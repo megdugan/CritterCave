@@ -1,13 +1,7 @@
--- Nina Howley
--- create the person, address and phone tables in nh107_db
--- load data from the provided and edited csvs into the tables
-
--- fixed: added ENGINE = InnoDB; for referential integrity
-
 use crittercave_db;
 
 -- drop tables before creating
--- drop in reverse order because of pid deletion restrictions
+-- drop in reverse order because of uid, cid and sid deletion restrictions
 drop table if exists liked_story;
 drop table if exists liked_critter;
 drop table if exists story;
@@ -26,6 +20,7 @@ create table user (
     primary key (uid)
 ) ENGINE = InnoDB;
 
+-- create critter table with primary key cid and foreign key uid
 create table critter (
     cid int not null,
     uid int not null,
@@ -39,6 +34,7 @@ create table critter (
         on delete restrict
 ) ENGINE = InnoDB;
 
+-- create story table with primary key sid and foreign keys cid and uid
 create table story (
     sid int not null,
     cid int not null,
@@ -54,6 +50,7 @@ create table story (
         on delete restrict
 ) ENGINE = InnoDB;
 
+-- create liked_critter table with foreign keys cid and uid
 create table liked_critter (
     cid int not null,
     uid int not null,
@@ -65,6 +62,7 @@ create table liked_critter (
         on delete restrict
 ) ENGINE = InnoDB;
 
+-- create liked_story table with foreign keys sid and uid
 create table liked_story (
     sid int not null,
     uid int not null,
