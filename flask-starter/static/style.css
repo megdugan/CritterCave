@@ -1,0 +1,88 @@
+/* the --color-header and others are CSS variables, which we access later. 
+   I chose these colors using https://venngage.com/tools/accessible-color-palette-generator
+   I liked the contrasting palette2 colors.
+
+   The idea is that
+
+   * the header (blue family) color is for headers and the background color of the nav bar buttons.
+   * the nav bar will have white text on the header bgcolor
+   * the nav bar will use the focus (greenish) color for 
+
+*/
+
+HTML {
+    --color-header: #0073e6;  /* for H1-H6 and nav buttons. */
+    --color-focus: #5ba300;   /* for focussed elements and mouseover on nav */
+    --color-alert: #b51963;   /* for flashed messages and such. */
+    --color-nav-fg: white;    /* foreground color of nav text. */
+    --font-family: Verdana;
+    font-family: var(--font-family)
+}
+
+/* For flashed messages; make them stand out using reddish and italics */
+
+#messages {
+    color: var(--color-alert);
+    font-style: italic;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-header);
+}
+
+h1 {
+    font-size: 200%;
+}
+    
+
+/* for a simple navbar. Talk to Scott if you want drop-downs. */
+nav > ul {
+    display: flex;
+    flex-direction: row;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+nav > ul > li {
+    flex: 0 0 auto;
+    width: 15em; 
+}
+
+nav button, nav a {
+    display: block;
+    box-sizing: border-box; /* easier to make button and A the same size */
+    width: 100%;
+    height: 40px;
+    padding: 0px;
+    padding-bottom: 5px;
+    background-color: var(--color-header);
+    color: var(--color-nav-fg);
+    border: 2px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    /* Firefox uses font -apple-system unless I repeat the font spec here. */
+    font-family: var(--font-family);
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+/* Only the top-level buttons are centered; lower ones are left-aligned. */
+nav > ul > li > button , nav > ul > li > a {
+    text-align: center;
+}
+
+/* because of the margin trick, this can only be used for the last element */
+
+nav li.right {
+    margin-left: auto;
+}
+
+nav button:hover, button:focus, nav a:hover, nav a:focus {
+    background-color: var(--color-focus);
+}
+
