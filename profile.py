@@ -1,10 +1,13 @@
 """ 
-Contains all methods that will be used to access the database and 
-get information that will be displayed on the user's profile
+Contains all database methods relating to accessing and displaying user profiles
 """
-
 import cs304dbi as dbi
 from datetime import datetime
+import bcrypt
+
+import critter  # critter methods
+import story    # story methods
+import settings # settings methods
 
 def get_user_info(conn, uid: int):
     """with the user's uid, returns their name and profile pic"""
@@ -59,3 +62,65 @@ def get_liked_stories(conn, uid: int):
                  WHERE liked_story.uid = %s'''
                  [uid])
     return curs.fetchall()
+
+
+def sign_up(conn, name, username, password) -> int: 
+    '''
+    Inserts a user into the database.
+    Args:
+        conn -> pymysql.connections.Connection
+        name -> str
+        username -> str
+        password -> str
+    Return:
+        user's uid -> int
+    '''
+    try:
+        # hash the user password
+        hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        # insert new user information with default profilepic and darkmode setting
+        curs = dbi.cursor(conn)
+        curs.execute('''insert into user (name, username, password, created, profilepic, darkmode) 
+                        values (%s, %s, %s, %s, %s, %s)''', [name, username, hashed.decode('utf-8'), datetime.now(), '/static/default.png', False])
+        conn.commit()
+        # return user uid
+        curs.execute('select last_insert_id()')
+        row = curs.fetchone()
+        return row[0]
+    # exception for duplicate username error
+    except pymysql.err.IntegrityError as err:
+        details = err.args
+        if details[0] == pymysql.constants.ER.DUP_ENTRY:
+            if verbose:
+                print('duplicate key for username {}'.format(username))
+        else:
+            print('error inserting user')
+        return -1
+
+def sign_in(conn, uid) -> None: 
+    '''
+    Delete a user from the database.
+    Args:
+        conn -> pymysql.connections.Connection
+        uid -> int
+    Return:
+        None
+    '''
+    curs = dbi.cursor(conn)
+    curs.execute('''delete from user where uid = %s''', uid)
+    conn.commit()
+    return
+
+def delete_user(conn, uid) -> None: 
+    '''
+    Delete a user from the database.
+    Args:
+        conn -> pymysql.connections.Connection
+        uid -> int
+    Return:
+        None
+    '''
+    curs = dbi.cursor(conn)
+    curs.execute('''delete from user where uid = %s''', uid)
+    conn.commit()
+    return

@@ -1,12 +1,16 @@
 """ 
-Contains all methods that will be used to access the database and 
-get information that will be needed for forms and info shown in settings
+Contains all database methods relating to accessing and displaying user settings
 """
+
 import cs304dbi as dbi
 from datetime import datetime
 from flask import (Flask, render_template, make_response, url_for, request,
                    redirect, flash, session, send_from_directory, jsonify)
 from werkzeug.utils import secure_filename
+
+import profile  # profile / user methods
+import critter  # critter methods
+import story    # story methods
 
 def update_name(conn, uid: int, new_name):
     curs = dbi.dict_cursor(conn)

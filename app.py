@@ -3,7 +3,11 @@ from flask import (Flask, render_template, make_response, url_for, request,
 from werkzeug.utils import secure_filename
 import secrets
 import cs304dbi as dbi
-import critter_db as db # Database methods
+
+import profile  # profile / user methods
+import critter  # critter methods
+import story    # story methods
+import settings # settings methods
 
 app = Flask(__name__)
 
