@@ -17,7 +17,6 @@ def update_name(conn, uid: int, new_name):
                  [new_name,uid])
     conn.commit()
     flash(f'name for uid {uid} updated to {new_name}')
-    return
 
 def update_username(conn, uid: int, new_username):
     curs = dbi.dict_cursor(conn)
@@ -27,14 +26,26 @@ def update_username(conn, uid: int, new_username):
                  WHERE uid = %s''',
                  [new_username,uid])
     conn.commit()
-    flash(f'name for uid {uid} updated to {new_name}')
-    return
+    flash(f'username for uid {uid} updated to {new_username}')
 
 def update_darkmode(conn, uid: int, new_mode):
-    return
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''
+                 UPDATE user 
+                 SET darkmode = %s
+                 WHERE uid = %s''',
+                 [new_mode,uid])
+    conn.commit()
+    flash(f'darkmode for uid {uid} updated to {new_mode}')
 
 def update_pfp(conn, uid: int, new_pfp):
-    return
-
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''
+                 UPDATE user 
+                 SET profilepic = %s
+                 WHERE uid = %s''',
+                 [new_pfp,uid])
+    conn.commit()
+    flash(f'pfp for uid {uid} updated to {new_pfp}')
 
 
