@@ -1,0 +1,18 @@
+
+
+{% extends "base.html" %}
+{% block main_content %}
+    <h1>{{ user.name }}</h1>
+
+    <h2>Critters:</h2>
+    <article>
+        <ol>
+            {% for critter in critters %}
+            <li><a href="{{ url_for('critter_page', cid=critter.cid) }}">
+                {{ critter.name }}</a></li>
+            {% endfor %}
+        </ol>
+    </article>
+
+    <p><a href="{{ url_for('index') }}">Back to Main Page</a></p>
+{% endblock %}
