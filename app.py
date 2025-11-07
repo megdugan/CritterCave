@@ -34,7 +34,7 @@ def login():
     return
 
 @app.route('/<uid>')
-def user_page():
+def user_profile():
     return
 
 @app.route('/<cid>')
