@@ -66,7 +66,8 @@ def get_liked_stories(conn, uid: int):
 
 def sign_up(conn, name, username, password) -> int: 
     '''
-    Inserts a user into the database.
+    Inserts a new user into the database.
+    Returns the new user's uid if successful, otherwise return -1.
     Args:
         conn -> pymysql.connections.Connection
         name -> str
@@ -97,19 +98,20 @@ def sign_up(conn, name, username, password) -> int:
             print('error inserting user')
         return -1
 
-def sign_in(conn, uid) -> None: 
+def sign_in(conn, username, password) -> None: 
     '''
     Delete a user from the database.
+    Returns the new user's uid if successful, otherwise return -1.
     Args:
         conn -> pymysql.connections.Connection
-        uid -> int
+        username -> str
+        password -> str
     Return:
-        None
+        user's uid -> int
     '''
     curs = dbi.cursor(conn)
-    curs.execute('''delete from user where uid = %s''', uid)
-    conn.commit()
-    return
+    # check whether entered password matches database using hashing
+    return -1
 
 def delete_user(conn, uid) -> None: 
     '''
