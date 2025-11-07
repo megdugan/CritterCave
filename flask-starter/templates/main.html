@@ -5,4 +5,9 @@
 
 <p>Welcome to our app. This is the main page</p>
 
+<p><a href="{{ url_for('critter_upload') }}">Upload a Critter</a></p>
+<p><a href="{{ url_for('user_profile', uid=1) }}">Nina's profile</a></p>
+<p><a href="{{ url_for('user_profile', uid=3) }}">Ruth's profile</a></p>
+
+
 {% endblock %}
