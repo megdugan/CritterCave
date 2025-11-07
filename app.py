@@ -29,6 +29,25 @@ def about():
     flash('this is a flashed message')
     return render_template('about.html', page_title='About Us')
 
+@app.route('/login/')
+def login():
+    return
+
+@app.route('/<uid>')
+def user_page():
+    return
+
+@app.route('/<cid>')
+# page for when you click into a critter to see their stories
+def critter_page():
+    return
+
+@app.route('/')
+def critter_upload():
+    return
+    
+
+
 if __name__ == '__main__':
     import sys, os
     dbi.conf('crittercave_db')
