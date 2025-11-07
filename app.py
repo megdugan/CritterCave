@@ -33,20 +33,35 @@ def about():
 def login():
     return
 
-@app.route('/<uid>')
-def user_profile():
-    return
+@app.route('/profile/<uid>')
+def user_profile(uid):
+    print(f'looking up user with uid {uid}')
+    if not uid.isdigit():
+        flash('uid must be a string of digits')
+        return redirect( url_for('index'))
+    uid = int(uid)
+    conn = dbi.connect()
+    user = profile.get_user_info(conn,uid)
+    critters = profile.get_critters_by_user(conn,uid)
+    if user is None:
+        flash(f'No profile found with uid={uid}')
+        return redirect(url_for('index'))
+    return render_template(
+        'profile.html',
+        user=user,
+        critters=critters
+    )
 
-@app.route('/<cid>')
+@app.route('/critter/<cid>')
 # page for when you click into a critter to see their stories
 def critter_page():
     return
 
-@app.route('/critter_upload')
+@app.route('/critter_upload/')
 def critter_upload():
     return
     
-@app.route('/<cid>/story_upload')
+@app.route('/critter/<cid>/story_upload/')
 def story_upload():
     return
 
