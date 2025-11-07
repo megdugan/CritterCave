@@ -42,10 +42,13 @@ def user_page():
 def critter_page():
     return
 
-@app.route('/')
+@app.route('/critter_upload')
 def critter_upload():
     return
     
+@app.route('/<cid>/story_upload')
+def story_upload():
+    return
 
 
 if __name__ == '__main__':
