@@ -1,5 +1,7 @@
-# CritterCave
-# Contains all database methods. (The functions that do most of the work.)
+""" 
+(CritterCave)
+Contains all database methods relating to accessing and displaying critters
+"""
 
 import cs304dbi as dbi
 from datetime import datetime
@@ -31,14 +33,6 @@ def signup(conn, name, username, password):
     curs.execute('select last_insert_id()')
     row = curs.fetchone()
     return row[0]
-
-def add_story(conn, cid: int, uid: int, story: str):
-    curs = dbi.dict_cursor(conn)
-    # created = 
-    # curs.execute('''
-    #     select name,birthdate from person 
-    #     where month(birthdate) = %s''',[month])
-    return
 
 def add_critter(conn,uid,imagepath,name,desc):
     """ This method will add a new critter to the database based on 

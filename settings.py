@@ -1,4 +1,5 @@
 """ 
+(CritterCave)
 Contains all database methods relating to accessing and displaying user settings
 """
 
