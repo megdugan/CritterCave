@@ -1,3 +1,6 @@
+-- (CritterCave)
+-- Creates all necessary tables for the database
+
 use crittercave_db;
 
 -- drop tables before creating
