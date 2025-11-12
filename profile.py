@@ -101,8 +101,9 @@ def sign_up(conn, name, username, password) -> int:
 
 def sign_in(conn, username, password) -> None: 
     '''
-    Delete a user from the database.
-    Returns the new user's uid if successful, otherwise return -1.
+    Sign in a user.
+    Returns the user's uid if successful.
+    If the username does not exist, or the password is incorrect, return -1.
     Args:
         conn -> pymysql.connections.Connection
         username -> str
@@ -110,9 +111,29 @@ def sign_in(conn, username, password) -> None:
     Return:
         user's uid -> int
     '''
-    curs = dbi.cursor(conn)
-    # check whether entered password matches database using hashing
-    return -1
+    try:
+        # grab user stored password
+        curs = dbi.cursor(conn)
+        curs.execute('''select uid, password from user where username = %s''', [username])
+        uid, stored = curs.fetchone()
+
+        # check whether entered password matches database using hashing
+        hashed = bcrypt.hashpw(password.encode('utf-8'), stored.encode('utf-8'))
+        hashed_str = hashed.decode('utf-8')
+        
+        if hashed_str == stored:
+            print('Login successful.')
+            # if the login is correct, return uid
+            return uid
+
+        print('Password is incorrect.')
+        # if the password is incorrect, return -1
+        return -1
+    
+    except TypeError:
+        print('Username does not exist.')
+        # if the username does not exist, return -1
+        return -1
 
 def delete_user(conn, uid) -> None: 
     '''
@@ -127,3 +148,16 @@ def delete_user(conn, uid) -> None:
     curs.execute('''delete from user where uid = %s''', uid)
     conn.commit()
     return
+
+if __name__ == '__main__':
+    dbi.conf('crittercave_db')
+    conn = dbi.connect()
+
+    # test user with username = test, uid = 7
+    
+    # sign_up(conn, 'test user', 'test', 'password')
+    # print(get_user_info(conn, 7))
+
+    print(f"non-existant username, expecting uid -1: {sign_in(conn, 'nobody', 'hi')}")
+    print(f"incorrect password, expecting uid -1: {sign_in(conn, 'test', 'password1')}")
+    print(f"valid login, expecting uid 7: {sign_in(conn, 'test', 'password')}")
