@@ -5,6 +5,7 @@ Contains all database methods relating to accessing and displaying user profiles
 import cs304dbi as dbi
 from datetime import datetime
 import bcrypt
+import pymysql
 
 import critter  # critter methods
 import story    # story methods
@@ -58,7 +59,8 @@ def get_liked_stories(conn, uid: int):
 def sign_up(conn, name, username, password) -> int: 
     '''
     Inserts a new user into the database.
-    Returns the new user's uid if successful, otherwise return -1.
+    Returns the new user's uid if successful.
+    For general errors, returns -1. For duplicate username, returns -2.
     Args:
         conn -> pymysql.connections.Connection
         name -> str
@@ -83,11 +85,11 @@ def sign_up(conn, name, username, password) -> int:
     except pymysql.err.IntegrityError as err:
         details = err.args
         if details[0] == pymysql.constants.ER.DUP_ENTRY:
-            if verbose:
-                print('duplicate key for username {}'.format(username))
+            print('duplicate key for username {}'.format(username))
+            return -2
         else:
             print('error inserting user')
-        return -1
+            return -1
 
 def sign_in(conn, username, password) -> None: 
     '''
