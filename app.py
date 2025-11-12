@@ -81,14 +81,43 @@ def critter_page(cid):
         critter_info=critter_info
     )
 
-@app.route('/critter_upload/')
+@app.route('/critter_upload/', methods=['POST', 'GET'])
 def critter_upload():
-    return
+    print(f'Uploading a critter')
+
+    if request.method == 'GET':
+        # Send the update form
+        return render_template('criiter_upload.html')
+    else:
+        # Method is post, and button is update, form has been filled out
+        # Add the critter to the database
+        conn = dbi.connect()
+        uid = session['uid']
+        imagePath = None
+        name = request.form.get('critter-name')
+        desc = request.form.get('critter-desc')
+        critter = critter.add_critter(conn, uid, imagePath, name, desc)
+        uid = critter['uid']
+        cid = critter['cid']
+
+        # Add the photo to the uploads folder, using critter{cid} as the name
+        nm = "critter" + uid
+        f = request.files['critter-pic']
+        user_filename = f.filename
+        ext = user_filename.split('.')[-1]
+        filename = secure_filename('{}.{}'.format(nm,ext))
+        pathname = os.path.join(app.config['uploads'],filename)
+        f.save(pathname)
+
+        # Update the critter element in database to have the correct image path
+        critter.update_critter(conn, cid, pathname, name, desc)
+
+        # Forward the user to the new critter's page
+        return redirect(url_for('critter_page'), cid=cid)
     
 @app.route('/critter/<cid>/story_upload/')
-def story_upload():
+def story_upload(cid):
     return
-
 
 if __name__ == '__main__':
     import sys, os
