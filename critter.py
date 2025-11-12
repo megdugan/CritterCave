@@ -11,29 +11,6 @@ import profile  # profile / user methods
 import story    # story methods
 import settings # settings methods
 
-def signup(conn, name, username, password): 
-    '''
-    Inserts a user into the database.
-    Args:
-        conn -> pymysql.connections.Connection
-        name -> str
-        username -> str
-        password -> str
-    Return:
-        list of movies -> dict[]
-    '''
-    # hash the user password
-    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    # insert new user information with default profilepic and darkmode setting
-    curs = dbi.cursor(conn)
-    curs.execute('''insert into user (name, username, password, created, profilepic, darkmode) 
-                    values (%s, %s, %s, %s, %s, %s, %b)''', [name, username, hashed.decode('utf-8'), datetime.now(), '/static/default.png', False])
-    conn.commit()
-    # return user uid
-    curs.execute('select last_insert_id()')
-    row = curs.fetchone()
-    return row[0]
-
 def add_critter(conn,uid,imagepath,name,desc):
     """ This method will add a new critter to the database based on 
     on the user entering the critters name and descritpion"""
