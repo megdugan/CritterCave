@@ -59,8 +59,27 @@ def user_profile(uid):
 
 @app.route('/critter/<cid>')
 # page for when you click into a critter to see their stories
-def critter_page():
-    return
+def critter_page(cid):
+    print(f'looking up critter with cid {cid}')
+    if not cid.isdigit():
+        flash('cid must be a string of digits')
+        return redirect( url_for('index'))
+    cid = int(cid)
+    conn = dbi.connect()
+    critter_info = critter.get_critter_by_id(conn,cid)
+    uid = critter_info['uid']
+    user = profile.get_user_info(conn,uid)
+    if user is None:
+        flash(f'No profile found with uid={uid}')
+        return redirect(url_for('index'))
+    if critter_info is None:
+        flash(f'No critter found with cid={cid}')
+        return redirect(url_for('index'))
+    return render_template(
+        'critter.html',
+        user=user,
+        critter_info=critter_info
+    )
 
 @app.route('/critter_upload/')
 def critter_upload():
