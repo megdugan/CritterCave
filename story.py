@@ -53,3 +53,34 @@ def update_story(conn, sid:int, story:str):
             where sid=%s
             """,[story, sid])
     conn.commit()
+    
+    
+def get_stories_for_critter(conn, cid: int):
+    """Returns all stories written about the specified critter with cid"""
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''
+                 SELECT story.created AS time_created,story.story AS critter_story 
+                 FROM story
+                 WHERE cid = %s''',
+                 [cid])
+    return curs.fetchall()
+
+def get_stories_for_critter_by_user(conn, cid: int, uid: int):
+    """Returns all stories writen about the specified critter with cid written by the specified user with uid"""
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''
+                 SELECT story.created AS time_created,story.story AS critter_story 
+                 FROM story
+                 WHERE cid = %s AND uid = %s''',
+                 [cid,uid])
+    return curs.fetchall()
+
+def get_stories_for_critter_not_by_user(conn, cid: int, uid: int):
+    """Returns all stories writen about the specified critter with cid NOT written by the specified user with uid"""
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''
+                 SELECT story.created AS time_created,story.story AS critter_story 
+                 FROM story
+                 WHERE cid = %s AND uid <> %s''',
+                 [cid,uid])
+    return curs.fetchall()

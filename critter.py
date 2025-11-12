@@ -58,6 +58,7 @@ def update_critter(conn,cid,imagepath,name,description):
             """,[imagepath,name,description,cid])
     conn.commit()
     
+    
 
 # To test methods
 # Remember to activate virtual environment: source ~/cs304/venv/bin/activate

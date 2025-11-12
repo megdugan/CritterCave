@@ -1,0 +1,10 @@
+{% extends "critter.html" %}
+{% block stories %}
+    <h1>{{ critter_info.name }}</h1>
+    <p>Made by: <a href="{{ url_for('user_profile', uid=user.uid) }}">
+        {{ user.name }}</a></p>
+    <h2>Description</h2>
+    <p>{{ critter_info.description }}</p>
+
+    <p><a href="{{ url_for('index') }}">Back to Main Page</a></p>
+{% endblock %}
