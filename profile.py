@@ -15,7 +15,7 @@ def get_user_info(conn, uid: int):
     """with the user's uid, returns their name and profile pic"""
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT name,profilepic
+                 SELECT uid,name,profilepic
                  FROM user
                  WHERE uid = %s''',
                  [uid])
@@ -37,7 +37,7 @@ def get_critters_by_user(conn, uid: int):
     """Returns all critters made by the specified user with uid"""
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT name,imagepath,description,created 
+                 SELECT cid, name, imagepath, description, created 
                  FROM critter
                  WHERE uid = %s''',
                  [uid])
