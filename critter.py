@@ -22,7 +22,7 @@ def add_critter(conn,uid,imagepath,name,desc):
              [uid,imagepath,name,desc,time])
     conn.commit()
 
-    #Then we get the gritter id for url redirection 
+    # Get the critter id (cid)
     curs.execute('select last_insert_id()')
     row = curs.fetchone()
     return row

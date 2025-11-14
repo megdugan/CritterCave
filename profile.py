@@ -15,7 +15,7 @@ def get_user_info(conn, uid: int):
     """with the user's uid, returns their name and profile pic"""
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT uid,name,profilepic
+                 SELECT *
                  FROM user
                  WHERE uid = %s''',
                  [uid])
