@@ -1,21 +1,24 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-<h1>Upload your critter!</h1>
+<h1>Introduce Your Critter to the World</h1>
 
 <form method="post" action="" enctype="multipart/form-data">
     <fieldset>
-        <table>
-            <tr><td><label for="critter-pic">Critter:</label></td>
-                <td><input id="critter-pic" type="file" name="critter-pic"</td></tr>
-            <tr><td><label for="critter-name">Story:</label></td>
-                <td><input id="critter-name" type="text" name="critter-name"
-                    placeholder="Ratatiouue"></td></tr>
-            <tr><td><label for="critter-desc">Description:</label></td>
-                <td><input id="critter-desc" type="text" name="critter-desc"
-                    placeholder="A grey, French rat wearing a chef hat"></td></tr>
-        </table>
-        <p> <input type='submit' value='Upload Critter'> </p>
+        <legend>Critter Info</legend>
+        <p><label for="critter-pic"><strong>Critter Photo:</strong></label><br>
+            <input id="critter-pic" type="file" name="critter-pic"></p>
+        
+        <p><label for="critter-name"><strong>Name:</strong></label><br>
+            <input id="critter-name" type="text" name="critter-name"
+                placeholder="Ratatouille"></p>
+        
+        <p><label for="critter-desc"><strong>Description:</strong></label><br>
+            <textarea id="critter-desc" name="critter-desc" rows="3" cols="50"
+                placeholder="A grey French rat wearing a chef hat, dreaming 
+                of Michelin stars..."></textarea></p>
+        
+        <p><input type="submit" value="Upload Your Critter"></p>
     </fieldset>
 </form>
 
