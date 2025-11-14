@@ -92,6 +92,8 @@ def critter_page(cid):
     if not cid.isdigit():
         flash('cid must be a string of digits')
         return redirect( url_for('index'))
+    
+    # getting critter info
     cid = int(cid)
     conn = dbi.connect()
     critter_info = critter.get_critter_by_id(conn,cid)
@@ -103,10 +105,20 @@ def critter_page(cid):
     if critter_info is None:
         flash(f'No critter found with cid={cid}')
         return redirect(url_for('index'))
+    
+    # getting story info
+    stories_by_user = story.get_stories_for_critter_by_user(conn, cid, uid)
+    stories_not_by_user = story.get_stories_for_critter_not_by_user(conn, cid, uid)
+    print("stories_by_user")
+    print(stories_by_user)
+    print("stories_not_by_user")
+    print(stories_not_by_user)
     return render_template(
         'critter.html',
         user=user,
-        critter_info=critter_info
+        critter_info=critter_info,
+        stories_by_user=stories_by_user,
+        stories_not_by_user=stories_not_by_user
     )
 
 @app.route('/critter_upload/', methods=['POST', 'GET'])
