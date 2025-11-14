@@ -135,27 +135,38 @@ def critter_page(cid):
 
 @app.route('/critter_upload/', methods=['POST', 'GET'])
 def critter_upload():
-    print(f'Uploading a critter')
+    """
+    Renders critter-upload form and adds the results to 
+    the database.
+    """
 
     if request.method == 'GET':
         # Send the update form
         return render_template('criiter_upload.html')
     else:
-        # Method is post, and button is update, form has been filled out
-        # Add the critter to the database
+        # Method is post, form has been filled out
         conn = dbi.connect()
         uid = session['uid']
         imagePath = None
         name = request.form.get('critter-name')
         desc = request.form.get('critter-desc')
-        critter = critter.add_critter(conn, uid, imagePath, name, desc)
-        uid = critter['uid']
-        cid = critter['cid']
-
-        # Add the photo to the uploads folder, using critter{cid} as the name
-        nm = "critter" + uid
         f = request.files['critter-pic']
         user_filename = f.filename
+
+        # Ensure the user uploads an image and name
+        if f and user_filename == '':
+            flash('Please add a critter image.')
+            return render_template('critter_upload.html')
+        if name == '':
+            flash('Please name the critter.')
+            return render_template('critter_upload.html')
+
+        # Add the critter to the database
+        critter = critter.add_critter(conn, uid, imagePath, name, desc)
+
+        # Add the photo to the uploads folder, using critter{cid} as the name
+        cid = critter['cid']
+        nm = "critter" + uid
         ext = user_filename.split('.')[-1]
         filename = secure_filename('{}.{}'.format(nm,ext))
         pathname = os.path.join(app.config['uploads'],filename)
@@ -169,7 +180,29 @@ def critter_upload():
     
 @app.route('/critter/<cid>/story_upload/')
 def story_upload(cid):
-    return
+    """
+    Renders story-upload form and adds the results to 
+    the database.
+    """
+
+    if request.method == 'GET':
+        # Send the update form
+        return render_template('story_upload.html')
+    else:
+        # Method is post, form has been filled out
+        # Add the story to the database
+        conn = dbi.connect()
+        uid = session['uid']
+        story = request.form.get('story')
+
+        # Ensure the user uploads a story
+        if story == '':
+            flash('Please write a story.')
+            return render_template('story_upload.html')
+        
+        # Add the story to the database
+        story.add_critter(conn, cid, uid, story)
+        return redirect(url_for('critter_page'), cid=cid)
 
 if __name__ == '__main__':
     import sys, os
