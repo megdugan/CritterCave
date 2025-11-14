@@ -29,7 +29,7 @@ create table user (
 create table critter (
     cid int not null auto_increment,
     uid int not null,
-    imagepath varchar(50) not null,
+    imagepath varchar(75) not null,
     name varchar(50) not null,
     description varchar(250) not null,
     created datetime not null,

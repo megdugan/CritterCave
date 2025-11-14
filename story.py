@@ -84,3 +84,10 @@ def get_stories_for_critter_not_by_user(conn, cid: int, uid: int):
                  WHERE cid = %s AND uid <> %s''',
                  [cid,uid])
     return curs.fetchall()
+
+# To test methods
+if __name__ == '__main__':
+    dbi.conf("crittercave_db")
+    conn = dbi.connect() # pass as conn argument for testing methods
+    story=add_story(conn,1,1,"Tommy was playing with scissors...")
+    print(story)
