@@ -38,6 +38,10 @@ def about():
     flash('this is a flashed message')
     return render_template('about.html', page_title='About Us')
 
+@app.route('/welcome/')
+def welcome():
+    return render_template('welcome.html', page_title='Welcome')
+
 @app.route('/signup/', methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
