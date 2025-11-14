@@ -108,6 +108,15 @@ def user_profile(uid):
         user=user,
         critters=critters
     )
+    
+@app.route('/settings')
+def settings(uid): # fix later to get uid from cookies
+    conn = dbi.connect()
+    curr_user_info = profile.get_user_info(conn,uid)
+    return render_template(
+        'settings.html',
+        curr_user_info=curr_user_info
+        )
 
 @app.route('/critter/<cid>')
 # page for when you click into a critter to see their stories
