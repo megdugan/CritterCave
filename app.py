@@ -142,16 +142,16 @@ def critter_upload():
 
     if request.method == 'GET':
         # Send the update form
-        return render_template('criiter_upload.html')
+        return render_template('critter_upload.html')
     else:
         # Method is post, form has been filled out
         conn = dbi.connect()
         uid = session['uid']
         imagePath = None
-        name = request.form.get('critter-name')
-        desc = request.form.get('critter-desc')
         f = request.files['critter-pic']
         user_filename = f.filename
+        name = request.form.get('critter-name')
+        desc = request.form.get('critter-desc')
 
         # Ensure the user uploads an image and name
         if f and user_filename == '':
@@ -193,7 +193,7 @@ def story_upload(cid):
         # Add the story to the database
         conn = dbi.connect()
         uid = session['uid']
-        story = request.form.get('story')
+        story = request.form.get('critter-story')
 
         # Ensure the user uploads a story
         if story == '':
