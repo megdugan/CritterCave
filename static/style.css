@@ -91,3 +91,8 @@ nav button:hover, button:focus, nav a:hover, nav a:focus {
     background-color: var(--color-focus);
 }
 
+.topbar {
+    display:grid;
+    grid-template-columns: 60% 39%;
+}
+

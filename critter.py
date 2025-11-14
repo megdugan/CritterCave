@@ -22,7 +22,7 @@ def add_critter(conn,uid,imagepath,name,desc):
              [uid,imagepath,name,desc,time])
     conn.commit()
 
-    #Then we get the gritter id for url redirection 
+    # Get the critter id (cid)
     curs.execute('select last_insert_id()')
     row = curs.fetchone()
     return row
@@ -65,9 +65,11 @@ def update_critter(conn,cid,imagepath,name,description):
 if __name__ == '__main__':
     dbi.conf("crittercave_db")
     conn = dbi.connect() # pass as conn argument for testing methods
-    #critter=add_critter(conn,1,"path","Tommy","Tommy is a very bald critter")
-    #print(critter)
+    critter=add_critter(conn,1,"path","Tommy","Tommy is a very bald critter")
+    print(critter)
+    critter=add_critter(conn,1,"path","Wow","Sam")
+    print(critter)
     #critter_id=get_critter_by_id(conn,2)
     #print(critter_id)
     #delete_critter(conn,4)
-    update_critter(conn,3,imagepath="path",description="Wow",name="Sam")
+    # update_critter(conn,3,imagepath="path",description="Wow",name="Sam")

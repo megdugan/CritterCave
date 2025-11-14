@@ -7,6 +7,7 @@ from flask import (Flask, render_template, make_response, url_for, request,
                    redirect, flash, session, send_from_directory, jsonify)
 from werkzeug.utils import secure_filename
 import secrets
+import os
 import cs304dbi as dbi
 
 import profile  # profile / user methods
@@ -21,6 +22,9 @@ app.secret_key = secrets.token_hex()
 
 # For project work, use your team db
 print(dbi.conf('crittercave_db'))
+
+# Configure base path for all file uploads
+app.config['uploads'] = '/students/crittercave/uploads'
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
@@ -167,8 +171,8 @@ def critter_upload():
     else:
         # Method is post, form has been filled out
         conn = dbi.connect()
+        session['uid'] = 1
         uid = session['uid']
-        imagePath = None
         f = request.files['critter-pic']
         user_filename = f.filename
         name = request.form.get('critter-name')
@@ -183,23 +187,25 @@ def critter_upload():
             return render_template('critter_upload.html')
 
         # Add the critter to the database
-        critter = critter.add_critter(conn, uid, imagePath, name, desc)
+        critterID = critter.add_critter(conn, uid, app.config['uploads'], name, desc)
+        pet = critter.get_critter_by_id(conn, critterID['last_insert_id()'])
 
         # Add the photo to the uploads folder, using critter{cid} as the name
-        cid = critter['cid']
-        nm = "critter" + uid
+        cid = pet['cid']
+        nm = "critter" + str(uid)
         ext = user_filename.split('.')[-1]
         filename = secure_filename('{}.{}'.format(nm,ext))
         pathname = os.path.join(app.config['uploads'],filename)
+        print(pathname)
         f.save(pathname)
 
         # Update the critter element in database to have the correct image path
         critter.update_critter(conn, cid, pathname, name, desc)
 
         # Forward the user to the new critter's page
-        return redirect(url_for('critter_page'), cid=cid)
+        return redirect(url_for('critter_page', cid=cid))
     
-@app.route('/critter/<cid>/story_upload/')
+@app.route('/critter/<cid>/story_upload/', methods=["GET", "POST"])
 def story_upload(cid):
     """
     Renders story-upload form and adds the results to 
@@ -213,17 +219,18 @@ def story_upload(cid):
         # Method is post, form has been filled out
         # Add the story to the database
         conn = dbi.connect()
+        session['uid'] = 1
         uid = session['uid']
-        story = request.form.get('critter-story')
+        desc = request.form.get('critter-story')
 
         # Ensure the user uploads a story
-        if story == '':
+        if desc == '':
             flash('Please write a story.')
             return render_template('story_upload.html')
         
         # Add the story to the database
-        story.add_critter(conn, cid, uid, story)
-        return redirect(url_for('critter_page'), cid=cid)
+        story.add_story(conn, cid, uid, desc)
+        return redirect(url_for('critter_page', cid=cid))
 
 if __name__ == '__main__':
     import sys, os
