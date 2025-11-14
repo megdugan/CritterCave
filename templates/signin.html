@@ -1,25 +1,39 @@
 <!-- (CritterCave) -->
 <!-- HTML template for the sign in page / form -->
+<!doctype html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <!-- for mobile-friendly pages -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name=author content="">
+    <title>{{ page_title }}</title>
+    <link rel='stylesheet' href="{{url_for('static', filename = 'style.css')}}">
+</head>
+<body>
+    <nav>
+        <ul>
+        <li><a href="{{url_for('welcome')}}"><</a></li>
+    </nav>
 
-{% extends "base.html" %}
+    <h1>Sign In</h1>
+    <h3>Welcome back to Critter Cave!</h3>
+    <h3>Sign in below.</h3>
 
-{% block main_content %}
-<h1>Sign In</h1>
-<h3>Welcome back to Critter Cave!</h3>
-<h3>Sign in below.</h3>
-
-<form method=POST action="">
-    <table>
-        <tr>
-            <td><label for="username">Username</label></td>
-            <td><input id="username" name='username' value=""></td>
-        </tr>
-        <tr>
-            <td><label for="password">Password</label></td>
-            <td><input id="password" name='password' value=""></td>
-        </tr>
-    </table>
-    <input type="submit" name="submit" value="sign up">
-</form>
-
-{% endblock %}
+    <form method=POST action="">
+        <table>
+            <tr>
+                <td><label for="username">Username</label></td>
+                <td><input id="username" name='username' value=""></td>
+            </tr>
+            <tr>
+                <td><label for="password">Password</label></td>
+                <td><input id="password" name='password' value=""></td>
+            </tr>
+        </table>
+        <input type="submit" name="submit" value="sign up">
+    </form>
+    <p>Test Account:</p>
+    <p>username = 'test'</p>
+    <p>password = 'password'</p>
+</body>
