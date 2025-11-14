@@ -22,16 +22,6 @@ def get_user_info(conn, uid: int):
     return curs.fetchone()
 
 
-def get_stories_for_critter(conn, cid: int):
-    """Returns all stories written about the specified critter with cid"""
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''
-                 SELECT story.created AS time_created,story.story AS critter_story 
-                 FROM story
-                 WHERE cid = %s''',
-                 [cid])
-    return curs.fetchall()
-
 
 def get_critters_by_user(conn, uid: int):
     """Returns all critters made by the specified user with uid"""
