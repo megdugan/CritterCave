@@ -23,7 +23,8 @@ app.secret_key = secrets.token_hex()
 # For project work, use your team db
 print(dbi.conf('crittercave_db'))
 
-app.config['uploads'] = os.path.join(app.root_path, 'uploads')
+# Configure base path for all file uploads
+app.config['uploads'] = '/students/crittercave/uploads'
 
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
