@@ -158,6 +158,7 @@ def critter_upload():
     else:
         # Method is post, form has been filled out
         conn = dbi.connect()
+        session['uid'] = 1
         uid = session['uid']
         imagePath = None
         f = request.files['critter-pic']
@@ -190,7 +191,7 @@ def critter_upload():
         # Forward the user to the new critter's page
         return redirect(url_for('critter_page'), cid=cid)
     
-@app.route('/critter/<cid>/story_upload/')
+@app.route('/critter/<cid>/story_upload/', methods=["GET", "POST"])
 def story_upload(cid):
     """
     Renders story-upload form and adds the results to 
@@ -204,17 +205,18 @@ def story_upload(cid):
         # Method is post, form has been filled out
         # Add the story to the database
         conn = dbi.connect()
+        session['uid'] = 1
         uid = session['uid']
-        story = request.form.get('critter-story')
+        desc = request.form.get('critter-story')
 
         # Ensure the user uploads a story
-        if story == '':
+        if desc == '':
             flash('Please write a story.')
             return render_template('story_upload.html')
         
         # Add the story to the database
-        story.add_critter(conn, cid, uid, story)
-        return redirect(url_for('critter_page'), cid=cid)
+        story.add_story(conn, cid, uid, desc)
+        return redirect(url_for('critter_page', cid=cid))
 
 if __name__ == '__main__':
     import sys, os

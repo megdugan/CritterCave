@@ -4,10 +4,10 @@
 <h1>Upload your critter!</h1>
 
 <form method="post" action="" enctype="multipart/form-data">
-    <p><label>Critter: <input type="file" name="pic"></label></p>
     <fieldset>
-        <legend>Critter Upload</legend>
         <table>
+            <tr><td><label for="critter-pic">Critter:</label></td>
+                <td><input id="critter-pic" type="file" name="critter-pic"</td></tr>
             <tr><td><label for="critter-name">Story:</label></td>
                 <td><input id="critter-name" type="text" name="critter-name"
                     placeholder="Ratatiouue"></td></tr>
@@ -15,8 +15,8 @@
                 <td><input id="critter-desc" type="text" name="critter-desc"
                     placeholder="A grey, French rat wearing a chef hat"></td></tr>
         </table>
+        <p> <input type='submit' value='Upload Critter'> </p>
     </fieldset>
-    <p> <input type='submit' value='Upload Critter'> </p>
 </form>
 
 {% endblock %}
