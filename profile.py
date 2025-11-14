@@ -60,7 +60,8 @@ def sign_up(conn, name, username, password) -> int:
     '''
     Inserts a new user into the database.
     Returns the new user's uid if successful.
-    For general errors, returns -1. For duplicate username, returns -2.
+    For duplicate username, returns -1.
+    For general errors, returns -2.
     Args:
         conn -> pymysql.connections.Connection
         name -> str
@@ -86,16 +87,17 @@ def sign_up(conn, name, username, password) -> int:
         details = err.args
         if details[0] == pymysql.constants.ER.DUP_ENTRY:
             print('duplicate key for username {}'.format(username))
-            return -2
+            return -1
         else:
             print('error inserting user')
-            return -1
+            return -2
 
 def sign_in(conn, username, password) -> None: 
     '''
     Sign in a user.
     Returns the user's uid if successful.
-    If the username does not exist, or the password is incorrect, return -1.
+    For incorrect password, returns -1. 
+    For non-existent username, returns -2.
     Args:
         conn -> pymysql.connections.Connection
         username -> str
@@ -125,7 +127,7 @@ def sign_in(conn, username, password) -> None:
     except TypeError:
         print('Username does not exist.')
         # if the username does not exist, return -1
-        return -1
+        return -2
 
 def delete_user(conn, uid) -> None: 
     '''
