@@ -113,10 +113,15 @@ def user_profile(uid):
         critters=critters
     )
     
-@app.route('/settings')
+@app.route('/settings/<uid>')
 def settings(uid): # fix later to get uid from cookies
+    if not uid.isdigit():
+        flash('uid must be a string of digits')
+        return redirect(url_for('index'))
+    uid = int(uid)
     conn = dbi.connect()
     curr_user_info = profile.get_user_info(conn,uid)
+    print(curr_user_info)
     return render_template(
         'settings.html',
         curr_user_info=curr_user_info
