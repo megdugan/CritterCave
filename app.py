@@ -45,26 +45,50 @@ def signup():
         name = request.form.get('name')
         username = request.form.get('username')
         password = request.form.get('password')
-        print(name)
-        print(username)
-        print(password)
+        # print(name)
+        # print(username)
+        # print(password)
         uid = profile.sign_up(conn, name, username, password)
         # if duplicate key error, flash message
-        if uid == -2:
-            flash(f"Username [ {username} ] is taken. Please try again.")
-            return redirect(url_for('signup'))
-        # if a different error occured, flash message
         if uid == -1:
+            flash(f"Username [ {username} ] is taken. Please try again.")
+            return render_template('signup.html')
+        # if a different error occured, flash message
+        if uid == -2:
             flash("An error has occured.")
-            return redirect(url_for('signup'))
+            return render_template('signup.html')
         # if successful, redirect to user's page
         user = profile.get_user_info(conn,uid)
         critters = profile.get_critters_by_user(conn,uid)
+        flash(f"Welcome to Critter Cave, {user['name']}.")
         return render_template('profile.html', user=user, critters=critters)
 
-@app.route('/signin/')
+@app.route('/signin/', methods=['GET', 'POST'])
 def signin():
-    return
+    if request.method == 'GET':
+        # if method is get, send a blank form
+        return render_template('signin.html', page_title='Sign In')
+    else:
+        # if method is post, get contents of filled in form
+        conn = dbi.connect()
+        username = request.form.get('username')
+        password = request.form.get('password')
+        print(username)
+        print(password)
+        uid = profile.sign_in(conn, username, password)
+        # if duplicate key error, flash message
+        if uid == -1:
+            flash("Incorrect password. Please try again.")
+            return render_template('signin.html')
+        # if a different error occured, flash message
+        if uid == -2:
+            flash(f"Username [ {username} ] does not exist. Please sign up or try again.")
+            return render_template('signin.html')
+        # if successful, redirect to user's page
+        user = profile.get_user_info(conn,uid)
+        critters = profile.get_critters_by_user(conn,uid)
+        flash(f"Welcome back, {user['name']}.")
+        return render_template('profile.html', user=user, critters=critters)
 
 @app.route('/profile/<uid>')
 def user_profile(uid):
