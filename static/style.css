@@ -96,3 +96,91 @@ nav button:hover, button:focus, nav a:hover, nav a:focus {
     grid-template-columns: 60% 39%;
 }
 
+
+/* Page spacing */
+.settings {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.settings h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+/* Card/Block container */
+.settings-block {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;   /* light grey border */
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04); /* subtle shadow */
+}
+
+/* Subtitles */
+.block-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 15px;
+}
+
+/* Headings inside cards */
+.settings-block h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/* Label styling */
+.settings-block label {
+    font-weight: 500;
+    font-size: 14px;
+    color: #374151;
+}
+
+/* Inputs: match screenshot style */
+.settings-block input[type="text"],
+.settings-block input[type="password"],
+.settings-block input[type="file"],
+.settings-block select {
+    width: 100%;
+    padding: 10px 14px;
+    margin: 8px 0 18px;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #f9fafb;
+    transition: border-color 0.2s;
+}
+
+/* Input hover/focus states */
+.settings-block input:focus,
+.settings-block select:focus {
+    outline: none;
+    border-color: #60a5fa; /* soft blue focus */
+    background: #ffffff;
+}
+
+/* Submit buttons */
+.settings-block input[type="submit"] {
+    background: #2563eb;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.settings-block input[type="submit"]:hover {
+    background: #1d4ed8;
+}
+
+/* Slight spacing fix under form groups */
+.settings-block form p {
+    margin: 0;
+}
