@@ -159,7 +159,12 @@ nav a:hover, nav a:focus {
 }
 
 
-/* Settings Page + Block Formatting --------------------- */
+
+/****************************************/
+/********* Settings page styles *********/
+/****************************************/
+
+/* Page spacing */
 .settings {
     max-width: 900px;
     margin: 40px auto;
