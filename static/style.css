@@ -1,37 +1,24 @@
-/* 
-(CritterCave)
-Base CSS file
-*/
+/* CSS for Critter Cave Project */
 
-/* the --color-header and others are CSS variables, which we access later. 
-   I chose these colors using https://venngage.com/tools/accessible-color-palette-generator
-   I liked the contrasting palette2 colors.
-
-   The idea is that
-
-   * the header (blue family) color is for headers and the background color of the nav bar buttons.
-   * the nav bar will have white text on the header bgcolor
-   * the nav bar will use the focus (greenish) color for 
-
-*/
-
+/* CSS Variables --------------------- */
 HTML {
-    --color-header: #0073e6;  /* for H1-H6 and nav buttons. */
-    --color-focus: #5ba300;   /* for focussed elements and mouseover on nav */
-    --color-alert: #b51963;   /* for flashed messages and such. */
-    --color-nav-fg: white;    /* foreground color of nav text. */
+    --color-header: #0073e6;
+    --color-focus: #5ba300;
+    --color-alert: #b51963;
+    --color-nav-fg: white;
     --font-family: Verdana;
     font-family: var(--font-family)
 }
 
-/* For flashed messages; make them stand out using reddish and italics */
 
+/* Flashed messages --------------------- */
 #messages {
     color: var(--color-alert);
     font-style: italic;
 }
 
 
+/* Headings --------------------- */
 h1, h2, h3, h4, h5, h6 {
     color: var(--color-header);
 }
@@ -39,9 +26,9 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
     font-size: 200%;
 }
-    
 
-/* for a simple navbar. Talk to Scott if you want drop-downs. */
+
+/* Nav Bar --------------------- */
 nav > ul {
     display: flex;
     flex-direction: row;
@@ -49,49 +36,124 @@ nav > ul {
 
 nav ul {
     list-style-type: none;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 nav > ul > li {
     flex: 0 0 auto;
-    width: 15em; 
+    width: 15em;
 }
 
 nav button, nav a {
     display: block;
-    box-sizing: border-box; /* easier to make button and A the same size */
+    box-sizing: border-box;
     width: 100%;
     height: 40px;
-    padding: 0px;
+    padding: 0;
     padding-bottom: 5px;
     background-color: var(--color-header);
     color: var(--color-nav-fg);
     border: 2px solid black;
     border-radius: 5px;
     cursor: pointer;
-    /* Firefox uses font -apple-system unless I repeat the font spec here. */
+
     font-family: var(--font-family);
     font-weight: bold;
     font-size: 1.4rem;
 }
 
-/* Only the top-level buttons are centered; lower ones are left-aligned. */
-nav > ul > li > button , nav > ul > li > a {
+nav > ul > li > button,
+nav > ul > li > a {
     text-align: center;
 }
-
-/* because of the margin trick, this can only be used for the last element */
 
 nav li.right {
     margin-left: auto;
 }
 
-nav button:hover, button:focus, nav a:hover, nav a:focus {
+nav button:hover, button:focus,
+nav a:hover, nav a:focus {
     background-color: var(--color-focus);
 }
 
-.topbar {
+/* The sidebar menu */
+.sidebar {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+
+/* The sidebar links */
+.sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* The button used to open the sidebar */
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #111;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+
+.openbtn:hover {
+  background-color: #444;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s; /* If you want a transition effect */
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}
+
+/*The log in css container*/
+#log_container{
+    width: 400px;
+    margin: 0 auto;
+    border: 2px solid;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#sign_up_form{
+    justify-items: center;
+}.topbar {
     display:grid;
     grid-template-columns: 60% 39%;
 }
@@ -115,77 +177,130 @@ nav button:hover, button:focus, nav a:hover, nav a:focus {
     margin-bottom: 25px;
 }
 
-/* Card/Block container */
 .settings-block {
     background: #ffffff;
-    border: 1px solid #e5e7eb;   /* light grey border */
+    border: 1px solid #e5e7eb;
     border-radius: 14px;
     padding: 24px 28px;
-    margin-bottom: 28px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04); /* subtle shadow */
+    margin-bottom: 14px;        /* smaller spacing between sections */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
-/* Subtitles */
 .block-subtitle {
     font-size: 14px;
     color: #6b7280;
     margin-bottom: 15px;
 }
 
-/* Headings inside cards */
 .settings-block h2 {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 5px;
 }
 
-/* Label styling */
 .settings-block label {
     font-weight: 500;
     font-size: 14px;
     color: #374151;
 }
 
-/* Inputs: match screenshot style */
+
+/* Inputs + Selects --------------------- */
 .settings-block input[type="text"],
 .settings-block input[type="password"],
 .settings-block input[type="file"],
 .settings-block select {
     width: 100%;
-    padding: 10px 14px;
-    margin: 8px 0 18px;
-    font-size: 14px;
+    max-width: calc(100% - 20px);
+    padding: 14px 18px;
+    margin: 14px auto 24px;
+    display: block;
+    text-align: left;
+    font-size: 15px;
+
     border: 1px solid #d1d5db;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #f9fafb;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background 0.2s;
 }
 
-/* Input hover/focus states */
 .settings-block input:focus,
 .settings-block select:focus {
     outline: none;
-    border-color: #60a5fa; /* soft blue focus */
-    background: #ffffff;
+    border-color: #60a5fa;
+    background: white;
+    box-shadow: 0 0 0 2px rgba(96,165,250,0.25);
 }
 
-/* Submit buttons */
-.settings-block input[type="submit"] {
+
+/* Text areas --------------------- */
+.settings-block textarea {
+    width: 100%;
+    max-width: calc(100% - 20px); /* nearly full width */
+    min-height: 70px;
+
+    padding: 16px 18px;
+    margin: 14px auto 24px;
+    display: block;
+
+    font-size: 15px;
+    text-align: left;
+    font-family: var(--font-family);
+    color: #374151;
+
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background: #f9fafb;
+
+    line-height: 1.5;
+    resize: vertical;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.settings-block textarea:focus {
+    outline: none;
+    border-color: #60a5fa;
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(96,165,250,0.25);
+}
+
+.settings-block textarea::placeholder,
+.settings-block input::placeholder {
+    text-align: left;
+    color: #9ca3af;
+}
+
+#critter-desc {
+    height: 70px;
+    padding-top: 12px;
+    display: block;
+}
+
+#critter-story {
+    min-height: 140px;
+    line-height: 1.6;
+    padding-top: 14px;
+}
+
+
+/* Submit Button --------------------- */
+.settings-block input[type="submit"],
+form > p > input[type="submit"] {
     background: #2563eb;
     color: white;
-    padding: 10px 18px;
-    border-radius: 8px;
+    padding: 12px 22px;
+    border-radius: 10px;
     border: none;
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
     transition: background 0.15s;
 }
 
-.settings-block input[type="submit"]:hover {
+.settings-block input[type="submit"]:hover,
+form > p > input[type="submit"]:hover {
     background: #1d4ed8;
 }
 
-/* Slight spacing fix under form groups */
 .settings-block form p {
     margin: 0;
 }

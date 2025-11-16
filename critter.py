@@ -58,17 +58,37 @@ def update_critter(conn,cid,imagepath,name,description):
             """,[imagepath,name,description,cid])
     conn.commit()
     
+def lookup_critter(conn, query):
+    '''
+    Lookup a critter by name.
+    Returns a list of critters who match the query.
+    If none match, return None.
     
+    Args:
+        conn -> pymysql.connections.Connection
+        query -> string
+    Return:
+        list of critters -> dict[]
+    '''
+    name_query = f"%{query}%"
+    curs=dbi.dict_cursor(conn)
+    curs.execute("""
+            select * from critter where name like %s
+            """,[name_query])
+    critters = curs.fetchall()
+    if not critters:
+        return None
+    return critters
 
 # To test methods
 # Remember to activate virtual environment: source ~/cs304/venv/bin/activate
 if __name__ == '__main__':
     dbi.conf("crittercave_db")
     conn = dbi.connect() # pass as conn argument for testing methods
-    critter=add_critter(conn,1,"path","Tommy","Tommy is a very bald critter")
-    print(critter)
-    critter=add_critter(conn,1,"path","Wow","Sam")
-    print(critter)
+    # critter=add_critter(conn,1,"path","Tommy","Tommy is a very bald critter")
+    # print(critter)
+    # critter=add_critter(conn,1,"path","Wow","Sam")
+    # print(critter)
     #critter_id=get_critter_by_id(conn,2)
     #print(critter_id)
     #delete_critter(conn,4)

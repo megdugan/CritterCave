@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name=author content="">
     <title>{{ page_title }}</title>
+    <script src="script.js"></script>
     <link rel='stylesheet' href="{{url_for('static', filename = 'style.css')}}">
     {% block head_stuff %} {% endblock %}
 </head>
@@ -33,9 +34,8 @@
           <label>kind:
                 <select required name="kind">
                     <option value="">choose one</option>
-                    <option value="person">user</option>
-                    <option value="movie">critter</option>
-                    <option value="movie">story</option>
+                    <option value="user">user</option>
+                    <option value="critter">critter</option>
                 </select>
         </label>
         <input type="submit" value="search">
