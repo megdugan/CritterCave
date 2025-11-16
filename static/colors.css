@@ -1,0 +1,54 @@
+/* ------------------------------------------------------
+   CritterCave Base Colors (slightly tuned for contrast)
+------------------------------------------------------ */
+:root {
+  --mustard: #D8A72F;
+  --plum: #5F274F;
+  --rosewood: #A45C68;
+  --sand-beige: #E7D6B4;
+  --sage-green: #678A7B;
+}
+
+/* ------------------------------------------------------
+   LIGHT MODE — “Cozy Cavern Fresh”
+------------------------------------------------------ */
+:root {
+  /* Primary Accents */
+  --accent-plum: #5F274F;
+  --accent-rosewood: #A45C68;
+  --accent-sage: #678A7B;
+  --accent-mustard: #D8A72F;
+
+  /* UI Foundation */
+  --bg: #F8F1E4;              /* lighter + cleaner */
+  --panel: #EEE2C8;           /* more mid-tone to stand off bg */
+  --border-subtle: #B2A99A;   /* slightly deeper for definition */
+
+  /* Typography */
+  --text-primary: #26221F;    /* richer charcoal brown */
+  --text-secondary: #6D645B;  /* warmer + clearly lighter */
+  --text-link: #7B346A;       /* brighter, more vibrant plum */
+}
+
+/* ------------------------------------------------------
+   DARK MODE — (unchanged, still contrast-safe)
+------------------------------------------------------ */
+
+[data-theme="dark"] {
+  /* Primary Accents */
+  --accent-plum: #B7649C;
+  --accent-rosewood: #CF919A;
+  --accent-sage: #6C9689;
+  --accent-mustard: #BE922A;
+
+  /* UI Foundation */
+  --bg: #141211;                 /* deep cavern base */
+  --panel: #302A29;              /* lighter, warm mocha-brown */
+  --panel-alt: #3B3433;          /* raised surfaces, slightly brighter */
+  --border-subtle: #7A726D;      /* lighter border for clear separation */
+
+  /* Typography */
+  --text-primary: #F4EEE5;
+  --text-secondary: #CAC3B8;
+  --text-link: #B7649C;
+}

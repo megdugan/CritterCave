@@ -6,17 +6,17 @@
 {% block main_content %}
 <h1>Main</h1>
 
-<p>Welcome to our app. This is the main page</p>
+<p>Welcome to the Draft Version of CritterCave.</p>
+<p>Below are the link to the pages we've currently developed.</p>
 
 <h2>Login</h2>
 <p><a href="{{ url_for('welcome') }}">Welcome page: test sign-up and sign-in</a></p>
 
-<h2>Users</h2>
-<p><a href="{{ url_for('critter_upload') }}">Upload a Critter</a></p>
+<h2>User Profiles</h2>
 <p><a href="{{ url_for('user_profile', uid=1) }}">Nina's profile</a></p>
 <p><a href="{{ url_for('user_profile', uid=3) }}">Ruth's profile</a></p>
 
-<h2>Critters</h2>
+<h2>Critter Pages</h2>
 <p><a href="{{ url_for('critter_page', cid=2) }}">Critter Tommy</a></p>
 <p><a href="{{ url_for('critter_page', cid=3) }}">Critter Sam</a></p>
 
@@ -27,6 +27,5 @@
 <h2>Settings</h2>
 <p><a href="{{ url_for('settings', uid=1) }}">Settings for User 1 (Nina)</a></p>
 <p><a href="{{ url_for('settings', uid=2) }}">Settings for User 2 (Ruth)</a></p>
-
 
 {% endblock %}
