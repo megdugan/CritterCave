@@ -119,6 +119,11 @@ def user_profile(uid):
         critters=critters
     )
     
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['uploads'], filename)
+
+    
 @app.route('/settings/<uid>', methods=['POST', 'GET'])
 def settings_page(uid): # fix later to get uid from cookies
     if not uid.isdigit():
@@ -149,14 +154,14 @@ def settings_page(uid): # fix later to get uid from cookies
         
         nm = "pfp" + str(uid)
         ext = user_filename.split('.')[-1]
-        filename = secure_filename('{}.{}'.format(nm,ext))
-        pathname = os.path.join(app.config['uploads'],filename)
-        print(pathname)
+        filename = secure_filename(f"{nm}.{ext}")
+
+        pathname = os.path.join(app.config['uploads'], filename)
         file.save(pathname)
-        
-        # Update the user's pfp in the database with the new file
-        settings.update_pfp(conn,uid,pathname)
-        
+
+
+        # Store ONLY the filename in the DB
+        settings.update_pfp(conn, uid, filename)
         flash("Profile picture updated!")
         
         return render_template('settings.html',

@@ -5,6 +5,12 @@
 {% block main_content %}
     <h1>{{ user.name }}</h1>
 
+    {% if user.profilepic %}
+    <img src="{{ url_for('uploaded_file', filename=user.profilepic) }}"
+         alt="Profile Picture"
+         style="width:150px; height:150px; border-radius:50%; object-fit:cover;">
+    {% endif %}
+
     <h2>Critters:</h2>
     <article>
         <ol>

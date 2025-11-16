@@ -100,10 +100,10 @@ def update_darkmode(conn, uid: int, new_mode):
 def update_pfp(conn, uid: int, new_pfp):
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 UPDATE user 
-                 SET profilepic = %s
-                 WHERE uid = %s''',
-                 [new_pfp,uid])
+        UPDATE user 
+        SET profilepic = %s
+        WHERE uid = %s
+        ''', [new_pfp, uid])
     conn.commit()
     flash(f'pfp for uid {uid} updated to {new_pfp}')
 
