@@ -69,7 +69,8 @@ def signup():
         user = profile.get_user_info(conn,uid)
         critters = profile.get_critters_by_user(conn,uid)
         flash(f"Welcome to Critter Cave, {user['name']}.")
-        return render_template('profile.html', user=user, critters=critters)
+        # change to redirect url_for
+        return render_template('profile.html', user=user, critters=critters) 
 
 @app.route('/signin/', methods=['GET', 'POST'])
 def signin():
@@ -96,6 +97,7 @@ def signin():
         user = profile.get_user_info(conn,uid)
         critters = profile.get_critters_by_user(conn,uid)
         flash(f"Welcome back, {user['name']}.")
+        # change to redirect url_for
         return render_template('profile.html', user=user, critters=critters)
 
 @app.route('/profile/<uid>')
@@ -213,7 +215,7 @@ def critter_upload():
 
         # Forward the user to the new critter's page
         return redirect(url_for('critter_page', cid=cid))
-    
+
 @app.route('/critter/<cid>/story_upload/', methods=["GET", "POST"])
 def story_upload(cid):
     """
@@ -240,6 +242,54 @@ def story_upload(cid):
         # Add the story to the database
         story.add_story(conn, cid, uid, desc)
         return redirect(url_for('critter_page', cid=cid))
+
+@app.route('/query/', methods=['GET'])
+def lookup_form():
+    '''
+    Returns the rendered page for the query inputted to the lookup form.
+    If the query result has multiple items, renders a list a clickable list of the items.
+    Otherwise, renders the page of the item itself.
+
+    Args:
+        None
+    Return:
+        String of the rendered template -> str
+    '''
+    query_type = request.args.get('kind')
+    query = request.args.get('query')
+    conn = dbi.connect()
+    if query_type == 'critter':
+        critters = critter.lookup_critter(conn, query)
+        if not critters:
+            flash('No critters matched the query. Please try again.')
+            return redirect(url_for('index'))
+        if len(critters) == 1:
+            return redirect(url_for('critter', cid=critters[0]['cid']))  # if there is only one result, go straight to the critter's page
+        return render_template('critter_lookup.html', query = query, critters = critters) # renders a clickable list of critters
+    if query_type == 'user':
+        users = profile.lookup_user(conn, query)
+        if not users:
+            flash('No users matched the query. Please try again.')
+            return redirect(url_for('index'))
+        if len(users) == 1:
+            return redirect(url_for('user_profile', uid=users[0]['uid']))  # if there is only one result, go straight to the user's page
+        return render_template('user_lookup.html', query = query, users = users) # renders a clickable list of users
+
+# @app.route('/lookup/critter/<name>')
+# def critter_lookup(name):
+#     '''
+#     Render the critter lookup page for a given name query.
+#     If no critters match, flash a message.
+    
+#     Args:
+#         name -> string
+#     Return:
+#         string of the rendered template -> str
+#     '''
+#     return render_template(
+#         'critter_lookup.html',
+#     )
+
 
 if __name__ == '__main__':
     import sys, os

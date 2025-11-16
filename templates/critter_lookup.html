@@ -1,0 +1,14 @@
+<!-- (CritterCave) -->
+<!-- HTML template for a critter lookup result page -->
+{% extends "base.html" %}      
+{% block main_content %}      
+
+<h1>Critter results for '{{query}}'</h1>
+
+<ul>
+    {% for c in critters %}
+    <li>  <a  href="{{url_for('critter_page', cid=c['cid'])}}">{{c['name']}}, {{c['description']}}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
