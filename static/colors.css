@@ -1,12 +1,12 @@
 /* ------------------------------------------------------
-   CritterCave Base Colors (raw extracted hues)
+   CritterCave Base Colors (slightly tuned for contrast)
 ------------------------------------------------------ */
 :root {
-  --mustard: #E1B749;
-  --plum: #6E2F5B;
-  --rosewood: #B46A73;
-  --sand-beige: #E8D9B8;
-  --sage-green: #729687;
+  --mustard: #D8A72F;
+  --plum: #5F274F;
+  --rosewood: #A45C68;
+  --sand-beige: #E7D6B4;
+  --sage-green: #678A7B;
 }
 
 /* ------------------------------------------------------
@@ -14,40 +14,40 @@
 ------------------------------------------------------ */
 :root {
   /* Primary Accents */
-  --accent-plum: #6E2F5B;
-  --accent-rosewood: #B46A73;
-  --accent-sage: #729687;
-  --accent-mustard: #E1B749;
+  --accent-plum: #5F274F;
+  --accent-rosewood: #A45C68;
+  --accent-sage: #678A7B;
+  --accent-mustard: #D8A72F;
 
   /* UI Foundation */
-  --bg: #F4ECD9;                 /* Warm Sand Cream */
-  --panel: #EDE3CC;              /* Soft Beige */
-  --border-subtle: #C7C0B1;      /* Peat Gray */
+  --bg: #F8F1E4;              /* lighter + cleaner */
+  --panel: #EEE2C8;           /* more mid-tone to stand off bg */
+  --border-subtle: #B2A99A;   /* slightly deeper for definition */
 
   /* Typography */
-  --text-primary: #2E2A26;       /* Charcoal Brown */
-  --text-secondary: #5B544E;     /* Soft Bark */
-  --text-link: #6E2F5B;          /* Plum */
+  --text-primary: #26221F;    /* richer charcoal brown */
+  --text-secondary: #6D645B;  /* warmer + clearly lighter */
+  --text-link: #7B346A;       /* brighter, more vibrant plum */
 }
 
 /* ------------------------------------------------------
-   DARK MODE — “Moonlit Cavern Depths”
+   DARK MODE — (unchanged, still contrast-safe)
 ------------------------------------------------------ */
 
 [data-theme="dark"] {
-  /* Primary Accents (dark variants) */
-  --accent-plum: #9D4A84;         /* Twilight Plum */
-  --accent-rosewood: #C88A92;     /* Dusty Rose */
-  --accent-sage: #58756C;         /* Deep Forest Sage */
-  --accent-mustard: #A4832C;      /* Dark Mustard */
+  /* Primary Accents */
+  --accent-plum: #B7649C;
+  --accent-rosewood: #CF919A;
+  --accent-sage: #6C9689;
+  --accent-mustard: #BE922A;
 
   /* UI Foundation */
-  --bg: #1E1B19;                  /* Cavern Charcoal */
-  --panel: #2B2624;               /* Deep Espresso */
-  --border-subtle: #4A4643;       /* Warm Slate */
+  --bg: #141211;                 /* deep cavern base */
+  --panel: #3B3433;              /* lighter, warm mocha-brown */
+  --border-subtle: #7A726D;      /* lighter border for clear separation */
 
   /* Typography */
-  --text-primary: #F3EDE3;        /* Cream Dust */
-  --text-secondary: #C9C3B7;      /* Soft Taupe Gray */
-  --text-link: #9D4A84;           /* Twilight Plum */
+  --text-primary: #F4EEE5;
+  --text-secondary: #CAC3B8;
+  --text-link: #B7649C;
 }
