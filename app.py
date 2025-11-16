@@ -305,11 +305,12 @@ def critter_upload():
 
         # Add the photo to the uploads folder, using critter{cid} as the name
         cid = pet['cid']
+        
         nm = "critter" + str(uid)
         ext = user_filename.split('.')[-1]
-        filename = secure_filename('{}.{}'.format(nm,ext))
-        pathname = os.path.join(app.config['uploads'],filename)
-        print(pathname)
+        filename = secure_filename(f"{nm}.{ext}")
+
+        pathname = os.path.join(app.config['uploads'], filename)
         f.save(pathname)
 
         # Update the critter element in database to have the correct image path
