@@ -14,27 +14,29 @@ import critter  # critter methods
 import story    # story methods
 import bcrypt
 
+import bcrypt
+import cs304dbi as dbi
+
 def check_password(conn, uid: int, old_pw, new_pw1, new_pw2):
     curs = dbi.cursor(conn)
-    curs.execute('''select password from user where uid = %s''', [uid])
-    stored = curs.fetchone()[0]
+    curs.execute('SELECT password FROM user WHERE uid = %s', [uid])
+    
+    row = curs.fetchone()
+    stored_pw = row[0]   # extract string from tuple
 
-    # check whether entered password matches database using hashing
-    hashed = bcrypt.hashpw(old_pw.encode('utf-8'), stored.encode('utf-8'))
-    hashed_str = hashed.decode('utf-8')
-    
-    if hashed_str != stored:
-        print('Password is incorrect.')
-        # if the password is incorrect, return -1
+    # bcrypt check
+    if not bcrypt.checkpw(old_pw.encode('utf-8'), stored_pw.encode('utf-8')):
+        print("Password is incorrect.")
         return -1
-    
-    elif new_pw1 != new_pw2:
-        print('The new passwords do not match')
+
+    # check new passwords match
+    if new_pw1 != new_pw2:
+        print("New passwords do not match.")
         return -2
-    
-    print('Passwords match.')
-    # if the login is correct, return uid
+
+    print("Passwords match.")
     return 1
+
 
 def update_personal_info(conn, uid: int, new_name, new_username):
     curs = dbi.dict_cursor(conn)
