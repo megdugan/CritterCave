@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h1>Write This Critter's Epic Tale</h1>
+
+<form method="post" action="">
+    <fieldset>
+        <legend>Story Details</legend>
+        <p><label for="critter-story"><strong>Your story begins here:</strong></label><br>
+            <textarea id="critter-story" name="critter-story" rows="5" cols="50"
+                placeholder="It was a dark and stormy night..."></textarea></p>
+        
+        <p><input type="submit" value="Submit Your Story"></p>
+    </fieldset>
+</form>
+
+{% endblock %}

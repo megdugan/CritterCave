@@ -21,9 +21,11 @@ def add_story(conn, cid:int, uid:int, story:str):
         insert into story(cid, uid, created, story)
         values (%s,%s,%s,%s)''', [cid, uid, time, story])
     conn.commit()
-    
-    # Does anything need to be done to update the critter page
-    # that the story is displayed on?
+
+    # Get the story id (sid)
+    curs.execute('select last_insert_id()')
+    row = curs.fetchone()
+    return row
 
 def get_story_by_id(conn, sid:int):
     """
@@ -53,3 +55,41 @@ def update_story(conn, sid:int, story:str):
             where sid=%s
             """,[story, sid])
     conn.commit()
+    
+    
+def get_stories_for_critter(conn, cid: int):
+    """Returns all stories written about the specified critter with cid"""
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''
+                 SELECT story.created AS time_created,story.story AS critter_story 
+                 FROM story
+                 WHERE cid = %s''',
+                 [cid])
+    return curs.fetchall()
+
+def get_stories_for_critter_by_user(conn, cid: int, uid: int):
+    """Returns all stories writen about the specified critter with cid written by the specified user with uid"""
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''
+                 SELECT story.created AS time_created,story.story AS critter_story 
+                 FROM story
+                 WHERE cid = %s AND uid = %s''',
+                 [cid,uid])
+    return curs.fetchall()
+
+def get_stories_for_critter_not_by_user(conn, cid: int, uid: int):
+    """Returns all stories writen about the specified critter with cid NOT written by the specified user with uid"""
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''
+                 SELECT story.created AS time_created,story.story AS critter_story 
+                 FROM story
+                 WHERE cid = %s AND uid <> %s''',
+                 [cid,uid])
+    return curs.fetchall()
+
+# To test methods
+if __name__ == '__main__':
+    dbi.conf("crittercave_db")
+    conn = dbi.connect() # pass as conn argument for testing methods
+    story=add_story(conn,1,1,"Tommy was playing with scissors...")
+    print(story)
