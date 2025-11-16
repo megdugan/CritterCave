@@ -43,7 +43,8 @@
 
   /* UI Foundation */
   --bg: #141211;                 /* deep cavern base */
-  --panel: #3B3433;              /* lighter, warm mocha-brown */
+  --panel: #302A29;              /* lighter, warm mocha-brown */
+  --panel-alt: #3B3433;          /* raised surfaces, slightly brighter */
   --border-subtle: #7A726D;      /* lighter border for clear separation */
 
   /* Typography */
