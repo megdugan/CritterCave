@@ -1,25 +1,43 @@
 {% extends "base.html" %}
-
 {% block main_content %}
-<h1>Introduce Your Critter to the World</h1>
 
-<form method="post" action="" enctype="multipart/form-data">
-    <fieldset>
-        <legend>Critter Info</legend>
-        <p><label for="critter-pic"><strong>Critter Photo:</strong></label><br>
-            <input id="critter-pic" type="file" name="critter-pic"></p>
-        
-        <p><label for="critter-name"><strong>Name:</strong></label><br>
-            <input id="critter-name" type="text" name="critter-name"
-                placeholder="Ratatouille"></p>
-        
-        <p><label for="critter-desc"><strong>Description:</strong></label><br>
-            <textarea id="critter-desc" name="critter-desc" rows="3" cols="50"
-                placeholder="A grey French rat wearing a chef hat, dreaming 
-                of Michelin stars..."></textarea></p>
-        
+<div class="settings">
+    <h1>Introduce Your Critter to the World</h1>
+
+    <form method="post" action="" enctype="multipart/form-data">
+
+        <!-- Block: Critter Photo -->
+        <section class="settings-block">
+            <h2>Upload Critter Photo</h2>
+            <p class="block-subtitle">Choose an image to represent your critter.</p>
+
+            <p>
+                <label for="critter-pic"><strong>Critter Photo:</strong></label><br>
+                <input id="critter-pic" type="file" name="critter-pic">
+            </p>
+        </section>
+
+        <!-- Block: Critter Information -->
+        <section class="settings-block">
+            <h2>Critter Information</h2>
+            <p class="block-subtitle">Tell the world more about your critter.</p>
+
+            <p>
+                <label for="critter-name"><strong>Name:</strong></label><br>
+                <input id="critter-name" type="text" name="critter-name"
+                       placeholder="Ratatouille">
+            </p>
+
+            <p>
+                <label for="critter-desc"><strong>Description:</strong></label><br>
+                <textarea id="critter-desc" name="critter-desc" rows="3" cols="50"
+                    placeholder="A grey French rat wearing a chef hat, dreaming of Michelin stars..."></textarea>
+            </p>
+        </section>
+
         <p><input type="submit" value="Upload Your Critter"></p>
-    </fieldset>
-</form>
+    </form>
+
+</div>
 
 {% endblock %}
