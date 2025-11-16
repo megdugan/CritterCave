@@ -265,6 +265,7 @@ def lookup_form():
             return redirect(url_for('index'))
         if len(critters) == 1:
             return redirect(url_for('critter', cid=critters[0]['cid']))  # if there is only one result, go straight to the critter's page
+        print(critters)
         return render_template('critter_lookup.html', query = query, critters = critters) # renders a clickable list of critters
     if query_type == 'user':
         users = profile.lookup_user(conn, query)
