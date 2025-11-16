@@ -1,0 +1,53 @@
+/* ------------------------------------------------------
+   CritterCave Base Colors (raw extracted hues)
+------------------------------------------------------ */
+:root {
+  --mustard: #E1B749;
+  --plum: #6E2F5B;
+  --rosewood: #B46A73;
+  --sand-beige: #E8D9B8;
+  --sage-green: #729687;
+}
+
+/* ------------------------------------------------------
+   LIGHT MODE — “Cozy Cavern Fresh”
+------------------------------------------------------ */
+:root {
+  /* Primary Accents */
+  --accent-plum: #6E2F5B;
+  --accent-rosewood: #B46A73;
+  --accent-sage: #729687;
+  --accent-mustard: #E1B749;
+
+  /* UI Foundation */
+  --bg: #F4ECD9;                 /* Warm Sand Cream */
+  --panel: #EDE3CC;              /* Soft Beige */
+  --border-subtle: #C7C0B1;      /* Peat Gray */
+
+  /* Typography */
+  --text-primary: #2E2A26;       /* Charcoal Brown */
+  --text-secondary: #5B544E;     /* Soft Bark */
+  --text-link: #6E2F5B;          /* Plum */
+}
+
+/* ------------------------------------------------------
+   DARK MODE — “Moonlit Cavern Depths”
+------------------------------------------------------ */
+
+[data-theme="dark"] {
+  /* Primary Accents (dark variants) */
+  --accent-plum: #9D4A84;         /* Twilight Plum */
+  --accent-rosewood: #C88A92;     /* Dusty Rose */
+  --accent-sage: #58756C;         /* Deep Forest Sage */
+  --accent-mustard: #A4832C;      /* Dark Mustard */
+
+  /* UI Foundation */
+  --bg: #1E1B19;                  /* Cavern Charcoal */
+  --panel: #2B2624;               /* Deep Espresso */
+  --border-subtle: #4A4643;       /* Warm Slate */
+
+  /* Typography */
+  --text-primary: #F3EDE3;        /* Cream Dust */
+  --text-secondary: #C9C3B7;      /* Soft Taupe Gray */
+  --text-link: #9D4A84;           /* Twilight Plum */
+}
