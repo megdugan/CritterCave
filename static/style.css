@@ -304,3 +304,22 @@ form > p > input[type="submit"]:hover {
 .settings-block form p {
     margin: 0;
 }
+
+/* use in div element for search results */
+.search_result {
+    display:block;
+    width:50%;
+    padding: 12px 22px;
+    border-radius: 10px;
+    margin-top: 10px;
+    /* outline: none; */
+    border: 2px, solid, #1d4ed8;
+    background: #ffffff;
+    /* box-shadow: 0 0 0 2px rgba(96,165,250,0.25); */
+}
+
+/* use in images in search_results */
+.search_result_image {
+    width:100px;
+    height:100px;
+}
