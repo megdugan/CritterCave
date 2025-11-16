@@ -117,8 +117,8 @@ def user_profile(uid):
         critters=critters
     )
     
-@app.route('/settings/<uid>')
-def settings(uid): # fix later to get uid from cookies
+@app.route('/settings/<uid>', methods=['POST', 'GET'])
+def settings_page(uid): # fix later to get uid from cookies
     if not uid.isdigit():
         flash('uid must be a string of digits')
         return redirect(url_for('index'))
@@ -126,10 +126,107 @@ def settings(uid): # fix later to get uid from cookies
     conn = dbi.connect()
     curr_user_info = profile.get_user_info(conn,uid)
     print(curr_user_info)
-    return render_template(
-        'settings.html',
-        curr_user_info=curr_user_info
-        )
+    if request.method == 'GET':
+        return render_template(
+            'settings.html',
+            curr_user_info=curr_user_info
+            )
+    
+    # POST: figure out which form was submitted
+    action = request.form.get('action')
+
+    if action == 'Update Profile Picture':
+        file = request.files.get('profile-pic')
+        user_filename = file.filename
+        
+        # handle saving file
+        # Ensure the user uploads an image and name
+        if file and user_filename == '':
+            flash('Please add a critter image.')
+            return render_template('critter_upload.html')
+        
+        nm = "pfp" + str(uid)
+        ext = user_filename.split('.')[-1]
+        filename = secure_filename('{}.{}'.format(nm,ext))
+        pathname = os.path.join(app.config['uploads'],filename)
+        print(pathname)
+        file.save(pathname)
+        
+        # Update the user's pfp in the database with the new file
+        settings.update_pfp(conn,uid,pathname)
+        
+        flash("Profile picture updated!")
+        
+        return render_template('settings.html',
+            curr_user_info=curr_user_info)
+
+    elif action == 'Update Profile Info':
+        new_name = request.form.get('display-name')
+        new_username = request.form.get('username')
+        if len(new_name) < 1:
+            flash("Please enter a name.")
+            return render_template('settings.html',
+            curr_user_info=curr_user_info)
+            
+        if len(new_username) < 1:
+            flash("Please enter a username.")
+            return render_template('settings.html',
+            curr_user_info=curr_user_info)
+            
+        settings.update_personal_info(conn,uid,new_name,new_username)
+        flash("Profile information updated!")
+        
+        return render_template('settings.html',
+            curr_user_info=curr_user_info)
+        
+    
+    elif action == 'Update Password':
+        old_pw = request.form.get('old_pw')
+        new_pw1 = request.form.get('new_pw1')
+        new_pw2 = request.form.get('new_pw2')
+        
+        pw_check = settings.check_password(conn,uid,old_pw,new_pw1,new_pw2)
+        
+        if len(new_pw1) < 6:
+            flash("New password must have at least 6 characters. Please try again.")
+            return render_template(
+            'settings.html',
+            curr_user_info=curr_user_info
+            )
+        
+        if pw_check == -1:
+            flash("Incorrect password. Please try again.")
+            return render_template(
+            'settings.html',
+            curr_user_info=curr_user_info
+            )
+        elif pw_check == -2:
+            flash("Please make sure the new passwords match")
+            return render_template(
+            'settings.html',
+            curr_user_info=curr_user_info
+            )
+        
+        # passwords must match --> update password
+        settings.update_password(conn, uid, new_pw1)
+        flash('Password successfully updated.')
+        
+        return render_template(
+            'settings.html',
+            curr_user_info=curr_user_info
+            )
+        
+
+    elif action == 'update_appearance':
+        appearance = request.form.get('appearance')
+        # update appearance pref
+        flash("Appearance updated!")
+
+    else:
+        flash("Unknown form submitted")
+
+    return redirect(url_for('settings_page', uid=uid))
+        
 
 @app.route('/critter/<cid>')
 # page for when you click into a critter to see their stories
