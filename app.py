@@ -305,12 +305,11 @@ def critter_upload():
 
         # Add the photo to the uploads folder, using critter{cid} as the name
         cid = pet['cid']
-        
         nm = "critter" + str(uid)
         ext = user_filename.split('.')[-1]
-        filename = secure_filename(f"{nm}.{ext}")
-
-        pathname = os.path.join(app.config['uploads'], filename)
+        filename = secure_filename('{}.{}'.format(nm,ext))
+        pathname = os.path.join(app.config['uploads'],filename)
+        print(pathname)
         f.save(pathname)
 
         # Update the critter element in database to have the correct image path
@@ -368,7 +367,6 @@ def lookup_form():
             return redirect(url_for('index'))
         if len(critters) == 1:
             return redirect(url_for('critter', cid=critters[0]['cid']))  # if there is only one result, go straight to the critter's page
-        print(critters)
         return render_template('critter_lookup.html', query = query, critters = critters) # renders a clickable list of critters
     if query_type == 'user':
         users = profile.lookup_user(conn, query)
