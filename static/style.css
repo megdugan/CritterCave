@@ -1,50 +1,50 @@
 @import url("colors.css");
 
 /* ======================================================
-   BASE RESET & TYPOGRAPHY
+   BASE & TYPOGRAPHY
 ====================================================== */
 
 html, body, p, label, input, select, textarea, button, a,
 h1, h2, h3, h4, h5, h6, li, span, div {
-  font-family: var(--font-family);
+    font-family: var(--font-family);
 }
 
 html {
-  color: var(--text-primary);
-  background-color: var(--bg);
+    color: var(--text-primary);
+    background-color: var(--bg);
 }
 
 body {
-  font-size: 16px;
-  line-height: 1.6;
-  scroll-behavior: smooth;
-  margin: 20px auto 40px;
-  padding: 0 20px;
+    font-size: 16px;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    margin: 20px auto 40px;
+    padding: 0 20px;
 }
 
 /* Links */
 a {
-  color: var(--text-link);
-  text-decoration: underline;
+    color: var(--text-link);
+    text-decoration: underline;
 }
 a:hover,
 a:focus {
-  color: var(--accent-sage);
-  text-decoration: none;
+    color: var(--accent-sage);
+    text-decoration: none;
 }
 
 /* Headings */
 h1, h2, h3, h4, h5, h6 {
-  color: var(--color-header);
+    color: var(--color-header);
 }
 h1 {
-  font-size: 200%;
+    font-size: 200%;
 }
 
 /* Alerts */
 #messages {
-  color: var(--color-alert);
-  font-style: italic;
+    color: var(--color-alert);
+    font-style: italic;
 }
 
 /* ======================================================
@@ -52,98 +52,86 @@ h1 {
 ====================================================== */
 
 .topbar {
-  background: var(--panel);
-  border: 2px solid var(--border-subtle);
-  border-radius: 8px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  padding: 10px 15px;
-  margin: 0;
+    background: var(--panel);
+    border: 2px solid var(--border-subtle);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 10px 15px;
+    margin: 0;
 }
 
 /* Navigation */
 .topbar nav ul {
-  list-style: none;
-  display: flex;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
 }
 
 .topbar nav a {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: white;
-  background: var(--accent-plum);
-  border: 2px solid var(--border-subtle);
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 16px;
-  cursor: pointer;
-  text-decoration: none;
-  margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    background: var(--accent-plum);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 0;
 }
 .topbar nav a:hover,
 .topbar nav a:focus {
-  background: var(--accent-sage);
+    background: var(--accent-sage);
 }
 
 /* Search Form */
 .topbar .search {
-  background: none;
-  border: none;
-  overflow: hidden;
-  min-width: 0;
-  margin-right: 12px;
-}
-
-.topbar .search-row {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 12px;
-  background: none;
-  border: none;
-  min-width: 0;
-  margin: 0;
+    overflow: hidden;
+    min-width: 0;
+    margin-right: 12px;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
 }
 
 .topbar .search label {
-  font-weight: bold;
-  color: var(--text-secondary);
+    font-weight: bold;
+    color: var(--text-secondary);
 }
 
 .topbar .search input[type="text"],
 .topbar .search select {
-  font-size: 1rem;
-  color: inherit;
-  background: white;
-  border: 2px solid var(--border-subtle);
-  border-radius: 5px;
-  padding: 8px 12px;
-  margin: 0;
-  flex-shrink: 1;
-  min-width: 70px;
+    font-size: 1rem;
+    color: inherit;
+    background: white;
+    border: 2px solid var(--border-subtle);
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin: 0;
+    flex-shrink: 1;
+    min-width: 70px;
 }
 
 .topbar .search input[type="submit"] {
-  font-weight: bold;
-  color: white;
-  background: var(--accent-plum);
-  border: 2px solid var(--border-subtle);
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 16px;
-  cursor: pointer;
-  flex-shrink: 0;
-  margin: 0;
+    font-weight: bold;
+    color: white;
+    background: var(--accent-plum);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    flex-shrink: 0;
 }
 .topbar .search input[type="submit"]:hover {
-  background: var(--accent-sage);
+    background: var(--accent-sage);
 }
 
 /* ======================================================
@@ -151,18 +139,17 @@ h1 {
 ====================================================== */
 
 .sidebar {
-  background-color: var(--panel-alt);
-  border: none;
-  height: 100%;
-  width: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  padding-top: 60px;
-  overflow-x: hidden;
-  transition: 0.5s;
-  margin: 0;
+    background-color: var(--panel-alt);
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    padding-top: 60px;
+    overflow-x: hidden;
+    transition: 0.5s;
+    margin: 0;
 }
 
 .sidebar a {
@@ -177,39 +164,34 @@ h1 {
   transition: 0.3s;
 }
 .sidebar a:hover {
-  color: var(--text-primary);
+    color: var(--text-primary);
 }
 
 .sidebar .closebtn {
-  background: none;
-  border: none;
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin: 0;
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin: 0;
 }
 
 /* Sidebar Toggle Button */
 .openbtn {
-  font-size: 20px;
-  color: white;
-  background: var(--accent-plum);
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  margin: 0;
+    font-size: 20px;
+    color: white;
+    background: var(--accent-plum);
+    padding: 10px 15px;
+    cursor: pointer;
+    margin: 0;
 }
 .openbtn:hover {
-  background: var(--accent-rosewood);
+    background: var(--accent-rosewood);
 }
 
 #main {
-  transition: margin-left 0.5s;
-  background: none;
-  border: none;
-  padding: 20px;
-  margin: 0;
+    transition: margin-left 0.5s;
+    padding: 20px;
+    margin: 0;
 }
 
 /* ======================================================
@@ -217,21 +199,19 @@ h1 {
 ====================================================== */
 
 #log_container {
-  text-align: center;
-  background: var(--panel);
-  border: 2px solid var(--border-subtle);
-  border-radius: 10px;
-  width: 400px;
-  padding: 10px;
-  margin: 0 auto;
+    text-align: center;
+    background: var(--panel);
+    border: 2px solid var(--border-subtle);
+    border-radius: 10px;
+    width: 400px;
+    padding: 10px;
+    margin: 0 auto;
 }
 
 #sign_up_form {
-  display: grid;
-  justify-items: center;
-  background: none;
-  border: none;
-  margin: 0;
+    display: grid;
+    justify-items: center;
+    margin: 0;
 }
 
 /* ======================================================
@@ -239,56 +219,46 @@ h1 {
 ====================================================== */
 
 .settings {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
-  background: none;
-  border: none;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
 .settings h1 {
-  font-size: 32px;
-  font-weight: 600;
-  text-align: left;
-  color: var(--text-primary);
-  margin-bottom: 25px;
-  background: none;
-  border: none;
+    font-size: 32px;
+    font-weight: 600;
+    text-align: left;
+    color: var(--text-primary);
+    margin-bottom: 25px;
 }
 
 /* Blocks */
 .settings-block {
-  background: var(--panel);
-  border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  padding: 24px 28px;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    background: var(--panel);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.04);
 }
 
 .block-subtitle {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 15px;
-  background: none;
-  border: none;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
 }
 
 .settings-block h2 {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 5px;
-  background: none;
-  border: none;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 5px;
 }
 
 .settings-block label {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 15px;
-  background: none;
-  border: none;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
 }
 
 /* Inputs */
@@ -296,65 +266,65 @@ h1 {
 .settings-block input[type="password"],
 .settings-block input[type="file"],
 .settings-block select {
-  font-size: 15px;
-  background: #f9fafb;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  width: 100%;
-  max-width: calc(100% - 20px);
-  display: block;
-  padding: 14px 18px;
-  margin: 14px auto 24px;
-  transition: border-color 0.2s, background 0.2s;
+    font-size: 15px;
+    background: #f9fafb;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    width: 100%;
+    max-width: calc(100% - 20px);
+    display: block;
+    padding: 14px 18px;
+    margin: 14px auto 24px;
+    transition: border-color 0.2s, background 0.2s;
 }
 
 .settings-block input:focus,
 .settings-block select:focus {
-  background: white;
-  border-color: var(--accent-sage);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(103,138,123,0.25);
+    background: white;
+    border-color: var(--accent-sage);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103,138,123,0.25);
 }
 
 /* Textareas */
 .settings-block textarea {
-  font-size: 15px;
-  color: var(--text-primary);
-  background: #f9fafb;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  width: 100%;
-  max-width: calc(100% - 20px);
-  min-height: 70px;
-  padding: 16px 18px;
-  resize: vertical;
-  margin: 14px auto 24px;
-  transition: border-color 0.2s, background 0.2s;
+    font-size: 15px;
+    color: var(--text-primary);
+    background: #f9fafb;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    width: 100%;
+    max-width: calc(100% - 20px);
+    min-height: 70px;
+    padding: 16px 18px;
+    resize: vertical;
+    margin: 14px auto 24px;
+    transition: border-color 0.2s, background 0.2s;
 }
 .settings-block textarea:focus {
-  background: white;
-  border-color: var(--accent-sage);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(103,138,123,0.25);
+    background: white;
+    border-color: var(--accent-sage);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103,138,123,0.25);
 }
 
 /* Submit Buttons */
 .settings-block input[type="submit"],
 form > p > input[type="submit"] {
-  font-size: 15px;
-  text-align: center;
-  color: white;
-  background: var(--accent-plum);
-  border: none;
-  border-radius: 10px;
-  padding: 12px 22px;
-  cursor: pointer;
-  margin: 0;
-  transition: background 0.15s;
+    font-size: 15px;
+    text-align: center;
+    color: white;
+    background: var(--accent-plum);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 22px;
+    cursor: pointer;
+    margin: 0;
+    transition: background 0.15s;
 }
 .settings-block input[type="submit"]:hover,
 form > p > input[type="submit"]:hover {
-  background: var(--accent-rosewood);
+    background: var(--accent-rosewood);
 }
 
 /* ======================================================
@@ -362,20 +332,18 @@ form > p > input[type="submit"]:hover {
 ====================================================== */
 
 .search_result {
-  background: var(--panel);
-  border: 2px solid var(--accent-plum);
-  border-radius: 10px;
-  width: 50%;
-  padding: 12px 22px;
-  margin-top: 10px;
+    background: var(--panel);
+    border: 2px solid var(--accent-plum);
+    border-radius: 10px;
+    width: 50%;
+    padding: 12px 22px;
+    margin-top: 10px;
 }
 
 .search_result_image {
-  width: 100px;
-  height: 100px;
-  background: none;
-  border: none;
-  margin: 0;
+    width: 100px;
+    height: 100px;
+    margin: 0;
 }
 
 /* ======================================================
@@ -383,10 +351,10 @@ form > p > input[type="submit"]:hover {
 ====================================================== */
 
 @media screen and (max-height: 450px) {
-  .sidebar {
-    padding-top: 15px;
-  }
-  .sidebar a {
-    font-size: 18px;
-  }
+    .sidebar {
+        padding-top: 15px;
+    }
+    .sidebar a {
+        font-size: 18px;
+    }
 }
