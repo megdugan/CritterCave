@@ -143,6 +143,28 @@ def delete_user(conn, uid) -> None:
     conn.commit()
     return
 
+def lookup_user(conn, query):
+    '''
+    Lookup a critter by name.
+    Returns a list of critters who match the query.
+    If none match, return None.
+    
+    Args:
+        conn -> pymysql.connections.Connection
+        query -> string
+    Return:
+        list of users -> dict[]
+    '''
+    name_query = f"%{query}%"
+    curs=dbi.dict_cursor(conn)
+    curs.execute("""
+            select * from user where username like %s
+            """,[name_query])
+    users = curs.fetchall()
+    if not users:
+        return None
+    return users
+
 if __name__ == '__main__':
     dbi.conf('crittercave_db')
     conn = dbi.connect()

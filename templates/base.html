@@ -23,35 +23,39 @@
           <a href="{{url_for('index')}}">Home</a>
           <a href="{{url_for('about')}}">About</a>
 
-      </div>
+<div class="topbar">
+    <nav>
+        <ul>
+            <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="{{url_for('about')}}">About</a></li>
+        </ul>
+    </nav>
 
-      <div>
-          <button class="openbtn" onclick="openNavall()">&#9776; </button>
-  </div>
-
-  <div class="topbar">
-
-    <!-- search bar -->
-      <form class="search" method="GET" action="/query/">
-        <p>
-            <label>search: 
-              <input type="text" required name="query">
+    <form class="search" method="GET" action="/query/">
+            <label>search:
+                <input type="text" required name="query">
             </label>
+
             <label>kind:
-                  <select required name="kind">
-                      <option value="">choose one</option>
-                      <option value="person">user</option>
-                      <option value="movie">critter</option>
-                      <option value="movie">story</option>
-                  </select>
-          </label>
-          <input type="submit" value="search">
-        </p>
-      </form>
-  </div>
+                <select required name="kind">
+                    <option value="">choose one</option>
+                    <option value="user">user</option>
+                    <option value="critter">critter</option>
+                </select>
+            </label>
 
-
+            <input type="submit" value="search">
+    </form>
+</div>
 {% endblock %}
+
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div id="messages">
+  {% for msg in messages %}
+  <p>*** {{msg}} ***</p>
+  {% endfor %}
 </div>
 
 <div class="main" id="main">

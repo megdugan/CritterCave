@@ -5,12 +5,17 @@
 {% block main_content %}
     <div class="criter">
         <h1>{{ critter_info.name }}</h1>
+
         <p>Made by: <a href="{{ url_for('user_profile', uid=user.uid) }}">
             {{ user.name }}</a></p>
         <h2>Description</h2>
         <p>{{ critter_info.description }}</p>
 
-        <p><a href="{{ url_for('index') }}">Back to Main Page</a></p>
+        {% if critter_info.imagepath %}
+        <img src="{{ url_for('uploaded_file', filename=critter_info.imagepath) }}"
+         alt="Critter Image"
+         style="width:150px; height:150px; border-radius:50%; object-fit:cover;">
+        {% endif %}
     </div>
 
     <div class="stories">

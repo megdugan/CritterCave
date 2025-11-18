@@ -13,7 +13,7 @@
         <form method="post" action="" enctype="multipart/form-data">
             <p><label for="profile-pic"><strong>New Profile Picture:</strong></label><br>
                 <input id="profile-pic" type="file" name="profile-pic"></p>
-            <p><input type="submit" value="Update Profile Picture"></p>
+            <p><input type="submit" name="action" value="Update Profile Picture"></p>
         </form>
     </section>
 
@@ -24,16 +24,28 @@
         <form method="post" action="">
             <p><label for="name"><strong>Name:</strong></label><br>
                 <input id="display-name" type="text" name="display-name"
-                    placeholder="{{ curr_user_info.name }}"></p>
+                    value="{{ curr_user_info.name }}"></p>
 
             <p><label for="username"><strong>Username:</strong></label><br>
                 <input id="username" type="text" name="username"
-                    placeholder="{{ curr_user_info.username }}"></p>
+                    value="{{ curr_user_info.username }}"></p>
 
-            <p><label for="password"><strong>Password:</strong></label></p><br>
-                <input id="password" type="password" name="password"
-                    placeholder="{{ curr_user_info.password }}"></p>
-            <p><input type="submit" value="Update Profile Info"></p>
+            <p><input type="submit" name="action" value="Update Profile Info"></p>
+        </form>
+    </section>
+
+    <!-- Block: Password -->
+     <section class="settings-block">
+        <h2>Update Password</h2>
+        <p class="block-subtitle">Change your password here.</p>
+        <form method="post" action="">
+            <p><label for="old_pw"><strong>Old Password:</strong></label></p><br>
+                <input id="old_pw" type="password" name="old_pw"></p> 
+            <p><label for="new_pw1"><strong>New Password:</strong></label></p><br>
+                <input id="new_pw1" type="password" name="new_pw1"></p>
+            <p><label for="new_pw2"><strong>Confirm new password:</strong></label></p><br>
+                <input id="new_pw2" type="password" name="new_pw2"></p>
+            <p><input type="submit" name="action" value="Update Password"></p>
         </form>
     </section>
 
@@ -49,7 +61,7 @@
                     <option value="darkmode">Dark Mode</option>
                 </select>
             </p>
-            <p><input type="submit" value="Update Appearance"></p>
+            <p><input type="submit" name="action" value="Update Appearance"></p>
         </form>
     </section>
 
