@@ -1,38 +1,41 @@
-<!-- (CritterCave) -->
-<!-- Base HTML template -->
-
 <!doctype html>
-<html lang='en'>
+<html lang='en' data-theme="light">
 <head>
     <meta charset='utf-8'>
-    <!-- for mobile-friendly pages -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name=author content="">
     <title>{{ page_title }}</title>
-    <link rel='stylesheet' href="{{url_for('static', filename = 'style.css')}}">
+
+    <link rel='stylesheet' href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 
-    {% block head_stuff %} {% endblock %}
+    {% block head_stuff %}{% endblock %}
 </head>
+
 <body>
 
 <div class="main" id="first_main">
-  {% block nav %}
-  <div id="mySidebar" class="sidebar">
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNavall()">&times;</a>
-          <a href="{{url_for('index')}}">Home</a>
-          <a href="{{url_for('about')}}">About</a>
 
-<div class="topbar">
-    <nav>
-        <ul>
-            <li><a href="{{url_for('index')}}">Home</a></li>
-            <li><a href="{{url_for('about')}}">About</a></li>
-            <li><a href="{{url_for('create')}}">Create</a></li>
-        </ul>
-    </nav>
+{% block nav %}
 
-    <form class="search" method="GET" action="/query/">
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNavall()">&times;</a>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <div class="topbar">
+
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('create') }}">Create</a></li>
+            </ul>
+        </nav>
+
+        <form class="search" method="GET" action="/query/">
             <label>search:
                 <input type="text" required name="query">
             </label>
@@ -45,38 +48,35 @@
             </label>
 
             <input type="submit" value="search">
-    </form>
-</div>
+        </form>
+
+    </div>
+
 {% endblock %}
 
-
+<!-- Flash Messages -->
 {% with messages = get_flashed_messages() %}
-{% if messages %}
-<div id="messages">
-  {% for msg in messages %}
-  <p>*** {{msg}} ***</p>
-  {% endfor %}
+    {% if messages %}
+    <div id="messages">
+        {% for msg in messages %}
+        <p>{{ msg }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endwith %}
+
+<!-- Main content -->
+<div class="main" id="main">
+
+    {% block main_content %}
+    <h1>Welcome!</h1>
+    {% endblock %}
+
 </div>
 
-<div class="main" id="main">
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  <div id="messages">
-    {% for msg in messages %}
-    <p>{{msg}}</p>
-    {% endfor %}
-  </div>
-  {% endif %}
-  {% endwith %}
-              
-  {% block main_content %}
-  <h1>Welcome!</h1>
-  {% endblock %}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+{% block end_scripts %}{% endblock %}
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    {% block end_scripts %}
-    {% endblock %}
-  </div>
-    
+</div>
 </body>
 </html>
