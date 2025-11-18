@@ -3,13 +3,6 @@
 
 {% extends "base.html" %}
 {% block main_content %}
-    <div id="mySidebar" class="sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="{{url_for('signup')}}">Sign Up</a>
-        <a href="{{url_for('signin')}}">Sign In</a>
-        <a href="{{url_for('welcome')}}">Back</a>
-        
-    </div>
 
     {% if user.profilepic %}
     <img src="{{ url_for('uploaded_file', filename=user.profilepic) }}"
