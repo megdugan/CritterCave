@@ -192,9 +192,9 @@ h1 {
 
 /* Style page content */
 .main {
-    transition: margin-left .5s; 
+    transition: margin-left .5s;
     padding: 20px;
-    background: var(--accent-rosewood);
+    background: var(--bg); /* 👈 correct background */
 }
 
 .topsection{
