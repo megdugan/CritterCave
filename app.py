@@ -35,7 +35,6 @@ def index():
 
 @app.route('/about/')
 def about():
-    flash('this is a flashed message')
     return render_template('about.html', page_title='About Us')
 
 @app.route('/welcome/')
@@ -157,7 +156,9 @@ def settings_page(uid): # fix later to get uid from cookies
         filename = secure_filename(f"{nm}.{ext}")
 
         pathname = os.path.join(app.config['uploads'], filename)
+        
         file.save(pathname)
+        os.chmod(pathname, 0o444)
 
 
         # Store ONLY the filename in the DB
