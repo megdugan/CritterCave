@@ -194,7 +194,7 @@ h1 {
 .main {
     transition: margin-left .5s;
     padding: 20px;
-    background: var(--bg); /* 👈 correct background */
+    background: var(--bg); 
 }
 
 .topsection{
