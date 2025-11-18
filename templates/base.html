@@ -22,6 +22,7 @@
         <ul>
             <li><a href="{{url_for('index')}}">Home</a></li>
             <li><a href="{{url_for('about')}}">About</a></li>
+            <li><a href="{{url_for('create')}}">Create</a></li>
         </ul>
     </nav>
 
@@ -32,7 +33,6 @@
 
             <label>kind:
                 <select required name="kind">
-                    <option value="">choose one</option>
                     <option value="user">user</option>
                     <option value="critter">critter</option>
                 </select>
