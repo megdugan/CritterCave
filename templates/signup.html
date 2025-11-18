@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href="{{url_for('static', filename = 'style.css')}}">
-    <script src="{{ url_for('static', filename='/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
     <title>Document</title>
  </head>
  <body>
@@ -16,35 +16,38 @@
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <a href="{{url_for('signup')}}">Sign Up</a>
   <a href="{{url_for('signin')}}">Sign In</a>
+  <a href="{{url_for('welcome')}}">Back</a>
 </div>
 
-<div id="main">
+<div>
+    <button class="openbtn" onclick="openNav()">&#9776; </button>
+</div>
 
-    <div id="log_container">
-        <button class="openbtn" onclick="openNav()">&#9776; Open Sidebar</button>
+<div class="main" id="main" >
+
+    <div class="log_container">
+        
         <h1>Sign Up</h1>
 
         <h2>Welcome to Critter Cave!</h3>
         <h2>Sign up below.</h3> 
-        <h2>Collapsed Sidebar</h2>
-        <p>Content...</p>
 
-        <form id="sign_up_form" method=POST action="">
+        <form class="sign_up_form" method=POST action="">
             <table>
                 <tr>
                     <td><label for="name">Name</label></td>
-                    <td><input id="name" name='name' value=""></td> 
+                    <td><input type="name" id="name" name='name' value=""></td> 
                 </tr>
                 <tr>
                     <td><label for="username">Username</label></td>
-                    <td><input id="username" name='username' value=""></td>
+                    <td><input type="username" id="username" name='username' value=""></td>
                 </tr>
                 <tr>
                     <td><label for="password">Password</label></td>
-                    <td><input id="password" name='password' value=""></td>
+                    <td><input type="password" id="password" name='password' value=""></td>
                 </tr>
             </table>
-            <input type="submit" name="submit" value="sign up">
+            <input type="submit" name="submit" value="Sign up">
         </form>
 
     </div>

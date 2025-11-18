@@ -37,6 +37,10 @@ def index():
 def about():
     return render_template('about.html', page_title='About Us')
 
+@app.route('/create/')
+def create():
+    return render_template('create.html', page_title='Create')
+
 @app.route('/welcome/')
 def welcome():
     return render_template('welcome.html', page_title='Welcome')

@@ -9,19 +9,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name=author content="">
     <title>{{ page_title }}</title>
-    <script src="script.js"></script>
     <link rel='stylesheet' href="{{url_for('static', filename = 'style.css')}}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
     {% block head_stuff %} {% endblock %}
 </head>
 <body>
 
-{% block nav %}
+<div class="main" id="first_main">
+  {% block nav %}
+  <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNavall()">&times;</a>
+          <a href="{{url_for('index')}}">Home</a>
+          <a href="{{url_for('about')}}">About</a>
 
 <div class="topbar">
     <nav>
         <ul>
             <li><a href="{{url_for('index')}}">Home</a></li>
             <li><a href="{{url_for('about')}}">About</a></li>
+            <li><a href="{{url_for('create')}}">Create</a></li>
         </ul>
     </nav>
 
@@ -32,7 +39,6 @@
 
             <label>kind:
                 <select required name="kind">
-                    <option value="">choose one</option>
                     <option value="user">user</option>
                     <option value="critter">critter</option>
                 </select>
@@ -48,19 +54,29 @@
 {% if messages %}
 <div id="messages">
   {% for msg in messages %}
-  <p>{{msg}}</p>
+  <p>*** {{msg}} ***</p>
   {% endfor %}
 </div>
-{% endif %}
-{% endwith %}
-            
-{% block main_content %}
-<h1>Welcome!</h1>
-{% endblock %}
 
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  {% block end_scripts %}
+<div class="main" id="main">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div id="messages">
+    {% for msg in messages %}
+    <p>{{msg}}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+              
+  {% block main_content %}
+  <h1>Welcome!</h1>
   {% endblock %}
-  
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    {% block end_scripts %}
+    {% endblock %}
+  </div>
+    
 </body>
 </html>
