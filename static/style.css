@@ -1,170 +1,223 @@
-/* CSS for Critter Cave Project */
+@import url("colors.css");
 
-/* CSS Variables --------------------- */
-HTML {
-    --color-header: #0073e6;
-    --color-focus: #5ba300;
-    --color-alert: #b51963;
-    --color-nav-fg: white;
-    --font-family: Verdana;
-    font-family: var(--font-family)
+/* ======================================================
+   BASE & TYPOGRAPHY
+====================================================== */
+
+html, body, p, label, input, select, textarea, button, a,
+h1, h2, h3, h4, h5, h6, li, span, div {
+    font-family: var(--font-family);
 }
 
+html {
+    color: var(--text-primary);
+    background-color: var(--bg);
+}
 
-/* Flashed messages --------------------- */
+body {
+    font-size: 16px;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    margin: 20px auto 40px;
+    padding: 0 20px;
+}
+
+/* Links */
+a {
+    color: var(--text-link);
+    text-decoration: underline;
+}
+a:hover,
+a:focus {
+    color: var(--accent-sage);
+    text-decoration: none;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-header);
+}
+h1 {
+    font-size: 200%;
+}
+
+/* Alerts */
 #messages {
     color: var(--color-alert);
     font-style: italic;
 }
 
+/* ======================================================
+   TOPBAR
+====================================================== */
 
-/* Headings --------------------- */
-h1, h2, h3, h4, h5, h6 {
-    color: var(--color-header);
+.topbar {
+    background: var(--panel);
+    border: 2px solid var(--border-subtle);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 10px 15px;
+    margin: 0;
 }
 
-h1 {
-    font-size: 200%;
-}
-
-
-/* Nav Bar --------------------- */
-nav > ul {
+/* Navigation */
+.topbar nav ul {
+    list-style: none;
     display: flex;
-    flex-direction: row;
-}
-
-nav ul {
-    list-style-type: none;
+    gap: 10px;
     margin: 0;
     padding: 0;
 }
 
-nav > ul > li {
-    flex: 0 0 auto;
-    width: 15em;
-}
-
-nav button, nav a {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    height: 40px;
-    padding: 0;
-    padding-bottom: 5px;
-    background-color: var(--color-header);
-    color: var(--color-nav-fg);
-    border: 2px solid black;
-    border-radius: 5px;
-    cursor: pointer;
-
-    font-family: var(--font-family);
+.topbar nav a {
+    font-size: 1.2rem;
     font-weight: bold;
-    font-size: 1.4rem;
+    color: white;
+    background: var(--accent-plum);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 0;
+}
+.topbar nav a:hover,
+.topbar nav a:focus {
+    background: var(--accent-sage);
 }
 
-nav > ul > li > button,
-nav > ul > li > a {
-    text-align: center;
+/* Search Form */
+.topbar .search {
+    overflow: hidden;
+    min-width: 0;
+    margin-right: 12px;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
 }
 
-nav li.right {
-    margin-left: auto;
+.topbar .search label {
+    font-weight: bold;
+    color: var(--text-secondary);
 }
 
-nav button:hover, button:focus,
-nav a:hover, nav a:focus {
-    background-color: var(--color-focus);
+.topbar .search input[type="text"],
+.topbar .search select {
+    font-size: 1rem;
+    color: inherit;
+    background: white;
+    border: 2px solid var(--border-subtle);
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin: 0;
+    flex-shrink: 1;
+    min-width: 70px;
 }
 
-/* The sidebar menu */
+.topbar .search input[type="submit"] {
+    font-weight: bold;
+    color: white;
+    background: var(--accent-plum);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.topbar .search input[type="submit"]:hover {
+    background: var(--accent-sage);
+}
+
+/* ======================================================
+   SIDEBAR
+====================================================== */
+
 .sidebar {
-  height: 100%; /* 100% Full-height */
-  width: 0; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
-  top: 0;
-  left: 0;
-  background-color: #111; /* Black*/
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+    background-color: var(--panel-alt);
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    padding-top: 60px;
+    overflow-x: hidden;
+    transition: 0.5s;
+    margin: 0;
 }
 
-/* The sidebar links */
 .sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  text-decoration: none;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
   display: block;
+  padding: 8px 32px;
+  margin: 0;
   transition: 0.3s;
 }
-
-/* When you mouse over the navigation links, change their color */
 .sidebar a:hover {
-  color: #f1f1f1;
+    color: var(--text-primary);
 }
 
-/* Position and style the close button (top right corner) */
 .sidebar .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin: 0;
 }
 
-/* The button used to open the sidebar */
+/* Sidebar Toggle Button */
 .openbtn {
-  font-size: 20px;
-  cursor: pointer;
-  background-color: #111;
-  color: white;
-  padding: 10px 15px;
-  border: none;
+    font-size: 20px;
+    color: white;
+    background: var(--accent-plum);
+    padding: 10px 15px;
+    cursor: pointer;
+    margin: 0;
 }
-
 .openbtn:hover {
-  background-color: #444;
+    background: var(--accent-rosewood);
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
-  transition: margin-left .5s; /* If you want a transition effect */
-  padding: 20px;
+    transition: margin-left 0.5s;
+    padding: 20px;
+    margin: 0;
 }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
-}
+/* ======================================================
+   LOGIN CONTAINER
+====================================================== */
 
-/*The log in css container*/
-#log_container{
-    width: 400px;
-    margin: 0 auto;
-    border: 2px solid;
-    padding: 10px;
-    border-radius: 10px;
+#log_container {
     text-align: center;
+    background: var(--panel);
+    border: 2px solid var(--border-subtle);
+    border-radius: 10px;
+    width: 400px;
+    padding: 10px;
+    margin: 0 auto;
 }
 
-#sign_up_form{
+#sign_up_form {
+    display: grid;
     justify-items: center;
-}.topbar {
-    display:grid;
-    grid-template-columns: 60% 39%;
+    margin: 0;
 }
 
+/* ======================================================
+   SETTINGS PAGE
+====================================================== */
 
-
-/****************************************/
-/********* Settings page styles *********/
-/****************************************/
-
-/* Page spacing */
 .settings {
     max-width: 900px;
     margin: 40px auto;
@@ -174,152 +227,134 @@ nav a:hover, nav a:focus {
 .settings h1 {
     font-size: 32px;
     font-weight: 600;
+    text-align: left;
+    color: var(--text-primary);
     margin-bottom: 25px;
 }
 
+/* Blocks */
 .settings-block {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--panel);
+    border: 1px solid var(--border-subtle);
     border-radius: 14px;
     padding: 24px 28px;
-    margin-bottom: 14px;        /* smaller spacing between sections */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+    margin-bottom: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.04);
 }
 
 .block-subtitle {
     font-size: 14px;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin-bottom: 15px;
 }
 
 .settings-block h2 {
     font-size: 20px;
     font-weight: 600;
+    color: var(--text-primary);
     margin-bottom: 5px;
 }
 
 .settings-block label {
-    font-weight: 500;
     font-size: 14px;
-    color: #374151;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
 }
 
-
-/* Inputs + Selects --------------------- */
+/* Inputs */
 .settings-block input[type="text"],
 .settings-block input[type="password"],
 .settings-block input[type="file"],
 .settings-block select {
+    font-size: 15px;
+    background: #f9fafb;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
     width: 100%;
     max-width: calc(100% - 20px);
+    display: block;
     padding: 14px 18px;
     margin: 14px auto 24px;
-    display: block;
-    text-align: left;
-    font-size: 15px;
-
-    border: 1px solid #d1d5db;
-    border-radius: 12px;
-    background: #f9fafb;
     transition: border-color 0.2s, background 0.2s;
 }
 
 .settings-block input:focus,
 .settings-block select:focus {
-    outline: none;
-    border-color: #60a5fa;
     background: white;
-    box-shadow: 0 0 0 2px rgba(96,165,250,0.25);
+    border-color: var(--accent-sage);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103,138,123,0.25);
 }
 
-
-/* Text areas --------------------- */
+/* Textareas */
 .settings-block textarea {
-    width: 100%;
-    max-width: calc(100% - 20px); /* nearly full width */
-    min-height: 70px;
-
-    padding: 16px 18px;
-    margin: 14px auto 24px;
-    display: block;
-
     font-size: 15px;
-    text-align: left;
-    font-family: var(--font-family);
-    color: #374151;
-
-    border: 1px solid #d1d5db;
-    border-radius: 12px;
+    color: var(--text-primary);
     background: #f9fafb;
-
-    line-height: 1.5;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    width: 100%;
+    max-width: calc(100% - 20px);
+    min-height: 70px;
+    padding: 16px 18px;
     resize: vertical;
+    margin: 14px auto 24px;
     transition: border-color 0.2s, background 0.2s;
 }
-
 .settings-block textarea:focus {
+    background: white;
+    border-color: var(--accent-sage);
     outline: none;
-    border-color: #60a5fa;
-    background: #ffffff;
-    box-shadow: 0 0 0 2px rgba(96,165,250,0.25);
+    box-shadow: 0 0 0 2px rgba(103,138,123,0.25);
 }
 
-.settings-block textarea::placeholder,
-.settings-block input::placeholder {
-    text-align: left;
-    color: #9ca3af;
-}
-
-#critter-desc {
-    height: 70px;
-    padding-top: 12px;
-    display: block;
-}
-
-#critter-story {
-    min-height: 140px;
-    line-height: 1.6;
-    padding-top: 14px;
-}
-
-
-/* Submit Button --------------------- */
+/* Submit Buttons */
 .settings-block input[type="submit"],
 form > p > input[type="submit"] {
-    background: #2563eb;
-    color: white;
-    padding: 12px 22px;
-    border-radius: 10px;
-    border: none;
     font-size: 15px;
+    text-align: center;
+    color: white;
+    background: var(--accent-plum);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 22px;
     cursor: pointer;
+    margin: 0;
     transition: background 0.15s;
 }
-
 .settings-block input[type="submit"]:hover,
 form > p > input[type="submit"]:hover {
-    background: #1d4ed8;
+    background: var(--accent-rosewood);
 }
 
-.settings-block form p {
+/* ======================================================
+   SEARCH RESULTS
+====================================================== */
+
+.search_result {
+    background: var(--panel);
+    border: 2px solid var(--accent-plum);
+    border-radius: 10px;
+    width: 50%;
+    padding: 12px 22px;
+    margin-top: 10px;
+}
+
+.search_result_image {
+    width: 100px;
+    height: 100px;
     margin: 0;
 }
 
-/* use in div element for search results */
-.search_result {
-    display:block;
-    width:50%;
-    padding: 12px 22px;
-    border-radius: 10px;
-    margin-top: 10px;
-    /* outline: none; */
-    border: 2px, solid, #1d4ed8;
-    background: #ffffff;
-    /* box-shadow: 0 0 0 2px rgba(96,165,250,0.25); */
-}
+/* ======================================================
+   RESPONSIVE
+====================================================== */
 
-/* use in images in search_results */
-.search_result_image {
-    width:100px;
-    height:100px;
+@media screen and (max-height: 450px) {
+    .sidebar {
+        padding-top: 15px;
+    }
+    .sidebar a {
+        font-size: 18px;
+    }
 }
