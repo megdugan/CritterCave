@@ -119,8 +119,6 @@ h1 {
     min-width: 70px;
 }
 
-/*Sign up and Sign In Page CSS*/
-/* The sidebar menu */
 .topbar .search input[type="submit"] {
     font-weight: bold;
     color: white;
@@ -157,15 +155,15 @@ h1 {
 }
 
 .sidebar a {
-  font-size: 25px;
-  text-decoration: none;
-  color: var(--text-secondary);
-  background: none;
-  border: none;
-  display: block;
-  padding: 8px 32px;
-  margin: 0;
-  transition: 0.3s;
+    font-size: 25px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    display: block;
+    padding: 8px 32px;
+    margin: 0;
+    transition: 0.3s;
 }
 .sidebar a:hover {
     color: var(--text-primary);
@@ -189,31 +187,25 @@ h1 {
     margin: 0;
 }
 .openbtn:hover {
-  transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+/* Style page content */
 .main {
-  transition: margin-left .5s; 
-  padding: 20px;
+    transition: margin-left .5s; 
+    padding: 20px;
     background: var(--accent-rosewood);
 }
 
-
+.topsection{
+    transition: margin-left .5s; 
+    
+}
 
 /* ======================================================
    LOGIN CONTAINER
 ====================================================== */
 
-
-
-/*The log in css container*/
-.log_container{
-    width: 400px;
-    margin: 0 auto;
-    border: 2px solid;
-    padding: 10px;
-    border-radius: 10px;
 #log_container {
     text-align: center;
     background: var(--panel);
@@ -222,26 +214,23 @@ h1 {
     width: 400px;
     padding: 10px;
     margin: 0 auto;
-    }
 }
 
-
-.sign_up_form{
 #sign_up_form {
     display: grid;
     justify-items: center;
     margin: 0;
 }
-}
 
 /* ======================================================
-   SETTINGS PAGE
+   FORM INPUTS
 ====================================================== */
 
-.sign_up_form input[type="username"],
-.sign_up_form input[type="password"],
-.sign_up_form input[type="name"],
-.sign_up_form select{
+#sign_up_form input[type="text"],
+#sign_up_form input[type="username"],
+#sign_up_form input[type="password"],
+#sign_up_form input[type="name"],
+#sign_up_form select {
     width: 100%;
     max-width: calc(100% - 20px);
     padding: 14px 18px;
@@ -255,7 +244,7 @@ h1 {
     transition: border-color 0.2s, background 0.2s;
 }
 
-.sign_up_form input[type="submit"],
+#sign_up_form input[type="submit"],
 form > p > input[type="submit"] {
     background: #2563eb;
     color: white;
@@ -267,15 +256,19 @@ form > p > input[type="submit"] {
     transition: background 0.15s;
 }
 
-.sign_up_form input[type="submit"]:hover,
+#sign_up_form input[type="submit"]:hover,
 form > p > input[type="submit"]:hover {
     background: #1d4ed8;
 }
-.sign_up_form form p {
+
+#sign_up_form form p {
     margin: 0;
 }
 
-/* Settings Page + Block Formatting --------------------- */
+/* ======================================================
+   SETTINGS PAGE
+====================================================== */
+
 .settings {
     max-width: 900px;
     margin: 40px auto;
@@ -367,8 +360,7 @@ form > p > input[type="submit"]:hover {
 }
 
 /* Submit Buttons */
-.settings-block input[type="submit"],
-form > p > input[type="submit"] {
+.settings-block input[type="submit"] {
     font-size: 15px;
     text-align: center;
     color: white;
@@ -380,8 +372,7 @@ form > p > input[type="submit"] {
     margin: 0;
     transition: background 0.15s;
 }
-.settings-block input[type="submit"]:hover,
-form > p > input[type="submit"]:hover {
+.settings-block input[type="submit"]:hover {
     background: var(--accent-rosewood);
 }
 
