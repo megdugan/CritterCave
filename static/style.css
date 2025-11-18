@@ -3,7 +3,6 @@
 /* CSS Variables --------------------- */
 HTML {
     --color-header: #0073e6;
-    --color-focus: #5ba300;
     --color-alert: #b51963;
     --color-nav-fg: white;
     --font-family: Verdana;
@@ -77,6 +76,7 @@ nav a:hover, nav a:focus {
     background-color: var(--color-focus);
 }
 
+/*Sign up and Sign In Page CSS*/
 /* The sidebar menu */
 .sidebar {
   height: 100%; /* 100% Full-height */
@@ -117,21 +117,23 @@ nav a:hover, nav a:focus {
 
 /* The button used to open the sidebar */
 .openbtn {
-  font-size: 20px;
+  font-size: 30px;
   cursor: pointer;
-  background-color: #111;
-  color: white;
+  color: #2563eb;
+  background-color: white;
   padding: 10px 15px;
   border: none;
+  transition: transform 0.3s ease;
+
 }
 
 .openbtn:hover {
-  background-color: #444;
+  transform: rotate(90deg);
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-  transition: margin-left .5s; /* If you want a transition effect */
+.main {
+  transition: margin-left .5s; 
   padding: 20px;
 }
 
@@ -141,8 +143,10 @@ nav a:hover, nav a:focus {
   .sidebar a {font-size: 18px;}
 }
 
+
+
 /*The log in css container*/
-#log_container{
+.log_container{
     width: 400px;
     margin: 0 auto;
     border: 2px solid;
@@ -151,13 +155,51 @@ nav a:hover, nav a:focus {
     text-align: center;
 }
 
-#sign_up_form{
+
+.sign_up_form{
     justify-items: center;
 }.topbar {
     display:grid;
     grid-template-columns: 60% 39%;
 }
 
+
+.sign_up_form input[type="username"],
+.sign_up_form input[type="password"],
+.sign_up_form input[type="name"],
+.sign_up_form select{
+    width: 100%;
+    max-width: calc(100% - 20px);
+    padding: 14px 18px;
+    margin: 14px auto 24px;
+    display: block;
+    text-align: left;
+    font-size: 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background: #f9fafb;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.sign_up_form input[type="submit"],
+form > p > input[type="submit"] {
+    background: #2563eb;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.sign_up_form input[type="submit"]:hover,
+form > p > input[type="submit"]:hover {
+    background: #1d4ed8;
+}
+.sign_up_form form p {
+    margin: 0;
+}
 
 /* Settings Page + Block Formatting --------------------- */
 .settings {
