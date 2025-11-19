@@ -6,15 +6,23 @@
 <h1>Critter results for '{{query}}'</h1>
 
 {% for c in critters %}
-<div class="search_result">
-    <img href="c['imagepath']">
-    <a href="{{url_for('critter_page', cid=c['cid'])}}">{{c['name']}}</a>
-    <ul>
-        <li><p>Description: {{c['description']}}</p></li>
-        <li><p>Created on: {{c['created']}}</p></li>
-    </ul>
 
+<div class="search_result">
+    <div class="critter_result">
+        <div>
+            <img src="{{  url_for('uploaded_file', filename=c['imagepath']) }}"
+            alt="Profile Picture" class="critter-profile-img">
+        </div>
+        <div style="padding-left:20px">
+            <h1><a href="{{url_for('critter_page', cid=c['cid'])}}">{{c['name']}}</a></h1>
+            <a href="{{url_for('user_profile', uid=c['uid'])}}">{{c['creator']}}</a>
+            <p>{{c['created']}}</p>
+
+        </div>
+    </div>
+    <p>Description: {{c['description']}}</p>
 </div>
+
 {% endfor %}
 
 {% endblock %}

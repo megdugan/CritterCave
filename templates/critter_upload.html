@@ -10,6 +10,7 @@
         <section class="settings-block">
             <h2>Upload Critter Photo</h2>
             <p class="block-subtitle">Choose an image to represent your critter.</p>
+            <p class="block-subtitle">You can upload a pre-existing image or create one <a href="{{ url_for('create') }}">here</a>. </p>
 
             <p>
                 <label for="critter-pic"><strong>Critter Photo:</strong></label><br>
@@ -37,7 +38,6 @@
 
         <p><input type="submit" class="sub_button" value="Upload Your Critter"></p>
     </form>
-
 </div>
 
 {% endblock %}

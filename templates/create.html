@@ -2,16 +2,19 @@
 <!-- HTML template for a critter lookup result page -->
 {% extends "base.html" %}      
 {% block main_content %}      
-
-<h1>Create a critter!</h1>
-<p>Draw a critter below and save the drawing to upload!</p>
-
-<iframe 
-    src="https://www.pixilart.com/draw" 
-    width="800" 
-    height="600" 
-    title="Pixel Art Creator"
->
-</iframe>
+<div class="settings">
+    <section class="settings-block">
+        <h1>Draw your critter!</h1>
+        <p class="block-subtitle">Draw and your critter using the software below.</p>
+        <p class="block-subtitle">Save the photo and use for <a href="{{ url_for('critter_upload') }}">upload critter</a>.</p>
+        <iframe 
+            src="https://www.pixilart.com/draw" 
+            width="800" 
+            height="600" 
+            title="Pixel Art Creator"
+            >
+            </iframe>
+    </section>
+</div>
 
 {% endblock %}

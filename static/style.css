@@ -120,6 +120,10 @@ h1 {
     min-width: 70px;
 }
 
+/* .form-select option {
+    background-color: var(--accent-plum);
+} */
+
 .topbar .search input[type="submit"] {
     font-weight: bold;
     color: white;
@@ -392,11 +396,17 @@ form > p > input[type="submit"]:hover {
 
 .search_result {
     background: var(--panel);
-    border: 2px solid var(--accent-plum);
-    border-radius: 10px;
-    width: 50%;
+    border: 2px solid var(--border-subtle);
+    border-radius: 5px;
+    width: 75%;
     padding: 12px 22px;
     margin-top: 10px;
+}
+
+.critter_result {
+    display: flex;
+    justify-content: left;
+    padding: 5px 5px;
 }
 
 .search_result_image {

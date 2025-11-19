@@ -99,6 +99,7 @@ def signin():
         session['uid']=uid
         session['logged_in']=True
         
+        print(type(uid))
         # if duplicate key error, flash message
         if uid == -1:
             flash("Incorrect password. Please try again.")
@@ -185,7 +186,7 @@ def settings_page(uid): # fix later to get uid from cookies
     
     # POST: figure out which form was submitted
     action = request.form.get('action')
-
+    
     if action == 'Update Profile Picture':
         file = request.files.get('profile-pic')
         user_filename = file.filename
@@ -221,13 +222,30 @@ def settings_page(uid): # fix later to get uid from cookies
             return render_template('settings.html',
             curr_user_info=curr_user_info)
             
+        if len(new_name) > 50:
+            flash("Name must be under 50 characters.")
+            return render_template('settings.html',
+            curr_user_info=curr_user_info)
+            
         if len(new_username) < 1:
             flash("Please enter a username.")
             return render_template('settings.html',
             curr_user_info=curr_user_info)
             
-        settings.update_personal_info(conn,uid,new_name,new_username)
+        if len(new_username) > 50:
+            flash("Username must be under 50 characters.")
+            return render_template('settings.html',
+            curr_user_info=curr_user_info)
+            
+        try:
+            settings.update_personal_info(conn,uid,new_name,new_username)
+        except:
+            flash("An error occurred when updating the profile information. Please try again.")
+            return render_template('settings.html',
+            curr_user_info=curr_user_info)
+            
         flash("Profile information updated!")
+        curr_user_info = profile.get_user_info(conn, uid)
         
         return render_template('settings.html',
             curr_user_info=curr_user_info)
@@ -244,8 +262,13 @@ def settings_page(uid): # fix later to get uid from cookies
             flash("New password must have at least 6 characters. Please try again.")
             return render_template(
             'settings.html',
-            curr_user_info=curr_user_info
-            )
+            curr_user_info=curr_user_info)
+        if len(new_pw1) > 60:
+            flash("New password must be under 60 characters. Please try again.")
+            return render_template(
+            'settings.html',
+            curr_user_info=curr_user_info)
+            
         
         if pw_check == -1:
             flash("Incorrect password. Please try again.")
@@ -261,7 +284,11 @@ def settings_page(uid): # fix later to get uid from cookies
             )
         
         # passwords must match --> update password
-        settings.update_password(conn, uid, new_pw1)
+        try:
+            settings.update_password(conn, uid, new_pw1)
+        except:
+            flash('An error occurred when updating the password. Please try again.')
+            
         flash('Password successfully updated.')
         
         return render_template(
@@ -276,7 +303,7 @@ def settings_page(uid): # fix later to get uid from cookies
         flash("Appearance updated!")
 
     else:
-        flash("Unknown form submitted")
+        flash("This is not yet implemented")
 
     return redirect(url_for('settings_page', uid=uid))
         
@@ -353,9 +380,21 @@ def critter_upload():
         if name == '':
             flash('Please name the critter.')
             return render_template('critter_upload.html')
+        
+        # check lengths
+        if len(name) > 50:
+            flash('Critter name must be under 50 characters')
+            return render_template('critter_upload.html')
+        if len(desc) > 250:
+            flash('Description must be under 250 characters')
+            return render_template('critter_upload.html')
 
         # Add the critter to the database
-        critterID = critter.add_critter(conn, uid, app.config['uploads'], name, desc)
+        try:
+            critterID = critter.add_critter(conn, uid, app.config['uploads'], name, desc)
+        except:
+            flash('An error occurred when uploading the critter. Please try again')
+            return render_template('critter_upload.html')
         pet = critter.get_critter_by_id(conn, critterID['last_insert_id()'])
 
         # Add the photo to the uploads folder, using critter{cid} as the name
@@ -385,9 +424,29 @@ def story_upload(cid):
         flash("Please Login in first!")
         return redirect(url_for('signin'))
 
+    print(f'looking up critter with cid {cid}')
+    if not cid.isdigit():
+        flash('cid must be a string of digits')
+        return redirect( url_for('index'))
+    
+    # getting critter info
+    cid = int(cid)
+    conn = dbi.connect()
+    critter_info = critter.get_critter_by_id(conn,cid)
+    uid = critter_info['uid']
+    user = profile.get_user_info(conn,uid)
+    if user is None:
+        flash(f'No profile found with uid={uid}')
+        return redirect(url_for('index'))
+    if critter_info is None:
+        flash(f'No critter found with cid={cid}')
+        return redirect(url_for('index'))
+    
     if request.method == 'GET':
         # Send the update form
-        return render_template('story_upload.html')
+        return render_template('story_upload.html', 
+                               user=user, 
+                               critter_info=critter_info)
     else:
         # Method is post, form has been filled out
         # Add the story to the database
@@ -395,14 +454,27 @@ def story_upload(cid):
         session['uid'] = 1
         uid = session['uid']
         desc = request.form.get('critter-story')
+        
+        # check lengths
+        if len(desc) > 2000:
+            flash('The story cannot be longer than 2000 characters')
+            return render_template('story_upload.html', 
+                               user=user, 
+                               critter_info=critter_info)
 
         # Ensure the user uploads a story
         if desc == '':
             flash('Please write a story.')
-            return render_template('story_upload.html')
+            return render_template('story_upload.html', 
+                               user=user, 
+                               critter_info=critter_info)
         
         # Add the story to the database
-        story.add_story(conn, cid, uid, desc)
+        try:
+            story.add_story(conn, cid, uid, desc)
+        except:
+            flash('An error occurred when uploading the story. Please try again')
+            return render_template('story_upload.html')
         return redirect(url_for('critter_page', cid=cid))
 
 @app.route('/query/', methods=['GET'])
@@ -430,6 +502,10 @@ def lookup_form():
         if not critters:
             flash('No critters matched the query. Please try again.')
             return redirect(url_for('index'))
+
+        for c in critters:
+            c['creator'] = profile.get_user_info(conn, c['uid'])['username']
+            c['created'] = c['created'].strftime("%m/%d/%Y")
         if len(critters) == 1:
             return redirect(url_for('critter_page', cid=critters[0]['cid']))  # if there is only one result, go straight to the critter's page
         return render_template('critter_lookup.html', query = query, critters = critters) # renders a clickable list of critters
@@ -438,25 +514,12 @@ def lookup_form():
         if not users:
             flash('No users matched the query. Please try again.')
             return redirect(url_for('index'))
+        for u in users:
+            u['created'] = u['created'].strftime("%m/%d/%Y")
+            u['num_critters'] = len(profile.get_critters_by_user(conn, u['uid']))
         if len(users) == 1:
             return redirect(url_for('user_profile', uid=users[0]['uid']))  # if there is only one result, go straight to the user's page
         return render_template('user_lookup.html', query = query, users = users) # renders a clickable list of users
-
-# @app.route('/lookup/critter/<name>')
-# def critter_lookup(name):
-#     '''
-#     Render the critter lookup page for a given name query.
-#     If no critters match, flash a message.
-    
-#     Args:
-#         name -> string
-#     Return:
-#         string of the rendered template -> str
-#     '''
-#     return render_template(
-#         'critter_lookup.html',
-#     )
-
 
 if __name__ == '__main__':
     import sys, os
