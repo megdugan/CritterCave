@@ -60,6 +60,11 @@ def signup():
         # print(username)
         # print(password)
         uid = profile.sign_up(conn, name, username, password)
+
+        #Set the session for uid 
+        session['uid']=uid
+        session['logged_in']=True
+
         # if duplicate key error, flash message
         if uid == -1:
             flash(f"Username [ {username} ] is taken. Please try again.")
@@ -72,6 +77,7 @@ def signup():
         user = profile.get_user_info(conn,uid)
         critters = profile.get_critters_by_user(conn,uid)
         flash(f"Welcome to Critter Cave, {user['name']}.")
+        flash(f"testing if logged in {session["logged_in"]}")
         # change to redirect url_for
         return render_template('profile.html', user=user, critters=critters) 
 
@@ -88,6 +94,11 @@ def signin():
         print(username)
         print(password)
         uid = profile.sign_in(conn, username, password)
+
+        #Set the session for uid 
+        session['uid']=uid
+        session['logged_in']=True
+        
         # if duplicate key error, flash message
         if uid == -1:
             flash("Incorrect password. Please try again.")
@@ -100,11 +111,18 @@ def signin():
         user = profile.get_user_info(conn,uid)
         critters = profile.get_critters_by_user(conn,uid)
         flash(f"Welcome back, {user['name']}.")
+        flash(f"testing if logged in {session["logged_in"]}")
         # change to redirect url_for
         return render_template('profile.html', user=user, critters=critters)
 
 @app.route('/profile/<uid>')
 def user_profile(uid):
+    #Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+
+
     print(f'looking up user with uid {uid}')
     if not uid.isdigit():
         flash('uid must be a string of digits')
@@ -121,14 +139,37 @@ def user_profile(uid):
         user=user,
         critters=critters
     )
-    
+
+@app.route('/logout/')
+def logout():
+    if 'uid' not in session:
+        session.pop('logged_in')
+        session.pop('uid')
+        flash('You are logged out!') 
+        return redirect(url_for('welcome'))
+    else:
+        flash("You are not logged in!")
+        return redirect(url_for('welcome'))
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
+    #Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+
+
     return send_from_directory(app.config['uploads'], filename)
 
     
 @app.route('/settings/<uid>', methods=['POST', 'GET'])
 def settings_page(uid): # fix later to get uid from cookies
+    #Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+
+
     if not uid.isdigit():
         flash('uid must be a string of digits')
         return redirect(url_for('index'))
@@ -243,6 +284,11 @@ def settings_page(uid): # fix later to get uid from cookies
 @app.route('/critter/<cid>')
 # page for when you click into a critter to see their stories
 def critter_page(cid):
+    #Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+
     print(f'looking up critter with cid {cid}')
     if not cid.isdigit():
         flash('cid must be a string of digits')
@@ -282,6 +328,10 @@ def critter_upload():
     Renders critter-upload form and adds the results to 
     the database.
     """
+    #Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
 
     if request.method == 'GET':
         # Send the update form
@@ -330,6 +380,10 @@ def story_upload(cid):
     Renders story-upload form and adds the results to 
     the database.
     """
+    #Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
 
     if request.method == 'GET':
         # Send the update form
@@ -363,6 +417,11 @@ def lookup_form():
     Return:
         String of the rendered template -> str
     '''
+    #Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+
     query_type = request.args.get('kind')
     query = request.args.get('query')
     conn = dbi.connect()

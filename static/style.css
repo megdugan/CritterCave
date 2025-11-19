@@ -89,6 +89,7 @@ h1 {
 .topbar nav a:hover,
 .topbar nav a:focus {
     background: var(--accent-sage);
+    
 }
 
 /* Search Form */
@@ -133,7 +134,9 @@ h1 {
     flex-shrink: 0;
 }
 .topbar .search input[type="submit"]:hover {
-    background: var(--accent-sage);
+    background: var(--rosewood);
+    transition: background 0.2s ease, transform 0.15s ease;
+    
 }
 
 /* ======================================================
@@ -152,6 +155,7 @@ h1 {
     overflow-x: hidden;
     transition: 0.5s;
     margin: 0;
+    
 }
 
 .sidebar a {
@@ -167,6 +171,8 @@ h1 {
 }
 .sidebar a:hover {
     color: var(--text-primary);
+    background: var(--rosewood);
+    transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .sidebar .closebtn {
@@ -179,15 +185,19 @@ h1 {
 
 /* Sidebar Toggle Button */
 .openbtn {
+    border-radius: 10px;
+    border: none;
     font-size: 20px;
     color: white;
     background: var(--accent-plum);
     padding: 10px 15px;
     cursor: pointer;
     margin: 0;
+    transition: background 0.2s ease, transform 0.15s ease;
 }
 .openbtn:hover {
     transform: rotate(90deg);
+    background: var(--rosewood);
 }
 
 /* Style page content */
@@ -246,7 +256,7 @@ h1 {
 
 #sign_up_form input[type="submit"],
 form > p > input[type="submit"] {
-    background: #2563eb;
+    background: #5F274F;;
     color: white;
     padding: 12px 22px;
     border-radius: 10px;
@@ -258,7 +268,7 @@ form > p > input[type="submit"] {
 
 #sign_up_form input[type="submit"]:hover,
 form > p > input[type="submit"]:hover {
-    background: #1d4ed8;
+    background: var(--rosewood);
 }
 
 #sign_up_form form p {
@@ -636,4 +646,12 @@ a:hover {
 .empty-text {
     color: var(--text-secondary);
     padding: 8px 4px;
+}
+
+/* ======================================================
+   SITE WIDE BUTTONS
+====================================================== */
+
+.sub_button{
+    background: var(--accent-rosewood);
 }
