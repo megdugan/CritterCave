@@ -332,8 +332,28 @@ def story_upload(cid):
     """
 
     if request.method == 'GET':
+        print(f'looking up critter with cid {cid}')
+        if not cid.isdigit():
+            flash('cid must be a string of digits')
+            return redirect( url_for('index'))
+        
+        # getting critter info
+        cid = int(cid)
+        conn = dbi.connect()
+        critter_info = critter.get_critter_by_id(conn,cid)
+        uid = critter_info['uid']
+        user = profile.get_user_info(conn,uid)
+        if user is None:
+            flash(f'No profile found with uid={uid}')
+            return redirect(url_for('index'))
+        if critter_info is None:
+            flash(f'No critter found with cid={cid}')
+            return redirect(url_for('index'))
+
         # Send the update form
-        return render_template('story_upload.html')
+        return render_template('story_upload.html', 
+                               user=user, 
+                               critter_info=critter_info)
     else:
         # Method is post, form has been filled out
         # Add the story to the database
