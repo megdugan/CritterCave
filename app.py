@@ -145,7 +145,7 @@ def settings_page(uid): # fix later to get uid from cookies
     
     # POST: figure out which form was submitted
     action = request.form.get('action')
-
+    
     if action == 'Update Profile Picture':
         file = request.files.get('profile-pic')
         user_filename = file.filename
@@ -188,6 +188,7 @@ def settings_page(uid): # fix later to get uid from cookies
             
         settings.update_personal_info(conn,uid,new_name,new_username)
         flash("Profile information updated!")
+        curr_user_info = profile.get_user_info(conn, uid)
         
         return render_template('settings.html',
             curr_user_info=curr_user_info)
@@ -236,7 +237,7 @@ def settings_page(uid): # fix later to get uid from cookies
         flash("Appearance updated!")
 
     else:
-        flash("Unknown form submitted")
+        flash("This is not yet implemented")
 
     return redirect(url_for('settings_page', uid=uid))
         
@@ -304,9 +305,21 @@ def critter_upload():
         if name == '':
             flash('Please name the critter.')
             return render_template('critter_upload.html')
+        
+        # check lengths
+        if len(name) > 50:
+            flash('Critter name must be under 50 characters')
+            return render_template('critter_upload.html')
+        if len(desc) > 250:
+            flash('Description must be under 250 characters')
+            return render_template('critter_upload.html')
 
         # Add the critter to the database
-        critterID = critter.add_critter(conn, uid, app.config['uploads'], name, desc)
+        try:
+            critterID = critter.add_critter(conn, uid, app.config['uploads'], name, desc)
+        except:
+            flash('An error occurred when uploading the critter. Please try again')
+            return render_template('critter_upload.html')
         pet = critter.get_critter_by_id(conn, critterID['last_insert_id()'])
 
         # Add the photo to the uploads folder, using critter{cid} as the name
@@ -362,6 +375,11 @@ def story_upload(cid):
         session['uid'] = 1
         uid = session['uid']
         desc = request.form.get('critter-story')
+        
+        # check lengths
+        if len(desc) > 2000:
+            flash('The story cannot be longer than 2000 characters')
+            return render_template('story_upload.html')
 
         # Ensure the user uploads a story
         if desc == '':
@@ -369,7 +387,11 @@ def story_upload(cid):
             return render_template('story_upload.html')
         
         # Add the story to the database
-        story.add_story(conn, cid, uid, desc)
+        try:
+            story.add_story(conn, cid, uid, desc)
+        except:
+            flash('An error occurred when uploading the story. Please try again')
+            return render_template('story_upload.html')
         return redirect(url_for('critter_page', cid=cid))
 
 @app.route('/query/', methods=['GET'])
