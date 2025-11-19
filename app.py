@@ -88,6 +88,7 @@ def signin():
         print(username)
         print(password)
         uid = profile.sign_in(conn, username, password)
+        print(type(uid))
         # if duplicate key error, flash message
         if uid == -1:
             flash("Incorrect password. Please try again.")
@@ -345,8 +346,28 @@ def story_upload(cid):
     """
 
     if request.method == 'GET':
+        print(f'looking up critter with cid {cid}')
+        if not cid.isdigit():
+            flash('cid must be a string of digits')
+            return redirect( url_for('index'))
+        
+        # getting critter info
+        cid = int(cid)
+        conn = dbi.connect()
+        critter_info = critter.get_critter_by_id(conn,cid)
+        uid = critter_info['uid']
+        user = profile.get_user_info(conn,uid)
+        if user is None:
+            flash(f'No profile found with uid={uid}')
+            return redirect(url_for('index'))
+        if critter_info is None:
+            flash(f'No critter found with cid={cid}')
+            return redirect(url_for('index'))
+
         # Send the update form
-        return render_template('story_upload.html')
+        return render_template('story_upload.html', 
+                               user=user, 
+                               critter_info=critter_info)
     else:
         # Method is post, form has been filled out
         # Add the story to the database
@@ -393,6 +414,10 @@ def lookup_form():
         if not critters:
             flash('No critters matched the query. Please try again.')
             return redirect(url_for('index'))
+
+        for c in critters:
+            c['creator'] = profile.get_user_info(conn, c['uid'])['username']
+            c['created'] = c['created'].strftime("%m/%d/%Y")
         if len(critters) == 1:
             return redirect(url_for('critter_page', cid=critters[0]['cid']))  # if there is only one result, go straight to the critter's page
         return render_template('critter_lookup.html', query = query, critters = critters) # renders a clickable list of critters

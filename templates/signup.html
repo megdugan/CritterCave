@@ -9,53 +9,61 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <title>Document</title>
  </head>
+ 
  <body>
 
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div id="messages">
+        {% for msg in messages %}
+            <p>*** {{ msg }} ***</p>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
 
-<div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="{{url_for('signup')}}">Sign Up</a>
-  <a href="{{url_for('signin')}}">Sign In</a>
-  <a href="{{url_for('welcome')}}">Back</a>
-</div>
-
-<div>
-    <button class="openbtn" onclick="openNav()">&#9776; </button>
-</div>
-
-<div class="main" id="main" >
-
-    <div class="log_container">
-        
-        <h1>Sign Up</h1>
-
-        <h2>Welcome to Critter Cave!</h3>
-        <h2>Sign up below.</h3> 
-
-        <form class="sign_up_form" method=POST action="">
-            <table>
-                <tr>
-                    <td><label for="name">Name</label></td>
-                    <td><input type="name" id="name" name='name' value=""></td> 
-                </tr>
-                <tr>
-                    <td><label for="username">Username</label></td>
-                    <td><input type="username" id="username" name='username' value=""></td>
-                </tr>
-                <tr>
-                    <td><label for="password">Password</label></td>
-                    <td><input type="password" id="password" name='password' value=""></td>
-                </tr>
-            </table>
-            <input type="submit" name="submit" value="Sign up">
-        </form>
-
+    <div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="{{url_for('signup')}}">Sign Up</a>
+    <a href="{{url_for('signin')}}">Sign In</a>
+    <a href="{{url_for('welcome')}}">Back</a>
     </div>
-    
-</div>
 
+    <div>
+        <button class="openbtn" onclick="openNav()">&#9776; </button>
+    </div>
 
-    
+    <div class="main" id="main" >
+
+        <div class="log_container">
+            
+            <h1>Sign Up</h1>
+
+            <h2>Welcome to Critter Cave!</h3>
+            <h2>Sign up below.</h3> 
+
+            <form class="sign_up_form" method=POST action="">
+                <table>
+                    <tr>
+                        <td><label for="name">Name</label></td>
+                        <td><input type="name" id="name" name='name' value=""></td> 
+                    </tr>
+                    <tr>
+                        <td><label for="username">Username</label></td>
+                        <td><input type="username" id="username" name='username' value=""></td>
+                    </tr>
+                    <tr>
+                        <td><label for="password">Password</label></td>
+                        <td><input type="password" id="password" name='password' value=""></td>
+                    </tr>
+                </table>
+                <input type="submit" name="submit" value="Sign up">
+            </form>
+
+        </div>
+        
+    </div>
+
  </body>
  </html>
 
