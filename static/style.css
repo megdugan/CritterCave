@@ -407,3 +407,120 @@ form > p > input[type="submit"]:hover {
         font-size: 18px;
     }
 }
+
+
+/* ======================================================
+   Profile Page and Critter Styling
+====================================================== */
+/* ======================================================
+   CRITTER PROFILE + GRID STYLES
+   Now using site color variables from colors.css
+====================================================== */
+
+/* Profile Pic */
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 20px;
+
+    border: 3px solid var(--accent-plum);
+    background: var(--panel);
+}
+
+/* Critter Grid Container */
+.critter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 24px;
+    padding: 20px 0;
+}
+
+/* Critter Card */
+.critter-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+
+    background: var(--panel);
+    border: 2px solid var(--border-subtle);
+    border-radius: 12px;
+
+    padding: 16px;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.12);
+    transition: transform 0.15s ease, box-shadow 0.15s ease,
+                border-color 0.15s ease;
+}
+
+/* Hover states: use theme accent colors */
+.critter-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.18);
+
+    border-color: var(--accent-plum);
+}
+
+/* Critter Image */
+.critter-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 3px solid var(--accent-rosewood);
+    background: var(--panel-alt);
+}
+
+/* Critter Name */
+.critter-card p {
+    margin-top: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: var(--font-family);
+}
+
+/* Back link styling */
+a {
+    color: var(--text-link);
+}
+a:hover {
+    color: var(--accent-plum);
+}
+
+.button-primary {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 8px;
+
+    background: var(--accent-plum);
+    color: white;
+    text-decoration: none;
+    font-family: var(--font-family);
+    font-weight: 600;
+
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.button-primary:hover {
+    background: var(--rosewood);
+    transform: translateY(-2px);
+}
+
+/* Wrapper to position the settings button below nav bar */
+.profile-settings-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 20px 0 20px;  /* moves the button down */
+    right: 20px;
+}
+
+
+/* Place the button in the top-right corner */
+.profile-settings-button {
+    position: absolute; /* absolute relative to container */
+    right: 20px;          /* aligned to right edge */
+}
