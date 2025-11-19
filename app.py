@@ -181,12 +181,28 @@ def settings_page(uid): # fix later to get uid from cookies
             return render_template('settings.html',
             curr_user_info=curr_user_info)
             
+        if len(new_name) > 50:
+            flash("Name must be under 50 characters.")
+            return render_template('settings.html',
+            curr_user_info=curr_user_info)
+            
         if len(new_username) < 1:
             flash("Please enter a username.")
             return render_template('settings.html',
             curr_user_info=curr_user_info)
             
-        settings.update_personal_info(conn,uid,new_name,new_username)
+        if len(new_username) > 50:
+            flash("Username must be under 50 characters.")
+            return render_template('settings.html',
+            curr_user_info=curr_user_info)
+            
+        try:
+            settings.update_personal_info(conn,uid,new_name,new_username)
+        except:
+            flash("An error occurred when updating the profile information. Please try again.")
+            return render_template('settings.html',
+            curr_user_info=curr_user_info)
+            
         flash("Profile information updated!")
         curr_user_info = profile.get_user_info(conn, uid)
         
@@ -205,8 +221,13 @@ def settings_page(uid): # fix later to get uid from cookies
             flash("New password must have at least 6 characters. Please try again.")
             return render_template(
             'settings.html',
-            curr_user_info=curr_user_info
-            )
+            curr_user_info=curr_user_info)
+        if len(new_pw1) > 60:
+            flash("New password must be under 60 characters. Please try again.")
+            return render_template(
+            'settings.html',
+            curr_user_info=curr_user_info)
+            
         
         if pw_check == -1:
             flash("Incorrect password. Please try again.")
@@ -222,7 +243,11 @@ def settings_page(uid): # fix later to get uid from cookies
             )
         
         # passwords must match --> update password
-        settings.update_password(conn, uid, new_pw1)
+        try:
+            settings.update_password(conn, uid, new_pw1)
+        except:
+            flash('An error occurred when updating the password. Please try again.')
+            
         flash('Password successfully updated.')
         
         return render_template(
@@ -344,26 +369,25 @@ def story_upload(cid):
     Renders story-upload form and adds the results to 
     the database.
     """
-
+    print(f'looking up critter with cid {cid}')
+    if not cid.isdigit():
+        flash('cid must be a string of digits')
+        return redirect( url_for('index'))
+    
+    # getting critter info
+    cid = int(cid)
+    conn = dbi.connect()
+    critter_info = critter.get_critter_by_id(conn,cid)
+    uid = critter_info['uid']
+    user = profile.get_user_info(conn,uid)
+    if user is None:
+        flash(f'No profile found with uid={uid}')
+        return redirect(url_for('index'))
+    if critter_info is None:
+        flash(f'No critter found with cid={cid}')
+        return redirect(url_for('index'))
+    
     if request.method == 'GET':
-        print(f'looking up critter with cid {cid}')
-        if not cid.isdigit():
-            flash('cid must be a string of digits')
-            return redirect( url_for('index'))
-        
-        # getting critter info
-        cid = int(cid)
-        conn = dbi.connect()
-        critter_info = critter.get_critter_by_id(conn,cid)
-        uid = critter_info['uid']
-        user = profile.get_user_info(conn,uid)
-        if user is None:
-            flash(f'No profile found with uid={uid}')
-            return redirect(url_for('index'))
-        if critter_info is None:
-            flash(f'No critter found with cid={cid}')
-            return redirect(url_for('index'))
-
         # Send the update form
         return render_template('story_upload.html', 
                                user=user, 
@@ -379,12 +403,16 @@ def story_upload(cid):
         # check lengths
         if len(desc) > 2000:
             flash('The story cannot be longer than 2000 characters')
-            return render_template('story_upload.html')
+            return render_template('story_upload.html', 
+                               user=user, 
+                               critter_info=critter_info)
 
         # Ensure the user uploads a story
         if desc == '':
             flash('Please write a story.')
-            return render_template('story_upload.html')
+            return render_template('story_upload.html', 
+                               user=user, 
+                               critter_info=critter_info)
         
         # Add the story to the database
         try:
