@@ -21,8 +21,6 @@ def get_user_info(conn, uid: int):
                  [uid])
     return curs.fetchone()
 
-
-
 def get_critters_by_user(conn, uid: int):
     """Returns all critters made by the specified user with uid"""
     curs = dbi.dict_cursor(conn)
@@ -76,7 +74,7 @@ def sign_up(conn, name, username, password) -> int:
         # insert new user information with default profilepic and darkmode setting
         curs = dbi.cursor(conn)
         curs.execute('''insert into user (name, username, password, created, profilepic, darkmode) 
-                        values (%s, %s, %s, %s, %s, %s)''', [name, username, hashed.decode('utf-8'), datetime.now(), '/static/default.png', False])
+                        values (%s, %s, %s, %s, %s, %s)''', [name, username, hashed.decode('utf-8'), datetime.now(), 'default.jpg', False])
         conn.commit()
         # return user uid
         curs.execute('select last_insert_id()')

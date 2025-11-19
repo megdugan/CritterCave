@@ -404,25 +404,12 @@ def lookup_form():
         if not users:
             flash('No users matched the query. Please try again.')
             return redirect(url_for('index'))
+        for u in users:
+            u['created'] = u['created'].strftime("%m/%d/%Y")
+            u['num_critters'] = len(profile.get_critters_by_user(conn, u['uid']))
         if len(users) == 1:
             return redirect(url_for('user_profile', uid=users[0]['uid']))  # if there is only one result, go straight to the user's page
         return render_template('user_lookup.html', query = query, users = users) # renders a clickable list of users
-
-# @app.route('/lookup/critter/<name>')
-# def critter_lookup(name):
-#     '''
-#     Render the critter lookup page for a given name query.
-#     If no critters match, flash a message.
-    
-#     Args:
-#         name -> string
-#     Return:
-#         string of the rendered template -> str
-#     '''
-#     return render_template(
-#         'critter_lookup.html',
-#     )
-
 
 if __name__ == '__main__':
     import sys, os

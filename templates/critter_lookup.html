@@ -6,6 +6,7 @@
 <h1>Critter results for '{{query}}'</h1>
 
 {% for c in critters %}
+
 <div class="search_result">
     <div class="critter_result">
         <div>
@@ -21,6 +22,7 @@
     </div>
     <p>Description: {{c['description']}}</p>
 </div>
+
 {% endfor %}
 
 {% endblock %}
