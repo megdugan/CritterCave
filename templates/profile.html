@@ -10,13 +10,24 @@
 
     <div  id="main" class="main">
 
-        <h1>{{ user.name }}</h1>
+        <!-- Profile Header Card -->
+        <section class="critter-header-card">
+            <div class="critter-info-left">
+                {% if user.profilepic %}
+                <img src="{{  url_for('uploaded_file', filename=user.profilepic) }}"
+                    alt="Profile Picture" class="critter-profile-img">
+                {% endif %}
+            </div>
 
-        {% if user.profilepic %}
-        <img src="{{ url_for('uploaded_file', filename=user.profilepic) }}"
-            alt="Profile Picture"
-            style="width:150px; height:150px; border-radius:50%; object-fit:cover;">
-        {% endif %}
+            <div class="critter-info-right">
+                <h1 class="critter-name">{{ user.name }}</h1>
+
+                <a href="{{ url_for('critter_upload') }}"
+                class="button-primary write-story-btn">
+                Create a new critter
+                </a>
+            </div>
+        </section>
 
         <h2>Critters:</h2>
         <div class="critter-grid">

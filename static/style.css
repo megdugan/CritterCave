@@ -524,3 +524,116 @@ a:hover {
     position: absolute; /* absolute relative to container */
     right: 20px;          /* aligned to right edge */
 }
+
+
+/* ======================================================
+   Critter Page Styling
+====================================================== */
+
+
+/* Main page wrapper */
+.critter-page {
+    max-width: 950px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Header card (critter info) */
+.critter-header-card {
+    background: var(--panel);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 28px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+
+    box-shadow: 0 3px 7px rgba(0,0,0,0.06);
+}
+
+/* Name & description layout */
+.critter-info-right {
+    flex: 1;
+}
+
+.critter-name {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.critter-maker a {
+    font-weight: 600;
+    color: var(--accent-plum);
+}
+
+.critter-description {
+    margin-top: 12px;
+    margin-bottom: 20px;
+    color: var(--text-secondary);
+}
+
+/* Critter profile image */
+.critter-profile-img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--accent-rosewood);
+    background: var(--panel-alt);
+}
+
+.write-story-btn {
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.stories-section {
+    margin-top: 40px;
+}
+
+.section-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.story-group {
+    margin-bottom: 30px;
+}
+
+.story-group-title {
+    margin-bottom: 14px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent-plum);
+}
+
+/* Grid of story cards */
+.story-card-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+/* Card styling reused + enhanced */
+.story-card {
+    padding: 18px 22px;
+    border-radius: 16px;
+    background: var(--panel);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.story-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 11px rgba(0,0,0,0.08);
+}
+
+.empty-text {
+    color: var(--text-secondary);
+    padding: 8px 4px;
+}
