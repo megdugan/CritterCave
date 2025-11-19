@@ -88,6 +88,7 @@ def signin():
         print(username)
         print(password)
         uid = profile.sign_in(conn, username, password)
+        print(type(uid))
         # if duplicate key error, flash message
         if uid == -1:
             flash("Incorrect password. Please try again.")
@@ -371,6 +372,10 @@ def lookup_form():
         if not critters:
             flash('No critters matched the query. Please try again.')
             return redirect(url_for('index'))
+
+        for c in critters:
+            c['creator'] = profile.get_user_info(conn, c['uid'])['username']
+            c['created'] = c['created'].strftime("%m/%d/%Y")
         if len(critters) == 1:
             return redirect(url_for('critter_page', cid=critters[0]['cid']))  # if there is only one result, go straight to the critter's page
         return render_template('critter_lookup.html', query = query, critters = critters) # renders a clickable list of critters
