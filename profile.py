@@ -111,7 +111,9 @@ def sign_in(conn, username, password) -> None:
 
         # check whether entered password matches database using hashing
         hashed = bcrypt.hashpw(password.encode('utf-8'), stored.encode('utf-8'))
+        print(f"encrypted: {hashed}")
         hashed_str = hashed.decode('utf-8')
+        print(f"descrypted: {hashed_str}")
         
         if hashed_str == stored:
             print('Login successful.')
