@@ -128,13 +128,13 @@ def update_username(conn, uid: int, new_username: str):
     conn.commit()
     flash(f'username for uid {uid} updated to {new_username}')
 
-def update_darkmode(conn, uid: int, new_mode: tinyint):
+def update_darkmode(conn, uid: int, new_mode):
     """
     Update a user's darkmode setting.
     Args:
         conn -> pymysql.connections.Connection
         uid -> int
-        new_mode -> tinyint (1/true, 0/false)
+        new_mode -> boolean or tinyint (1/true, 0/false) (?)
     Return:
         None
     """

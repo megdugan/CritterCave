@@ -47,6 +47,11 @@ def welcome():
 
 @app.route('/signup/', methods=['GET', 'POST'])
 def signup():
+    """
+    Display the sign up page / form (signup.html).
+    If the sign up is successful, route to the user's profile.
+    Otherwise, flash an error message.
+    """
     if request.method == 'GET':
         # if method is get, send a blank form
         return render_template('signup.html', page_title='Sign Up')
@@ -83,6 +88,11 @@ def signup():
 
 @app.route('/signin/', methods=['GET', 'POST'])
 def signin():
+    """
+    Display the sign in page / form (signin.html).
+    If the sign up is successful, route to the user's profile.
+    Otherwise, flash an error message.
+    """
     if request.method == 'GET':
         # if method is get, send a blank form
         return render_template('signin.html', page_title='Sign In')
@@ -118,12 +128,14 @@ def signin():
 
 @app.route('/profile/<uid>')
 def user_profile(uid):
-    #Session code 
+    """
+    View a user's profile (profile.html).
+    If the user views their own profile, show options to access settings and upload a story.
+    """
+    # session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
-
     print(f'looking up user with uid {uid}')
     if not uid.isdigit():
         flash('uid must be a string of digits')
@@ -143,6 +155,10 @@ def user_profile(uid):
 
 @app.route('/logout/')
 def logout():
+    """
+    Log a user out of the session.
+    If the user is not logged in, flash an error message.
+    """
     if 'uid' not in session:
         session.pop('logged_in')
         session.pop('uid')
@@ -154,23 +170,25 @@ def logout():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    #Session code 
+    """
+    Access an uploaded image/file for display.
+    """
+    # session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
-
     return send_from_directory(app.config['uploads'], filename)
 
-    
 @app.route('/settings/<uid>', methods=['POST', 'GET'])
 def settings_page(uid): # fix later to get uid from cookies
-    #Session code 
+    """
+    Route to the settings page (settings.html).
+    Send the blank settings form or handle filled out forms by updating settings.
+    """
+    # session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
-
     if not uid.isdigit():
         flash('uid must be a string of digits')
         return redirect(url_for('index'))
@@ -183,125 +201,116 @@ def settings_page(uid): # fix later to get uid from cookies
             'settings.html',
             curr_user_info=curr_user_info
             )
-    
-    # POST: figure out which form was submitted
     action = request.form.get('action')
-    
     if action == 'Update Profile Picture':
+        # if action is update pfp, update the user's profile pic
         file = request.files.get('profile-pic')
         user_filename = file.filename
-        
         # handle saving file
-        # Ensure the user uploads an image and name
+        # ensure the user uploads an image and name
         if file and user_filename == '':
             flash('Please add a critter image.')
             return render_template('critter_upload.html')
-        
         nm = "pfp" + str(uid)
         ext = user_filename.split('.')[-1]
         filename = secure_filename(f"{nm}.{ext}")
-
         pathname = os.path.join(app.config['uploads'], filename)
-        
         file.save(pathname)
         os.chmod(pathname, 0o444)
-
-
-        # Store ONLY the filename in the DB
+        # store ONLY the filename in the DB
         settings.update_pfp(conn, uid, filename)
         flash("Profile picture updated!")
-        
+        # render the settings page with user's info
         return render_template('settings.html',
             curr_user_info=curr_user_info)
-
     elif action == 'Update Profile Info':
+        # if action is update profile info, update the user's name or username
         new_name = request.form.get('display-name')
         new_username = request.form.get('username')
         if len(new_name) < 1:
+            # if new name is None, flash error message
             flash("Please enter a name.")
             return render_template('settings.html',
             curr_user_info=curr_user_info)
-            
         if len(new_name) > 50:
+            # if new name is too long, flash error message
             flash("Name must be under 50 characters.")
             return render_template('settings.html',
             curr_user_info=curr_user_info)
-            
         if len(new_username) < 1:
+            # if new username is None, flash error message
             flash("Please enter a username.")
             return render_template('settings.html',
             curr_user_info=curr_user_info)
-            
         if len(new_username) > 50:
+            # if new username is too long, flash error message
             flash("Username must be under 50 characters.")
             return render_template('settings.html',
             curr_user_info=curr_user_info)
-            
         try:
+            # attempt to update the user's settings
             settings.update_personal_info(conn,uid,new_name,new_username)
         except:
+            # if unsuccessful, flash an error message
             flash("An error occurred when updating the profile information. Please try again.")
             return render_template('settings.html',
             curr_user_info=curr_user_info)
-            
         flash("Profile information updated!")
         curr_user_info = profile.get_user_info(conn, uid)
-        
+        # rerender settings page
         return render_template('settings.html',
             curr_user_info=curr_user_info)
-        
-    
     elif action == 'Update Password':
+        # if action is update password, check user current password and update new password
         old_pw = request.form.get('old_pw')
         new_pw1 = request.form.get('new_pw1')
         new_pw2 = request.form.get('new_pw2')
-        
+        # check old password, and check that new password was typed correctly
         pw_check = settings.check_password(conn,uid,old_pw,new_pw1,new_pw2)
-        
         if len(new_pw1) < 6:
+            # if new password is too short, flash error message
             flash("New password must have at least 6 characters. Please try again.")
             return render_template(
             'settings.html',
             curr_user_info=curr_user_info)
         if len(new_pw1) > 60:
+            # if new password is too long, flash error message
             flash("New password must be under 60 characters. Please try again.")
             return render_template(
             'settings.html',
             curr_user_info=curr_user_info)
-            
-        
         if pw_check == -1:
+            # if original password is incorrect, flash error message
             flash("Incorrect password. Please try again.")
             return render_template(
             'settings.html',
             curr_user_info=curr_user_info
             )
         elif pw_check == -2:
+            # if password matching failed, flash error message
             flash("Please make sure the new passwords match")
             return render_template(
             'settings.html',
             curr_user_info=curr_user_info
             )
-        
         # passwords must match --> update password
         try:
+            # if all is correct, attempt to update password
             settings.update_password(conn, uid, new_pw1)
         except:
+            # for errors, flash general message
             flash('An error occurred when updating the password. Please try again.')
-            
         flash('Password successfully updated.')
-        
+        # rerender settings page
         return render_template(
             'settings.html',
             curr_user_info=curr_user_info
             )
-        
-
     elif action == 'update_appearance':
+        # if action is update appearance, 
         appearance = request.form.get('appearance')
         # update appearance pref
         flash("Appearance updated!")
-
     else:
         flash("This is not yet implemented")
 
