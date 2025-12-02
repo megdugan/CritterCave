@@ -77,7 +77,7 @@ def signup():
         user = profile.get_user_info(conn,uid)
         critters = profile.get_critters_by_user(conn,uid)
         flash(f"Welcome to Critter Cave, {user['name']}.")
-        flash(f"testing if logged in {session["logged_in"]}")
+        flash(f"testing if logged in {session['logged_in']}")
         # change to redirect url_for
         return render_template('profile.html', user=user, critters=critters) 
 
@@ -112,7 +112,7 @@ def signin():
         user = profile.get_user_info(conn,uid)
         critters = profile.get_critters_by_user(conn,uid)
         flash(f"Welcome back, {user['name']}.")
-        flash(f"testing if logged in {session["logged_in"]}")
+        flash(f"testing if logged in {session['logged_in']}")
         # change to redirect url_for
         return render_template('profile.html', user=user, critters=critters)
 
@@ -355,18 +355,18 @@ def critter_upload():
     Renders critter-upload form and adds the results to 
     the database.
     """
-    #Session code 
+    # Session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
 
     if request.method == 'GET':
-        # Send the update form
+        # Method is get, user entered the page
+        # Send the upload form
         return render_template('critter_upload.html')
     else:
         # Method is post, form has been filled out
         conn = dbi.connect()
-        session['uid'] = 1
         uid = session['uid']
         f = request.files['critter-pic']
         user_filename = f.filename
@@ -381,7 +381,8 @@ def critter_upload():
             flash('Please name the critter.')
             return render_template('critter_upload.html')
         
-        # check lengths
+        # Ensure that the name and description are the correct length
+        # to prevent errors
         if len(name) > 50:
             flash('Critter name must be under 50 characters')
             return render_template('critter_upload.html')
@@ -419,7 +420,7 @@ def story_upload(cid):
     Renders story-upload form and adds the results to 
     the database.
     """
-    #Session code 
+    # Session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
@@ -429,21 +430,23 @@ def story_upload(cid):
         flash('cid must be a string of digits')
         return redirect( url_for('index'))
     
-    # getting critter info
-    cid = int(cid)
-    conn = dbi.connect()
-    critter_info = critter.get_critter_by_id(conn,cid)
-    uid = critter_info['uid']
-    user = profile.get_user_info(conn,uid)
-    if user is None:
-        flash(f'No profile found with uid={uid}')
-        return redirect(url_for('index'))
-    if critter_info is None:
-        flash(f'No critter found with cid={cid}')
-        return redirect(url_for('index'))
-    
     if request.method == 'GET':
-        # Send the update form
+        # Method is get, user entered the page
+        # Send the upload form
+
+        # Retrieves critter info for form
+        cid = int(cid)
+        conn = dbi.connect()
+        critter_info = critter.get_critter_by_id(conn,cid)
+        uid = critter_info['uid']
+        user = profile.get_user_info(conn,uid)
+        if user is None:
+            flash(f'No profile found with uid={uid}')
+            return redirect(url_for('index'))
+        if critter_info is None:
+            flash(f'No critter found with cid={cid}')
+            return redirect(url_for('index'))
+
         return render_template('story_upload.html', 
                                user=user, 
                                critter_info=critter_info)
@@ -455,16 +458,16 @@ def story_upload(cid):
         uid = session['uid']
         desc = request.form.get('critter-story')
         
-        # check lengths
-        if len(desc) > 2000:
-            flash('The story cannot be longer than 2000 characters')
+        # Ensure the user uploads a story
+        if desc == '':
+            flash('Please write a story.')
             return render_template('story_upload.html', 
                                user=user, 
                                critter_info=critter_info)
 
-        # Ensure the user uploads a story
-        if desc == '':
-            flash('Please write a story.')
+        # Check length of description to avoid error
+        if len(desc) > 2000:
+            flash('The story cannot be longer than 2000 characters')
             return render_template('story_upload.html', 
                                user=user, 
                                critter_info=critter_info)
