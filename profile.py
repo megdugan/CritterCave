@@ -11,8 +11,15 @@ import critter  # critter methods
 import story    # story methods
 import settings # settings methods
 
-def get_user_info(conn, uid: int):
-    """with the user's uid, returns their name and profile pic"""
+def get_user_info(conn, uid):
+    """
+    Returns info about a given user.
+    Args:
+        conn -> pymysql.connections.Connection
+        uid -> int
+    Return:
+        user's info -> dict[]
+    """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
                  SELECT *
@@ -21,8 +28,15 @@ def get_user_info(conn, uid: int):
                  [uid])
     return curs.fetchone()
 
-def get_critters_by_user(conn, uid: int):
-    """Returns all critters made by the specified user with uid"""
+def get_critters_by_user(conn, uid):
+    """
+    Returns all critters made by the specified user with uid.
+    Args:
+        conn -> pymysql.connections.Connection
+        uid -> int
+    Return:
+        user's critters -> dict[]
+    """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
                  SELECT cid, name, imagepath, description, created 
@@ -32,8 +46,15 @@ def get_critters_by_user(conn, uid: int):
     return curs.fetchall()
 
 
-def get_liked_critters(conn, uid: int):
-    """Returns a list of all critters the user with uid has liked"""
+def get_liked_critters(conn, uid):
+    """
+    Returns a list of all critters the user with uid has liked.
+    Args:
+        conn -> pymysql.connections.Connection
+        uid -> int
+    Return:
+        liked critters -> dict[]
+    """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
                  SELECT critter.name AS name,critter.imagepath AS image,critter.description AS desc
@@ -43,8 +64,15 @@ def get_liked_critters(conn, uid: int):
     return curs.fetchall()
 
 
-def get_liked_stories(conn, uid: int):
-    """Returns a list of all stories the user with uid has liked"""
+def get_liked_stories(conn, uid):
+    """
+    Returns a list of all stories the user with uid has liked.
+    Args:
+        conn -> pymysql.connections.Connection
+        uid -> int
+    Return:
+        liked stories -> dict[]
+    """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
                  SELECT story.story AS story
@@ -53,11 +81,9 @@ def get_liked_stories(conn, uid: int):
                  [uid])
     return curs.fetchall()
 
-
 def sign_up(conn, name, username, password) -> int: 
-    '''
-    Inserts a new user into the database.
-    Returns the new user's uid if successful.
+    """
+    Inserts a new user into the database, returning their uid if successful.
     For duplicate username, returns -1.
     For general errors, returns -2.
     Args:
@@ -67,7 +93,7 @@ def sign_up(conn, name, username, password) -> int:
         password -> str
     Return:
         user's uid -> int
-    '''
+    """
     try:
         # hash the user password
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
@@ -91,9 +117,8 @@ def sign_up(conn, name, username, password) -> int:
             return -2
 
 def sign_in(conn, username, password) -> None: 
-    '''
-    Sign in a user.
-    Returns the user's uid if successful.
+    """
+    Sign in a user, returning the user's uid if successful.
     For incorrect password, returns -1. 
     For non-existent username, returns -2.
     Args:
@@ -102,7 +127,7 @@ def sign_in(conn, username, password) -> None:
         password -> str
     Return:
         user's uid -> int
-    '''
+    """
     try:
         # grab user stored password
         curs = dbi.cursor(conn)
@@ -130,31 +155,29 @@ def sign_in(conn, username, password) -> None:
         return -2
 
 def delete_user(conn, uid) -> None: 
-    '''
+    """
     Delete a user from the database.
     Args:
         conn -> pymysql.connections.Connection
         uid -> int
     Return:
         None
-    '''
+    """
     curs = dbi.cursor(conn)
     curs.execute('''delete from user where uid = %s''', uid)
     conn.commit()
     return
 
 def lookup_user(conn, query):
-    '''
-    Lookup a critter by name.
-    Returns a list of critters who match the query.
+    """
+    Lookup a critter by name, returning all critters who match the query.
     If none match, return None.
-    
     Args:
         conn -> pymysql.connections.Connection
-        query -> string
+        query -> str
     Return:
         list of users -> dict[]
-    '''
+    """
     name_query = f"%{query}%"
     curs=dbi.dict_cursor(conn)
     curs.execute("""
@@ -164,16 +187,3 @@ def lookup_user(conn, query):
     if not users:
         return None
     return users
-
-if __name__ == '__main__':
-    dbi.conf('crittercave_db')
-    conn = dbi.connect()
-
-    # test user with username = test, uid = 7
-    
-    # sign_up(conn, 'test user', 'test', 'password')
-    # print(get_user_info(conn, 7))
-
-    print(f"non-existant username, expecting uid -1: {sign_in(conn, 'nobody', 'hi')}")
-    print(f"incorrect password, expecting uid -1: {sign_in(conn, 'test', 'password1')}")
-    print(f"valid login, expecting uid 7: {sign_in(conn, 'test', 'password')}")
