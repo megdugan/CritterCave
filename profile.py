@@ -1,17 +1,17 @@
 """
 (CritterCave)
-Contains all database methods relating to accessing and displaying user profiles
+Contains all database methods relating to accessing and displaying user profiles.
 """
-import cs304dbi as dbi
+
 from datetime import datetime
 import bcrypt
 import pymysql
+import cs304dbi as dbi
+import critter
+import story
+import settings
 
-import critter  # critter methods
-import story    # story methods
-import settings # settings methods
-
-def get_user_info(conn, uid):
+def get_user_info(conn, uid: int):
     """
     Returns info about a given user.
     Args:
@@ -28,7 +28,7 @@ def get_user_info(conn, uid):
                  [uid])
     return curs.fetchone()
 
-def get_critters_by_user(conn, uid):
+def get_critters_by_user(conn, uid: int):
     """
     Returns all critters made by the specified user with uid.
     Args:
@@ -46,7 +46,7 @@ def get_critters_by_user(conn, uid):
     return curs.fetchall()
 
 
-def get_liked_critters(conn, uid):
+def get_liked_critters(conn, uid: int):
     """
     Returns a list of all critters the user with uid has liked.
     Args:
@@ -64,7 +64,7 @@ def get_liked_critters(conn, uid):
     return curs.fetchall()
 
 
-def get_liked_stories(conn, uid):
+def get_liked_stories(conn, uid: int):
     """
     Returns a list of all stories the user with uid has liked.
     Args:
@@ -81,7 +81,7 @@ def get_liked_stories(conn, uid):
                  [uid])
     return curs.fetchall()
 
-def sign_up(conn, name, username, password) -> int: 
+def sign_up(conn, name: str, username: str, password: str) -> int: 
     """
     Inserts a new user into the database, returning their uid if successful.
     For duplicate username, returns -1.
@@ -106,8 +106,8 @@ def sign_up(conn, name, username, password) -> int:
         curs.execute('select last_insert_id()')
         row = curs.fetchone()
         return row[0]
-    # exception for duplicate username error
     except pymysql.err.IntegrityError as err:
+        # exception for duplicate username error
         details = err.args
         if details[0] == pymysql.constants.ER.DUP_ENTRY:
             print('duplicate key for username {}'.format(username))
@@ -116,7 +116,7 @@ def sign_up(conn, name, username, password) -> int:
             print('error inserting user')
             return -2
 
-def sign_in(conn, username, password) -> None: 
+def sign_in(conn, username: str, password: str) -> None: 
     """
     Sign in a user, returning the user's uid if successful.
     For incorrect password, returns -1. 
@@ -133,28 +133,24 @@ def sign_in(conn, username, password) -> None:
         curs = dbi.cursor(conn)
         curs.execute('''select uid, password from user where username = %s''', [username])
         uid, stored = curs.fetchone()
-
         # check whether entered password matches database using hashing
         hashed = bcrypt.hashpw(password.encode('utf-8'), stored.encode('utf-8'))
         print(f"encrypted: {hashed}")
         hashed_str = hashed.decode('utf-8')
         print(f"descrypted: {hashed_str}")
-        
         if hashed_str == stored:
-            print('Login successful.')
             # if the login is correct, return uid
+            print('Login successful.')
             return uid
-
+        # else, if the password is incorrect, return -1
         print('Password is incorrect.')
-        # if the password is incorrect, return -1
         return -1
-    
     except TypeError:
+        # if the username does not exist is incorrect, return -2
         print('Username does not exist.')
-        # if the username does not exist, return -1
         return -2
 
-def delete_user(conn, uid) -> None: 
+def delete_user(conn, uid: int) -> None: 
     """
     Delete a user from the database.
     Args:
@@ -168,7 +164,7 @@ def delete_user(conn, uid) -> None:
     conn.commit()
     return
 
-def lookup_user(conn, query):
+def lookup_user(conn, query: str):
     """
     Lookup a critter by name, returning all critters who match the query.
     If none match, return None.

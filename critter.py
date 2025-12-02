@@ -1,17 +1,16 @@
 """ 
 (CritterCave)
-Contains all database methods relating to accessing and displaying critters
+Contains all database methods relating to accessing and displaying critters.
 """
 
-import cs304dbi as dbi
 from datetime import datetime
 import bcrypt
+import cs304dbi as dbi
+import profile
+import story
+import settings
 
-import profile  # profile / user methods
-import story    # story methods
-import settings # settings methods
-
-def add_critter(conn, uid, imagepath, name, description):
+def add_critter(conn, uid: int, imagepath: str, name: str, description: str):
     """
     Add a new critter to the database.
     Args:
@@ -30,13 +29,12 @@ def add_critter(conn, uid, imagepath, name, description):
             values (%s,%s, %s,%s,%s) """,
             [uid, imagepath, name, description, time])
     conn.commit()
-
     # Get the critter id (cid)
     curs.execute('select last_insert_id()')
     row = curs.fetchone()
     return row
 
-def get_critter_by_id(conn, cid):
+def get_critter_by_id(conn, cid: int):
     """
     Get information about a critter.
     Args:
@@ -51,7 +49,7 @@ def get_critter_by_id(conn, cid):
             [cid])
     return curs.fetchone()
 
-def delete_critter(conn,cid):
+def delete_critter(conn, cid: int):
     """
     Delete a critter from the database.
     Args:
@@ -66,7 +64,7 @@ def delete_critter(conn,cid):
             """,[cid])
     conn.commit()
 
-def update_critter(conn,cid,imagepath,name,description):
+def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
     """
     Update a critter's info.
     Args:
@@ -82,10 +80,10 @@ def update_critter(conn,cid,imagepath,name,description):
     curs.execute("""
             update critter set imagepath=%s,name=%s,description=%s
             where cid=%s""",
-            [imagepath,name,description,cid])
+            [imagepath, name, description, cid])
     conn.commit()
     
-def lookup_critter(conn, query):
+def lookup_critter(conn, query:str):
     """
     Lookup a critter by name.
     If none match, return None.
