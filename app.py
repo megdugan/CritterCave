@@ -61,15 +61,10 @@ def signup():
         name = request.form.get('name')
         username = request.form.get('username')
         password = request.form.get('password')
-        # print(name)
-        # print(username)
-        # print(password)
         uid = profile.sign_up(conn, name, username, password)
-
-        #Set the session for uid 
+        # set the session for uid 
         session['uid']=uid
         session['logged_in']=True
-
         # if duplicate key error, flash message
         if uid == -1:
             flash(f"Username [ {username} ] is taken. Please try again.")
@@ -307,49 +302,51 @@ def settings_page(uid): # fix later to get uid from cookies
             curr_user_info=curr_user_info
             )
     elif action == 'update_appearance':
-        # if action is update appearance, 
+        # if action is update appearance, upate darkmode settings
         appearance = request.form.get('appearance')
         # update appearance pref
+        # ADD THIS CODE
         flash("Appearance updated!")
     else:
         flash("This is not yet implemented")
-
     return redirect(url_for('settings_page', uid=uid))
-        
 
 @app.route('/critter/<cid>')
-# page for when you click into a critter to see their stories
 def critter_page(cid):
-    #Session code 
+    """
+    Route to a critter's page to view it's info and stories (critter.html).
+    """
+    # session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
     print(f'looking up critter with cid {cid}')
     if not cid.isdigit():
+        # if the critter cid is wrong type, flash error message
         flash('cid must be a string of digits')
         return redirect( url_for('index'))
-    
-    # getting critter info
+    # get critter info
     cid = int(cid)
     conn = dbi.connect()
     critter_info = critter.get_critter_by_id(conn,cid)
     uid = critter_info['uid']
     user = profile.get_user_info(conn,uid)
     if user is None:
+        # error message for user uid of Nonetype
         flash(f'No profile found with uid={uid}')
         return redirect(url_for('index'))
     if critter_info is None:
+        # error message for critter cid of Nonetype
         flash(f'No critter found with cid={cid}')
         return redirect(url_for('index'))
-    
-    # getting story info
+    # get story info
     stories_by_user = story.get_stories_for_critter_by_user(conn, cid, uid)
     stories_not_by_user = story.get_stories_for_critter_not_by_user(conn, cid, uid)
     print("stories_by_user")
     print(stories_by_user)
     print("stories_not_by_user")
     print(stories_not_by_user)
+    # render the critter template it's info and all of it's stories
     return render_template(
         'critter.html',
         user=user,
@@ -361,53 +358,52 @@ def critter_page(cid):
 @app.route('/critter_upload/', methods=['POST', 'GET'])
 def critter_upload():
     """
-    Renders critter-upload form and adds the results to 
-    the database.
+    Renders critter-upload form and adds the results to the database.
     """
-    # Session code 
+    # session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
     if request.method == 'GET':
-        # Method is get, user entered the page
-        # Send the upload form
+        # method is get, user entered the page
+        # send the upload form
         return render_template('critter_upload.html')
     else:
-        # Method is post, form has been filled out
+        # method is post, form has been filled out
+        # get critter info from form
         conn = dbi.connect()
         uid = session['uid']
         f = request.files['critter-pic']
         user_filename = f.filename
         name = request.form.get('critter-name')
         desc = request.form.get('critter-desc')
-
-        # Ensure the user uploads an image and name
+        # ensure the user uploads an image and name
         if f and user_filename == '':
+            # if the filename is none, flash error message and re-render
             flash('Please add a critter image.')
             return render_template('critter_upload.html')
         if name == '':
+            # if the critter wasn't named, flash error message and re-render
             flash('Please name the critter.')
             return render_template('critter_upload.html')
-        
-        # Ensure that the name and description are the correct length
-        # to prevent errors
+        # ensure that the name and description are the correct length
         if len(name) > 50:
+            # if the name is too long, flash message and re-render
             flash('Critter name must be under 50 characters')
             return render_template('critter_upload.html')
         if len(desc) > 250:
+            # if the description is too long, flash message and re-render
             flash('Description must be under 250 characters')
             return render_template('critter_upload.html')
-
-        # Add the critter to the database
         try:
+            # try to add the critter to the database
             critterID = critter.add_critter(conn, uid, app.config['uploads'], name, desc)
         except:
+            # if this doesn't work, flash an error message
             flash('An error occurred when uploading the critter. Please try again')
             return render_template('critter_upload.html')
         pet = critter.get_critter_by_id(conn, critterID['last_insert_id()'])
-
-        # Add the photo to the uploads folder, using critter{cid} as the name
+        # add the photo to the uploads folder, using critter{cid} as the name
         cid = pet['cid']
         nm = "critter" + str(cid)
         ext = user_filename.split('.')[-1]
@@ -416,122 +412,125 @@ def critter_upload():
         print(pathname)
         f.save(pathname)
         os.chmod(pathname, 0o444)
-        
-        # Update the critter element in database to have the correct image path
+        # update the critter element in database to have the correct image path
         critter.update_critter(conn, cid, filename, name, desc)
-
-        # Forward the user to the new critter's page
+        # forward the user to the new critter's page
         return redirect(url_for('critter_page', cid=cid))
 
 @app.route('/critter/<cid>/story_upload/', methods=["GET", "POST"])
 def story_upload(cid):
     """
-    Renders story-upload form and adds the results to 
-    the database.
+    Renders story-upload form and adds the results to the database.
     """
-    # Session code 
     if 'uid' not in session:
+        # session code 
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
     print(f'looking up critter with cid {cid}')
     if not cid.isdigit():
+        # if the critter cid is wrong type, flash error message
         flash('cid must be a string of digits')
         return redirect( url_for('index'))
-    
     if request.method == 'GET':
-        # Method is get, user entered the page
-        # Send the upload form
-
-        # Retrieves critter info for form
+        # method is get, user entered the page
+        # send the upload form
+        # get critter info for form
         cid = int(cid)
         conn = dbi.connect()
         critter_info = critter.get_critter_by_id(conn,cid)
+        # get user info for form
         uid = critter_info['uid']
         user = profile.get_user_info(conn,uid)
         if user is None:
+            # if the user doesn't exist, flash message and redirect
             flash(f'No profile found with uid={uid}')
             return redirect(url_for('index'))
         if critter_info is None:
+            # if the critter doesn't exist, flash message and redirect
             flash(f'No critter found with cid={cid}')
             return redirect(url_for('index'))
-
+        # render the blank form
         return render_template('story_upload.html', 
                                user=user, 
                                critter_info=critter_info)
     else:
-        # Method is post, form has been filled out
-        # Add the story to the database
+        # method is post, form has been filled out
+        # add the story to the database
         conn = dbi.connect()
         session['uid'] = 1
+        # get the user's uid from session
         uid = session['uid']
-        desc = request.form.get('critter-story')
-        
-        # Ensure the user uploads a story
-        if desc == '':
+        # get the story from form
+        story = request.form.get('critter-story')
+        # ensure the user uploads a story
+        if story == '':
+            # if the story is blank, flash a message and re-render form
             flash('Please write a story.')
             return render_template('story_upload.html', 
                                user=user, 
                                critter_info=critter_info)
-
-        # Check length of description to avoid error
-        if len(desc) > 2000:
+        # check length of story to avoid error
+        if len(story) > 2000:
+            # if the story length is too long, flash a message and re-render form
             flash('The story cannot be longer than 2000 characters')
             return render_template('story_upload.html', 
                                user=user, 
                                critter_info=critter_info)
-        
-        # Add the story to the database
         try:
-            story.add_story(conn, cid, uid, desc)
+            # try to add the story to the database
+            story.add_story(conn, cid, uid, story)
         except:
+            # if this doesn't work, flash an error message
             flash('An error occurred when uploading the story. Please try again')
             return render_template('story_upload.html')
         return redirect(url_for('critter_page', cid=cid))
 
 @app.route('/query/', methods=['GET'])
 def lookup_form():
-    '''
-    Returns the rendered page for the query inputted to the lookup form.
-    If the query result has multiple items, renders a list a clickable list of the items.
-    Otherwise, renders the page of the item itself.
-
-    Args:
-        None
-    Return:
-        String of the rendered template -> str
-    '''
-    #Session code 
+    """
+    Sends the user the lookup form.
+    When the user has filled out the form, display a lookup result according to their query.
+    """
+    # session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
+    # get the query type (either critter's name or user's username)
     query_type = request.args.get('kind')
     query = request.args.get('query')
     conn = dbi.connect()
     if query_type == 'critter':
+        # if the query type is critter, get critters matching the query
         critters = critter.lookup_critter(conn, query)
         if not critters:
+            # if no critters match the query, flash a message
             flash('No critters matched the query. Please try again.')
             return redirect(url_for('index'))
-
         for c in critters:
+            # save critter's creator and created time for display as well
             c['creator'] = profile.get_user_info(conn, c['uid'])['username']
             c['created'] = c['created'].strftime("%m/%d/%Y")
         if len(critters) == 1:
-            return redirect(url_for('critter_page', cid=critters[0]['cid']))  # if there is only one result, go straight to the critter's page
-        return render_template('critter_lookup.html', query = query, critters = critters) # renders a clickable list of critters
+            # if only one critter matches the query, redirect directly to that critter's page
+            return redirect(url_for('critter_page', cid=critters[0]['cid']))
+        # render a clickable list of critters
+        return render_template('critter_lookup.html', query = query, critters = critters)
     if query_type == 'user':
+        # if the query type is user, get users matching the query
         users = profile.lookup_user(conn, query)
         if not users:
+            # if no users match the query, flash a message
             flash('No users matched the query. Please try again.')
             return redirect(url_for('index'))
         for u in users:
+            # save user's account creation time and number of critters for display as well
             u['created'] = u['created'].strftime("%m/%d/%Y")
             u['num_critters'] = len(profile.get_critters_by_user(conn, u['uid']))
         if len(users) == 1:
-            return redirect(url_for('user_profile', uid=users[0]['uid']))  # if there is only one result, go straight to the user's page
-        return render_template('user_lookup.html', query = query, users = users) # renders a clickable list of users
+            # if only one user matches the query, redirect directly to that user's page
+            return redirect(url_for('user_profile', uid=users[0]['uid']))
+        # render a clickable list of users
+        return render_template('user_lookup.html', query = query, users = users)
 
 if __name__ == '__main__':
     import sys, os
