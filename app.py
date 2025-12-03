@@ -114,7 +114,7 @@ def signin():
         flash(f"Welcome back, {user['name']}.")
         flash(f"testing if logged in {session["logged_in"]}")
         # change to redirect url_for
-        return render_template('profile.html', user=user, critters=critters)
+        return redirect(url_for('user_profile',uid=uid))
 
 @app.route('/profile/<uid>')
 def user_profile(uid):
@@ -122,6 +122,27 @@ def user_profile(uid):
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
+
+    #if this is not the users profile
+
+    if int(session['uid'])!=int(uid):
+        print(f'looking up user with uid {uid}')
+        if not uid.isdigit():
+            flash('uid must be a string of digits')
+            return redirect( url_for('index'))
+        uid = int(uid)
+        conn = dbi.connect()
+        user = profile.get_user_info(conn,uid)
+        critters = profile.get_critters_by_user(conn,uid)
+        if user is None:
+            flash(f'No profile found with uid={uid}')
+            return redirect(url_for('index'))
+        return render_template(
+            'profile_for_none_user.html',
+            user=user,
+            critters=critters
+        )
+
 
 
     print(f'looking up user with uid {uid}')
@@ -163,18 +184,20 @@ def uploaded_file(filename):
     return send_from_directory(app.config['uploads'], filename)
 
     
-@app.route('/settings/<uid>', methods=['POST', 'GET'])
-def settings_page(uid): # fix later to get uid from cookies
+@app.route('/settings/', methods=['POST', 'GET'])
+def settings_page(): # fix later to get uid from cookies
     #Session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
 
+    uid = session['uid']
 
-    if not uid.isdigit():
-        flash('uid must be a string of digits')
-        return redirect(url_for('index'))
-    uid = int(uid)
+    #if not uid.isdigit():
+        #flash('uid must be a string of digits')
+        #return redirect(url_for('index'))
+    
+    uid = int(session['uid'])
     conn = dbi.connect()
     curr_user_info = profile.get_user_info(conn,uid)
     print(curr_user_info)

@@ -1,0 +1,36 @@
+<!-- (CritterCave) -->
+<!-- HTML template for a user's profile page -->
+
+{% extends "base.html" %}
+{% block main_content %}
+
+
+    <div  id="main" class="main">
+
+        <!-- Profile Header Card -->
+        <section class="critter-header-card">
+            <div class="critter-info-left">
+                {% if user.profilepic %}
+                <img src="{{  url_for('uploaded_file', filename=user.profilepic) }}"
+                    alt="Profile Picture" class="critter-profile-img">
+                {% endif %}
+            </div>
+
+            <div class="critter-info-right">
+                <h1 class="critter-name">{{ user.name }}</h1>
+            </div>
+        </section>
+
+        <h2>Critters:</h2>
+        <div class="critter-grid">
+            {% for critter in critters %}
+            <a href="{{ url_for('critter_page', cid=critter.cid) }}" class="critter-card">
+                <img src="{{ url_for('uploaded_file', filename=critter.imagepath) }}"
+                    alt="{{ critter.name }}">
+                <p>{{ critter.name }}</p>
+            </a>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
