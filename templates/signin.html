@@ -7,7 +7,7 @@
     <!-- for mobile-friendly pages -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name=author content="">
-    <title>{{ page_title }}</title>
+    <title>"Sign-In Page for CritterCave"</title>
     <link rel='stylesheet' href="{{url_for('static', filename = 'style.css')}}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 
@@ -44,7 +44,7 @@
             <h3>Welcome back to Critter Cave!</h3>
             <h3>Sign in below.</h3>
             
-            <form class="sign_up_form" method=POST action="">
+            <form class="sign_up_form" method=POST action="{{ url_for('signin') }}">
                 <table>
                     <tr>
                         <td><label for="username">Username</label></td>

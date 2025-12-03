@@ -1,6 +1,12 @@
 <!-- (CritterCave) -->
 <!-- HTML template for a critter lookup result page -->
-{% extends "base.html" %}      
+{% extends "base.html" %}  
+
+{% block head_stuff %}
+<title>"Critter Search Results: Contains the results from 
+    your search."</title>
+{% endblock %}
+
 {% block main_content %}      
 
 <h1>Critter results for '{{query}}'</h1>

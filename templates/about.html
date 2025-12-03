@@ -3,6 +3,11 @@
 
 {% extends "base.html" %}
 
+{% block head_stuff %}
+<title>"About Page: Contains a description of the website 
+    and the creators."</title>
+{% endblock %}
+
 {% block main_content %}
 
 <h1>About CritterCave</h1>
@@ -12,33 +17,5 @@
 
 <h2>About Us</h2>
 <p>This site was created by Nina, Ruth, Meg and Kayla.</p>
-
-<h2>Initial Links</h2>
-
-<p>Welcome to the Draft Version of CritterCave.</p>
-<p>Below are the link to the pages we've currently developed.</p>
-
-<h2>Login</h2>
-<p><a href="{{ url_for('welcome') }}">Welcome page: test sign-up and sign-in</a></p>
-
-<h2>User Profiles</h2>
-<p><a href="{{ url_for('user_profile', uid=1) }}">Nina's profile</a></p>
-<p><a href="{{ url_for('user_profile', uid=3) }}">Ruth's profile</a></p>
-
-<h2>Critter Pages</h2>
-<p><a href="{{ url_for('critter_page', cid=13) }}">Critter Betsy Beaver</a></p>
-<p><a href="{{ url_for('critter_page', cid=15) }}">Critter Reginald II</a></p>
-<p><a href="{{ url_for('critter_page', cid=16) }}">Critter Tommy</a></p>
-<p><a href="{{ url_for('critter_page', cid=12) }}">Critter Sam</a></p>
-
-
-<h2>Upload Forms</h2>
-<p><a href="{{ url_for('critter_upload') }}">Critter Upload</a></p>
-<p><a href="{{ url_for('story_upload', cid=16) }}">Story Upload for Critter 16 (Tommy)</a></p>
-
-<h2>Settings</h2>
-<p><a href="{{ url_for('settings_page', uid=1) }}">Settings for User 1 (Nina)</a></p>
-<p><a href="{{ url_for('settings_page', uid=3) }}">Settings for User 2 (Ruth)</a></p>
-<p><a href="{{ url_for('settings_page', uid=7) }}">Settings for test user</a></p>
 
 {% endblock %}
