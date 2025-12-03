@@ -9,11 +9,10 @@ from werkzeug.utils import secure_filename
 import secrets
 import os
 import cs304dbi as dbi
-
-import profile  # profile / user methods
-import critter  # critter methods
-import story    # story methods
-import settings # settings methods
+import profile
+import critter
+import story
+import settings
 
 app = Flask(__name__)
 
