@@ -343,6 +343,7 @@ def critter_page(cid):
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
+    uid = session['uid']
     print(f'looking up critter with cid {cid}')
     if not cid.isdigit():
         # if the critter cid is wrong type, flash error message
@@ -352,27 +353,39 @@ def critter_page(cid):
     cid = int(cid)
     conn = dbi.connect()
     critter_info = critter.get_critter_by_id(conn,cid)
-    uid = critter_info['uid']
-    user = profile.get_user_info(conn,uid)
-    if user is None:
+    creator_uid = int(critter_info['uid'])
+    creator_info = profile.get_user_info(conn,creator_uid)
+    if creator_info is None:
         # error message for user uid of Nonetype
-        flash(f'No profile found with uid={uid}')
+        flash(f'No profile found with uid={creator_uid}')
         return redirect(url_for('index'))
     if critter_info is None:
         # error message for critter cid of Nonetype
         flash(f'No critter found with cid={cid}')
         return redirect(url_for('index'))
     # get story info
-    stories_by_user = story.get_stories_for_critter_by_user(conn, cid, uid)
-    stories_not_by_user = story.get_stories_for_critter_not_by_user(conn, cid, uid)
+    stories_by_user = story.get_stories_for_critter_by_user(conn, cid, creator_uid)
+    stories_not_by_user = story.get_stories_for_critter_not_by_user(conn, cid, creator_uid)
     print("stories_by_user")
     print(stories_by_user)
     print("stories_not_by_user")
     print(stories_not_by_user)
+    
+    # if the critter was not made by the user then render non-user critter page
+    if creator_uid != uid:
+        print("non user")
+        return render_template(
+            'critter_for_non_user.html',
+            user=creator_info,
+            critter_info=critter_info,
+            stories_by_user=stories_by_user,
+            stories_not_by_user=stories_not_by_user
+        )
+    print("critter made by user")
     # render the critter template it's info and all of it's stories
     return render_template(
         'critter.html',
-        user=user,
+        user=creator_info,
         critter_info=critter_info,
         stories_by_user=stories_by_user,
         stories_not_by_user=stories_not_by_user
@@ -492,8 +505,7 @@ def delete_critter(cid):
                 flash(f'No profile found with uid={uid}')
                 return redirect(url_for('index'))
             return redirect(url_for('user_profile',
-                user=user,
-                critters=critters))
+                uid=user['uid']))
     
     
 
