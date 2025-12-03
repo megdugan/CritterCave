@@ -10,7 +10,7 @@
 <div class="settings">
     <h1>Introduce Your Critter to the World</h1>
 
-    <form method="post" action="" enctype="multipart/form-data">
+    <form method="post" action="{{ url_for('critter_upload') }}" enctype="multipart/form-data">
 
         <!-- Critter Photo -->
         <section class="settings-block">
