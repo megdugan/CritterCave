@@ -176,7 +176,7 @@ def logout():
     Log a user out of the session.
     If the user is not logged in, flash an error message.
     """
-    if 'uid' not in session:
+    if 'uid' in session:
         session.pop('logged_in')
         session.pop('uid')
         flash('You are logged out!') 
