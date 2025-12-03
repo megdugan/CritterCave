@@ -430,16 +430,16 @@ def story_upload(cid):
         # if the critter cid is wrong type, flash error message
         flash('cid must be a string of digits')
         return redirect( url_for('index'))
+    # get critter info for form
+    cid = int(cid)
+    conn = dbi.connect()
+    critter_info = critter.get_critter_by_id(conn, cid)
+    # get user info for form
+    uid = critter_info['uid']
+    user = profile.get_user_info(conn,uid)
     if request.method == 'GET':
         # method is get, user entered the page
         # send the upload form
-        # get critter info for form
-        cid = int(cid)
-        conn = dbi.connect()
-        critter_info = critter.get_critter_by_id(conn,cid)
-        # get user info for form
-        uid = critter_info['uid']
-        user = profile.get_user_info(conn,uid)
         if user is None:
             # if the user doesn't exist, flash message and redirect
             flash(f'No profile found with uid={uid}')
@@ -460,16 +460,16 @@ def story_upload(cid):
         # get the user's uid from session
         uid = session['uid']
         # get the story from form
-        story = request.form.get('critter-story')
+        new_story = request.form.get('critter-story')
         # ensure the user uploads a story
-        if story == '':
+        if new_story == '':
             # if the story is blank, flash a message and re-render form
             flash('Please write a story.')
             return render_template('story_upload.html', 
                                user=user, 
                                critter_info=critter_info)
         # check length of story to avoid error
-        if len(story) > 2000:
+        if len(new_story) > 2000:
             # if the story length is too long, flash a message and re-render form
             flash('The story cannot be longer than 2000 characters')
             return render_template('story_upload.html', 
@@ -477,7 +477,7 @@ def story_upload(cid):
                                critter_info=critter_info)
         try:
             # try to add the story to the database
-            story.add_story(conn, cid, uid, story)
+            story.add_story(conn, cid, uid, new_story)
         except:
             # if this doesn't work, flash an error message
             flash('An error occurred when uploading the story. Please try again')
