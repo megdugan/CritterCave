@@ -32,6 +32,10 @@ app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 def index():
     return render_template('main.html', page_title='Main Page')
 
+@app.route('/old_main/')
+def old_main():
+    return render_template('old_main.html', page_title='Old Main Page')
+
 @app.route('/about/')
 def about():
     return render_template('about.html', page_title='About Us')
