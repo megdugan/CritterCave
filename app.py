@@ -480,7 +480,6 @@ def story_upload(cid):
         # method is post, form has been filled out
         # add the story to the database
         conn = dbi.connect()
-        session['uid'] = 1
         # get the user's uid from session
         uid = session['uid']
         # get the story from form
