@@ -181,7 +181,7 @@ def logout():
     Log a user out of the session.
     If the user is not logged in, flash an error message.
     """
-    if 'uid' not in session:
+    if 'uid' in session:
         session.pop('logged_in')
         session.pop('uid')
         flash('You are logged out!') 
@@ -364,8 +364,11 @@ def critter_page(cid):
         flash(f'No critter found with cid={cid}')
         return redirect(url_for('index'))
     # get story info
-    stories_by_user = story.get_stories_for_critter_by_user(conn, cid, creator_uid)
-    stories_not_by_user = story.get_stories_for_critter_not_by_user(conn, cid, creator_uid)
+    stories_by_user = story.get_stories_for_critter_by_user(conn, cid, uid)
+    stories_not_by_user = story.get_stories_for_critter_not_by_user(conn, cid, uid)
+    for s in stories_not_by_user:
+        print(stories_not_by_user)
+        s['creator'] = profile.get_user_info(conn, s['uid'])['username']
     print("stories_by_user")
     print(stories_by_user)
     print("stories_not_by_user")
@@ -549,7 +552,6 @@ def story_upload(cid):
         # method is post, form has been filled out
         # add the story to the database
         conn = dbi.connect()
-        session['uid'] = 1
         # get the user's uid from session
         uid = session['uid']
         # get the story from form
