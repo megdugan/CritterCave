@@ -39,13 +39,19 @@ def get_critter_by_id(conn,cid):
 
 def delete_critter(conn,cid):
     """
-    This method will delete critters by their critter id
+    This method will delete critters by their critter id and delete any stories about the critter to maintain ref integ
     """
     curs=dbi.dict_cursor(conn)
+    curs.execute(
+        '''delete from story where cid=%s''',
+        [cid])
+    stories_deleted = curs.rowcount
     curs.execute("""
             delete from critter where cid=%s
             """,[cid])
+    critters_deleted = curs.rowcount
     conn.commit()
+    return critters_deleted, stories_deleted
 
 def update_critter(conn,cid,imagepath,name,description):
     """

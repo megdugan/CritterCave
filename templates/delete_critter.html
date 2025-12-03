@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block main_content %}
+
+<div class="settings">
+    <h1>Are you sure you want to delete {{ critter_info.name }}?</h1>
+    <p>This will also delete all stories written by you and other users about {{ critter_info.name }}</p>
+
+    <!-- Critter Header Card -->
+    <section class="critter-header-card">
+        <div class="critter-info-left">
+            {% if critter_info.imagepath %}
+            <img src="{{ url_for('uploaded_file', filename=critter_info.imagepath) }}"
+                 alt="Critter Image" class="critter-profile-img">
+            {% endif %}
+        </div>
+
+        <div class="critter-info-right">
+            <h1 class="critter-name">{{ critter_info.name }}</h1>
+            <p class="critter-description">
+                {{ critter_info.description }}
+            </p>
+        </div>
+    </section>
+
+    <p></p>
+
+    <!-- Delete Form -->
+    <form method="post" action="{{url_for('delete_critter', cid=critter_info.cid)}}">
+        <section class="settings-block">
+            <h2>Confirm Deletion</h2>
+            <p class="block-subtitle">This action cannot be undone. Please confirm your decision.</p>
+
+            <p><input type="submit" name="action" value="Delete"></p>
+        </section>
+    </form>
+
+    <a href="{{ url_for('critter_page', cid=critter_info.cid) }}" class="button-secondary">
+    Cancel
+    </a>
+
+</div>
+
+{% endblock %}

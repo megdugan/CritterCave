@@ -73,6 +73,11 @@
         </div>
 
     </section>
+
+    <form action="{{ url_for('delete_critter', cid=critter_info.cid) }}" method="get">
+        <button class="button-primary">Delete Critter</button>
+    </form>
+
 </div>
 
 {% endblock %}

@@ -412,6 +412,63 @@ def critter_upload():
 
         # Forward the user to the new critter's page
         return redirect(url_for('critter_page', cid=cid))
+    
+@app.route('/critter/delete_citter/<cid>', methods=["GET", "POST"])
+def delete_critter(cid):
+    '''
+    Renders a form to delete the specified critter and remove it from the database.
+    Will also delete any stories that were written about that critter.
+    
+    :param cid: the primary key in the database of the critter to delete
+    '''
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+    uid = session['uid']
+    
+    try:
+        cid = int(cid)
+    except:
+        flash('invalid url')
+        user = profile.get_user_info(conn,uid)
+        critters = profile.get_critters_by_user(conn,uid)
+        if user is None:
+            flash(f'No profile found with uid={uid}')
+            return redirect(url_for('index'))
+        return redirect(url_for('profile.html',
+            user=user,
+            critters=critters))
+        
+    conn = dbi.connect()
+    critter_info = critter.get_critter_by_id(conn,cid)
+    
+    if critter_info is None:
+        flash(f'No critter found with cid={cid}')
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        # Render the delete form
+        return render_template('delete_critter.html',
+                               critter_info=critter_info)
+    else:
+        action = request.form.get('action')
+        if action == 'Delete':
+            # if button clicked == confirm deletion:
+            critters_deleted, stories_deleted = critter.delete_critter(conn, cid)
+            if critters_deleted == 0:
+                flash('Critter not found or already deleted.')
+            else:
+                flash(f'Deleted {critters_deleted} critter and {stories_deleted} related stories.')
+            
+            user = profile.get_user_info(conn,uid)
+            critters = profile.get_critters_by_user(conn,uid)
+            if user is None:
+                flash(f'No profile found with uid={uid}')
+                return redirect(url_for('index'))
+            return redirect(url_for('user_profile',
+                user=user,
+                critters=critters))
+    
+    
 
 @app.route('/critter/<cid>/story_upload/', methods=["GET", "POST"])
 def story_upload(cid):
