@@ -14,7 +14,8 @@
             alt="Profile Picture" class="critter-profile-img">
         </div>
         <div style="padding-left:20px">
-            <h1><a  href="{{url_for('user_profile', uid=u['uid'])}}">{{u['username']}}</a></h1>
+            <h1><a  href="{{url_for('user_profile', uid=u['uid'])}}">{{u['name']}}</a></h1>
+            <p>@{{u['username']}}</p>
             <p>Join date: {{u['created']}}</p>
             <p>Number of critters: {{u['num_critters']}}</p>
         </div>
