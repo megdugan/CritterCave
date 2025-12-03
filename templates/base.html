@@ -3,12 +3,13 @@
 <head>
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ page_title }}</title>
 
     <link rel='stylesheet' href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 
-    {% block head_stuff %}{% endblock %}
+    {% block head_stuff %}
+      <title>{{ page_title }}</title>
+    {% endblock %}
 </head>
 
 <body>
