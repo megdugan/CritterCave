@@ -130,14 +130,14 @@ def user_profile(uid):
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
-    #if this is not the users profile
-
+    # if this is not the users profile
     if int(session['uid'])!=int(uid):
+        # if the user isn't viewing their own profile
         print(f'looking up user with uid {uid}')
         if not uid.isdigit():
             flash('uid must be a string of digits')
             return redirect( url_for('index'))
+        # get user info and critters to display
         uid = int(uid)
         conn = dbi.connect()
         user = profile.get_user_info(conn,uid)
@@ -145,23 +145,24 @@ def user_profile(uid):
         if user is None:
             flash(f'No profile found with uid={uid}')
             return redirect(url_for('index'))
+        # display profile without settings and add critter button (not logged in user)
         return render_template(
             'profile_for_none_user.html',
             user=user,
             critters=critters
         )
-
-
-
     print(f'looking up user with uid {uid}')
     if not uid.isdigit():
+        # if the uid is of wrong type, flash message and redirect to home
         flash('uid must be a string of digits')
         return redirect( url_for('index'))
+    # get user info and critters to display
     uid = int(uid)
     conn = dbi.connect()
     user = profile.get_user_info(conn,uid)
     critters = profile.get_critters_by_user(conn,uid)
     if user is None:
+        # if the user doesn't exist, flash message and redirect to home
         flash(f'No profile found with uid={uid}')
         return redirect(url_for('index'))
     return render_template(
@@ -199,17 +200,12 @@ def uploaded_file(filename):
     
 @app.route('/settings/', methods=['POST', 'GET'])
 def settings_page(): # fix later to get uid from cookies
-    #Session code 
+    # session code 
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
+    # get user info for form
     uid = session['uid']
-
-    #if not uid.isdigit():
-        #flash('uid must be a string of digits')
-        #return redirect(url_for('index'))
-    
     uid = int(session['uid'])
     conn = dbi.connect()
     curr_user_info = profile.get_user_info(conn,uid)
