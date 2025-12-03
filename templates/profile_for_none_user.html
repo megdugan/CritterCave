@@ -2,17 +2,8 @@
 <!-- HTML template for a user's profile page -->
 
 {% extends "base.html" %}
-
-{% block head_stuff %}
-<title>"Profile Page: Displays a user's information and all 
-    the critters they created."</title>
-{% endblock %}
-
 {% block main_content %}
 
-    <div class=".profile-settings-wrapper">
-        <a href="{{ url_for('settings_page', uid=user.uid) }}" class="button-primary profile-settings-button">Settings</a>
-    </div>
 
     <div  id="main" class="main">
 
@@ -27,11 +18,6 @@
 
             <div class="critter-info-right">
                 <h1 class="critter-name">{{ user.name }}</h1>
-                <h4>@{{ user.username }}</h4>
-                <a href="{{ url_for('critter_upload') }}"
-                class="button-primary write-story-btn">
-                Create a new critter
-                </a>
             </div>
         </section>
 
@@ -45,13 +31,6 @@
             </a>
             {% endfor %}
         </div>
-
-    <a href="{{ url_for('critter_upload', uid=user.uid) }}" class="button-primary">
-    Add another critter!</a>
-    <p>Currently this only adds critters for Nina, 
-        but this will be updated in Alpha to add critters for the user
-        saved in the session.</p>
-
 
     </div>
 {% endblock %}

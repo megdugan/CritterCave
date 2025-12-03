@@ -1,19 +1,24 @@
 """ 
 (CritterCave)
-Contains all database methods relating to accessing and displaying stories
+Contains all database methods relating to accessing and displaying stories.
 """
 
-import cs304dbi as dbi
 from datetime import datetime
-
-import profile  # profile / user methods
-import critter  # critter methods
-import settings # settings methods
+import cs304dbi as dbi
+import profile
+import critter
+import settings
 
 def add_story(conn, cid:int, uid:int, story:str):
     """
-    This method will add a new story to the database based on 
-    on the user entering the story on a post.
+    Add a new story for a critter.
+    Args:
+        conn -> pymysql.connections.Connection
+        cid -> int
+        uid -> int
+        story -> str
+    Return:
+        story id -> int
     """
     time=datetime.now()
     curs = dbi.dict_cursor(conn)
@@ -21,7 +26,6 @@ def add_story(conn, cid:int, uid:int, story:str):
         insert into story(cid, uid, created, story)
         values (%s,%s,%s,%s)''', [cid, uid, time, story])
     conn.commit()
-
     # Get the story id (sid)
     curs.execute('select last_insert_id()')
     row = curs.fetchone()
@@ -29,16 +33,26 @@ def add_story(conn, cid:int, uid:int, story:str):
 
 def get_story_by_id(conn, sid:int):
     """
-    This method will grab a story by its sid (story id)
+    Get a story by it's sid.
+    Args:
+        conn -> pymysql.connections.Connection
+        sid -> int
+    Return:
+        story info -> dict
     """
     curs=dbi.dict_cursor(conn)
     curs.execute("""
         select * from story where sid=%s""", [sid])
     return curs.fetchone()
 
-def delete_story(conn,sid:int):
+def delete_story(conn, sid:int):
     """
-    This method will delete a story by its sid (story id)
+    Delete a story.
+    Args:
+        conn -> pymysql.connections.Connection
+        sid -> int
+    Return:
+        None
     """
     curs=dbi.dict_cursor(conn)
     curs.execute("""
@@ -47,7 +61,13 @@ def delete_story(conn,sid:int):
 
 def update_story(conn, sid:int, story:str):
     """
-    This method will update a story by its sid (story id)
+    Update a story.
+    Args:
+        conn -> pymysql.connections.Connection
+        sid -> int
+        story -> str
+    Return:
+        None
     """
     curs=dbi.dict_cursor(conn)
     curs.execute("""
@@ -58,7 +78,14 @@ def update_story(conn, sid:int, story:str):
     
     
 def get_stories_for_critter(conn, cid: int):
-    """Returns all stories written about the specified critter with cid"""
+    """
+    Get all of the stories for a critter.
+    Args:
+        conn -> pymysql.connections.Connection
+        cid -> int
+    Return:
+        critter stories -> dict[]
+    """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
                  SELECT story.created AS time_created,story.story AS critter_story 
@@ -68,7 +95,15 @@ def get_stories_for_critter(conn, cid: int):
     return curs.fetchall()
 
 def get_stories_for_critter_by_user(conn, cid: int, uid: int):
-    """Returns all stories writen about the specified critter with cid written by the specified user with uid"""
+    """
+    Get all of the stories for a critter made by a specific user.
+    Args:
+        conn -> pymysql.connections.Connection
+        cid -> int
+        uid -> int
+    Return:
+        critter stories -> dict[]
+    """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
                  SELECT story.created AS time_created,story.story AS critter_story 
@@ -78,7 +113,15 @@ def get_stories_for_critter_by_user(conn, cid: int, uid: int):
     return curs.fetchall()
 
 def get_stories_for_critter_not_by_user(conn, cid: int, uid: int):
-    """Returns all stories writen about the specified critter with cid NOT written by the specified user with uid"""
+    """
+    Get all of the stories for a critter made by anyone except for a specific user.
+    Args:
+        conn -> pymysql.connections.Connection
+        cid -> int
+        uid -> int
+    Return:
+        critter stories -> dict[]
+    """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
                  SELECT story.created AS time_created,story.story AS critter_story 
@@ -86,10 +129,3 @@ def get_stories_for_critter_not_by_user(conn, cid: int, uid: int):
                  WHERE cid = %s AND uid <> %s''',
                  [cid,uid])
     return curs.fetchall()
-
-# To test methods
-if __name__ == '__main__':
-    dbi.conf("crittercave_db")
-    conn = dbi.connect() # pass as conn argument for testing methods
-    story=add_story(conn,1,1,"Tommy was playing with scissors...")
-    print(story)
