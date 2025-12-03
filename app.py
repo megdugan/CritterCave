@@ -365,6 +365,9 @@ def critter_page(cid):
     # get story info
     stories_by_user = story.get_stories_for_critter_by_user(conn, cid, uid)
     stories_not_by_user = story.get_stories_for_critter_not_by_user(conn, cid, uid)
+    for s in stories_not_by_user:
+        print(stories_not_by_user)
+        s['creator'] = profile.get_user_info(conn, s['uid'])['username']
     print("stories_by_user")
     print(stories_by_user)
     print("stories_not_by_user")
