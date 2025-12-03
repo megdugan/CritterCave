@@ -145,6 +145,7 @@ def user_profile(uid):
         uid = int(uid)
         conn = dbi.connect()
         user = profile.get_user_info(conn,uid)
+        user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
         critters = profile.get_critters_by_user(conn,uid)
         if user is None:
             flash(f'No profile found with uid={uid}')
@@ -164,6 +165,7 @@ def user_profile(uid):
     uid = int(uid)
     conn = dbi.connect()
     user = profile.get_user_info(conn,uid)
+    user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
     critters = profile.get_critters_by_user(conn,uid)
     if user is None:
         # if the user doesn't exist, flash message and redirect to home
@@ -352,6 +354,7 @@ def critter_page(cid):
     cid = int(cid)
     conn = dbi.connect()
     critter_info = critter.get_critter_by_id(conn,cid)
+    critter_info['created'] = critter_info['created'].strftime("%m/%d/%Y")[:10]
     uid = critter_info['uid']
     user = profile.get_user_info(conn,uid)
     if user is None:
