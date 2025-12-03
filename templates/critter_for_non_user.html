@@ -21,12 +21,10 @@
         <div class="critter-info-right">
             <h1 class="critter-name">{{ critter_info.name }}</h1>
             <p class="critter-maker">
-                <h4>Made by:
+                Made by:
                 <a href="{{ url_for('user_profile', uid=user.uid) }}">
                     {{ user.name }}
                 </a>
-                </h4>
-                <h4>{{ critter_info.created }}</h4>
             </p>
 
             <p class="critter-description">
@@ -70,7 +68,6 @@
                 {% for story in stories_not_by_user %}
                     <div class="story-card pastel-box">
                         <p>{{ story.critter_story }}</p>
-                        <a href="{{url_for('user_profile', uid=story.uid)}}">{{story['creator']}}</a>
                     </div>
                 {% else %}
                     <a href="{{ url_for('story_upload', cid=critter_info.cid) }}"
@@ -82,10 +79,6 @@
         </div>
 
     </section>
-
-    <form action="{{ url_for('delete_critter', cid=critter_info.cid) }}" method="get">
-        <button class="button-primary">Delete Critter</button>
-    </form>
 
 </div>
 

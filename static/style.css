@@ -681,3 +681,28 @@ a:hover {
 .sub_button{
     background: var(--accent-rosewood);
 }
+
+.button-secondary {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    background-color: #f0f0f0;
+    color: #333;
+    border: 2px solid #ccc;
+    text-decoration: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.button-secondary:hover {
+    background-color: #e6e6e6;
+    border-color: #bdbdbd;
+}
+
+.button-secondary:active {
+    background-color: #dcdcdc;
+    border-color: #a7a7a7;
+}
