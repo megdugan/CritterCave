@@ -20,7 +20,18 @@
     <a href="javascript:void(0)" class="closebtn" onclick="closeNavall()">&times;</a>
     <a href="{{url_for('index')}}">Home</a>
     <a href="{{url_for('about')}}">About</a>
-    <a href="{{url_for('logout')}}">Logout</a>
+
+    <!--If the user is logged in then show their profile, upload critter and logout options-->
+    {% if session.get('uid') %}
+      <a href="{{url_for('user_profile', uid=session.get('uid'))}}">My Profile</a>
+      <a href="{{url_for('critter_upload')}}">Upload a Critter</a>
+      <a href="{{url_for('logout')}}">Logout</a>
+
+    <!--If the user is not logged in then show signin and signup options-->
+    {% else %}
+      <a href="{{url_for('signin')}}">Login</a>
+      <a href="{{url_for('signup')}}">Register</a>
+    {% endif %}
 </div>
 
 <!-- Topbar -->
