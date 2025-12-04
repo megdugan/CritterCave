@@ -50,9 +50,9 @@
 
             <div class="story-card-grid">
                 {% for story in stories_by_user %}
-                    <div class="story-card pastel-box">
+                    <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
                         <p>{{ story.critter_story }}</p>
-                    </div>
+                    </a>
                 {% else %}
                     <p class="empty-text">No stories found by this author.</p>
                 {% endfor %}
@@ -66,14 +66,14 @@
 
             <div class="story-card-grid">
                 {% for story in stories_not_by_user %}
-                    <div class="story-card pastel-box">
+                    <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
                         <p>{{ story.critter_story }}</p>
-                        <a href="{{url_for('user_profile', uid=story.uid)}}">{{story['creator']}}</a>
-                    </div>
+                        <span class="story-author-tag">By {{ story.creator }}</span>
+                    </a>
                 {% else %}
                     <a href="{{ url_for('story_upload', cid=critter_info.cid) }}"
-                       class="empty-text linkify">
-                       Write {{ critter_info.name }}'s first story!
+                    class="empty-text linkify">
+                    Write {{ critter_info.name }}'s first story!
                     </a>
                 {% endfor %}
             </div>

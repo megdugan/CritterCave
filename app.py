@@ -384,6 +384,7 @@ def critter_page(cid):
             stories_by_user=stories_by_user,
             stories_not_by_user=stories_not_by_user
         )
+    print(f"stories_not_by_user {stories_not_by_user}")
     print("critter made by user")
     # render the critter template it's info and all of it's stories
     return render_template(
@@ -393,6 +394,54 @@ def critter_page(cid):
         stories_by_user=stories_by_user,
         stories_not_by_user=stories_not_by_user
     )
+    
+@app.route('/story/<cid>/<sid>')
+def story_page(cid, sid):
+    """
+    Route to a story's page to view it's info and with options to delete or update if the story was written by the user.
+    """
+    # session code 
+    print(f"sid: {sid}")
+    print(f"cid: {cid}")
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+    uid = session['uid']
+    print(f'looking up critter with cid {cid}')
+    if not cid.isdigit():
+        # if the critter cid is wrong type, flash error message
+        flash('cid must be a string of digits')
+        return render_template('main.html')
+    # get critter info
+    cid = int(cid)
+    conn = dbi.connect()
+    critter_info = critter.get_critter_by_id(conn,cid)
+    creator_uid = int(critter_info['uid'])
+    creator_info = profile.get_user_info(conn,creator_uid)
+    if creator_info is None:
+        # error message for user uid of Nonetype
+        flash(f'No profile found with uid={creator_uid}')
+        return render_template('main.html')
+    if critter_info is None:
+        # error message for critter cid of Nonetype
+        flash(f'No critter found with cid={cid}')
+        return render_template('main.html')
+    
+    # get story info
+    if not sid.isdigit():
+        # if the critter cid is wrong type, flash error message
+        flash('cid must be a string of digits')
+        return redirect( url_for('critter_page', cid=cid))
+    sid = int(sid)
+    story_info = story.get_story_by_id(conn, sid)
+    writer_uid = int(story_info['uid'])
+    writer_info = profile.get_user_info(conn, writer_uid)
+    if writer_uid != uid:
+        # story was not written by this user --> don't allow them to edit or delete it
+        return render_template('story_by_non_user.html', story_info=story_info, critter_info=critter_info, critter_creator=creator_info, writer=writer_info)
+    return render_template('story.html', story_info=story_info, critter_info=critter_info, critter_creator=creator_info, writer=writer_info)
+    
+    
 
 @app.route('/critter_upload/', methods=['POST', 'GET'])
 def critter_upload():

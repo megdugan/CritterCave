@@ -88,7 +88,7 @@ def get_stories_for_critter(conn, cid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT story.created AS time_created,story.story AS critter_story, uid 
+                 SELECT story.created AS time_created,story.story AS critter_story, uid, sid 
                  FROM story
                  WHERE cid = %s''',
                  [cid])
@@ -106,7 +106,7 @@ def get_stories_for_critter_by_user(conn, cid: int, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT story.created AS time_created, story.story AS critter_story 
+                 SELECT story.created AS time_created, story.story AS critter_story , sid
                  FROM story
                  WHERE cid = %s AND uid = %s''',
                  [cid,uid])
@@ -124,7 +124,7 @@ def get_stories_for_critter_not_by_user(conn, cid: int, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT story.created AS time_created,story.story AS critter_story, uid 
+                 SELECT story.created AS time_created,story.story AS critter_story, uid, sid
                  FROM story
                  WHERE cid = %s AND uid <> %s''',
                  [cid,uid])

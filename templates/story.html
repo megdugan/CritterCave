@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block head_stuff %}
+<title>"Story Page: Displays a story and info about the critter it was written for, 
+    including it's photo, name and description."</title>
+{% endblock %}
+
+{% block main_content %}
+
+    <div class="story-page-container">
+
+        <!-- LEFT: Critter Card -->
+        <div class="critter-info-card">
+            {% if critter_info.imagepath %}
+            <img src="{{ url_for('uploaded_file', filename=critter_info.imagepath) }}"
+                    alt="Critter Image" class="critter-profile-img">
+            {% endif %}
+
+            <h2 class="critter-name">{{ critter_info.name }}</h2>
+
+            <div class="critter-extra">
+            <p><strong>Creator:</strong> {{ critter_info.creator_name }}</p>
+            <p><strong>Description:</strong> {{ critter_info.description }}</p>
+            </div>
+
+            <div class="critter-buttons">
+            <a class="button-primary" href="{{ url_for('critter_page', cid=critter_info.cid) }}">View Critter Page</a>
+            </div>
+        </div>
+
+        <!-- RIGHT: Story Card -->
+        <div class="story-card">
+            <h1 class="story-title">A Tale of {{ critter_info.name }}</h1>
+            <p class="story-author">By <a href="{{ url_for('user_profile', uid=writer.uid) }}">{{ writer.name }}</a> </p>
+
+            <div class="story-content">
+            <p>{{ story_info.story }}</p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <form action="{{ url_for('delete_critter', cid=critter_info.cid) }}" method="get">
+        <button class="button-primary">Delete Critter</button>
+    </form>
+
+</div>
+
+{% endblock %}

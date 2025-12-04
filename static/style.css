@@ -664,6 +664,20 @@ a:hover {
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.story-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;        /* Keeps your pastel-box text color */
+    border-radius: 18px;   /* Same as your pastel-box cards */
+}
+
+.story-card-link:hover {
+    transform: translateY(-3px);
+    transition: 0.15s ease;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+
 .story-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 11px rgba(0,0,0,0.08);
@@ -705,4 +719,102 @@ a:hover {
 .button-secondary:active {
     background-color: #dcdcdc;
     border-color: #a7a7a7;
+}
+
+/* ======================================================
+   Story Page Styling
+====================================================== */
+.story-page-container {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.critter-info-card, .story-card {
+  background: var(--sand-beige);
+  border-radius: 22px;
+  padding: 2rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* LEFT CARD */
+.critter-info-card {
+  background: var(--panel-alt); /* soft cute color (change to match your palette) */
+  text-align: center;
+}
+
+.critter-img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 100%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  margin-bottom: 1rem;
+}
+
+.critter-name {
+  margin: 0.5rem 0;
+  font-size: 1.8rem;
+  color: var(--text-primary);
+}
+
+.critter-extra p {
+  margin: 0.4rem 0;
+}
+
+/* Make the critter card button more subtle */
+.critter-info-card .button-primary {
+    background: transparent;
+    color: var(--accent-plum);
+    border: 1px solid var(--border-subtle);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 8px 14px;
+    transition: background 0.2s ease, color 0.2s ease;
+    margin-top: 1rem;
+}
+
+.critter-info-card .button-primary:hover {
+    background: var(--panel);
+    color: var(--accent-rosewood);
+    border-color: var(--accent-plum);
+    transform: none;
+}
+
+/* RIGHT STORY CARD */
+.story-title {
+  margin-top: 0;
+  font-size: 2.2rem;
+}
+
+.story-author {
+  margin-top: 0.2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.story-content {
+  line-height: 1.8;
+}
+
+/* Also ensure the story-page-container aligns items to start */
+.story-page-container {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: auto;
+    align-items: start;      /* This ensures both cards align to the top */
+}
+
+/* MOBILE */
+@media (max-width: 850px) {
+  .story-page-container {
+    grid-template-columns: 1fr;
+  }
 }
