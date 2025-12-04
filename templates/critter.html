@@ -83,9 +83,14 @@
 
     </section>
 
-    <form action="{{ url_for('delete_critter', cid=critter_info.cid) }}" method="get">
+    <!-- Show delete button only if the logged-in user is the creator of the critter -->
+    {% if session.get('uid') == critter_info.uid %}
+     <form action="{{ url_for('delete_critter', cid=critter_info.cid) }}" method="get">
         <button class="button-primary">Delete Critter</button>
     </form>
+    {% endif %}
+
+   
 
 </div>
 

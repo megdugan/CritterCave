@@ -376,17 +376,6 @@ def critter_page(cid):
     print(stories_by_user)
     print("stories_not_by_user")
     print(stories_not_by_user)
-    
-    # if the critter was not made by the user then render non-user critter page
-    if creator_uid != uid:
-        print("non user")
-        return render_template(
-            'critter_for_non_user.html',
-            user=creator_info,
-            critter_info=critter_info,
-            stories_by_user=stories_by_user,
-            stories_not_by_user=stories_not_by_user
-        )
     print(f"stories_not_by_user {stories_not_by_user}")
     print("critter made by user")
     # render the critter template it's info and all of it's stories
