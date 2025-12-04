@@ -40,10 +40,12 @@
 
     </div>
 
-
-    <form action="{{ url_for('delete_critter', cid=critter_info.cid) }}" method="get">
-        <button class="button-primary">Delete Critter</button>
+    <!-- Show delete button only if the logged-in user is the author of the story -->
+    {% if session.get('uid') == story_info.uid %}
+    <form action="{{ url_for('delete_story', sid=story_info.sid) }}" method="get">
+        <button class="button-primary">Delete Story</button>
     </form>
+    {% endif %}
 
 </div>
 

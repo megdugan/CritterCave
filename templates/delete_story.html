@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block main_content %}
+
+<div class="settings">
+    <h1>Are you sure you want to delete this story?</h1>
+
+    <!-- LEFT: Critter Card -->
+        <div class="story-card">
+            <h1 class="story-title">A Tale of {{ critter_info.name }}</h1>
+            <div class="story-content">
+            <p>{{ story_info.story }}</p>
+            </div>
+        </div>
+
+        <br>
+
+    <!-- Delete Form -->
+    <form method="post" action="{{url_for('delete_story', sid=story_info.sid)}}">
+        <section class="settings-block">
+            <h2>Confirm Deletion</h2>
+            <p class="block-subtitle">This action cannot be undone. Please confirm your decision.</p>
+
+            <p><input type="submit" name="action" value="Delete"></p>
+        </section>
+    </form>
+
+    <a href="{{ url_for('story_page', sid=story_info.sid, cid=critter_info.cid) }}" class="button-secondary">
+    Cancel
+    </a>
+
+</div>
+
+{% endblock %}

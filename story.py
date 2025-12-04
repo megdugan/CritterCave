@@ -58,6 +58,7 @@ def delete_story(conn, sid:int):
     curs.execute("""
             delete from story where sid=%s""",[sid])
     conn.commit()
+    return curs.rowcount
 
 def update_story(conn, sid:int, story:str):
     """

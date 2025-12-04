@@ -437,11 +437,13 @@ def story_page(cid, sid):
         return redirect( url_for('critter_page', cid=cid))
     sid = int(sid)
     story_info = story.get_story_by_id(conn, sid)
+    if story_info == None:
+        flash('Invalid link')
+        return render_template('main.html')
+    print(story_info)
+    print(critter_info)
     writer_uid = int(story_info['uid'])
     writer_info = profile.get_user_info(conn, writer_uid)
-    if writer_uid != uid:
-        # story was not written by this user --> don't allow them to edit or delete it
-        return render_template('story_by_non_user.html', story_info=story_info, critter_info=critter_info, critter_creator=creator_info, writer=writer_info)
     return render_template('story.html', story_info=story_info, critter_info=critter_info, critter_creator=creator_info, writer=writer_info)
     
     
@@ -526,13 +528,14 @@ def delete_critter(cid):
     except:
         flash('invalid url')
         user = profile.get_user_info(conn,uid)
-        critters = profile.get_critters_by_user(conn,uid)
         if user is None:
             flash(f'No profile found with uid={uid}')
             return redirect(url_for('index'))
-        return redirect(url_for('profile.html',
-            user=user,
-            critters=critters))
+        if user is None:
+            flash(f'No profile found with uid={uid}')
+            return redirect(url_for('index'))
+        return redirect(url_for('user_profile',
+            uid=uid))
         
     conn = dbi.connect()
     critter_info = critter.get_critter_by_id(conn,cid)
@@ -554,14 +557,61 @@ def delete_critter(cid):
             else:
                 flash(f'Deleted {critters_deleted} critter and {stories_deleted} related stories.')
             
-            user = profile.get_user_info(conn,uid)
-            critters = profile.get_critters_by_user(conn,uid)
-            if user is None:
-                flash(f'No profile found with uid={uid}')
-                return redirect(url_for('index'))
             return redirect(url_for('user_profile',
-                uid=user['uid']))
+                uid=uid))
+            
+@app.route('/story/delete_story/<sid>', methods=["GET", "POST"])   
+def delete_story(sid):
+    '''
+    Renders a form to delete the specified story and remove it from the database.
     
+    :param sid: the primary key in the database of the story to delete
+    '''
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+    uid = session['uid']
+    
+    try:
+        sid = int(sid)
+    except:
+        flash('invalid url')
+        user = profile.get_user_info(conn,uid)
+        if user is None:
+            flash(f'No profile found with uid={uid}')
+            return redirect(url_for('index'))
+        return redirect(url_for('user_profile',
+            uid=uid))
+        
+    conn = dbi.connect()
+    story_info = story.get_story_by_id(conn,sid)
+    print("in delete story")
+    
+    if story_info is None:
+        print("no story")
+        flash(f'No story found with sid={sid}')
+        return redirect(url_for('index'))
+    
+    if request.method == 'GET':
+        print("get delete story page")
+        
+        critter_info = critter.get_critter_by_id(conn, story_info['cid'])
+        return render_template('delete_story.html', story_info=story_info, critter_info=critter_info)
+    else:
+        print("post")
+        action = request.form.get('action')
+        if action == 'Delete':
+            print("delete")
+            # if button clicked == confirm deletion:
+            stories_deleted = story.delete_story(conn, sid)
+            print("deleted?")
+            if stories_deleted == 0:
+                flash('Story not found or already deleted.')
+            else:
+                flash(f'Number of stories deleted: {stories_deleted}.')
+            
+            return redirect(url_for('user_profile',
+                uid=uid))
     
 
 @app.route('/critter/<cid>/story_upload/', methods=["GET", "POST"])
