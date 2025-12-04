@@ -21,10 +21,12 @@
         <div class="critter-info-right">
             <h1 class="critter-name">{{ critter_info.name }}</h1>
             <p class="critter-maker">
-                Made by:
+                <h4>Made by:
                 <a href="{{ url_for('user_profile', uid=user.uid) }}">
                     {{ user.name }}
                 </a>
+                </h4>
+                <h4>{{ critter_info.created }}</h4>
             </p>
 
             <p class="critter-description">
