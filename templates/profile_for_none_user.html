@@ -42,8 +42,8 @@
             <div class="story-card-grid">
                 {% for story in stories %}
                     <a href="{{ url_for('story_page', sid=story.sid, cid=story.critter_info.cid) }}" class="story-card pastel-box story-card-link">
-                        <p>{{ story.critter_story }}</p>
                         <span class="story-author-tag">For {{ story.critter_info.name }}</span>
+                        <p>{{ story.critter_story }}</p>
                     </a>
                 {% else %}
                     <p>{{ user.name }} hasn't written any stories.</p>
