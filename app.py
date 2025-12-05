@@ -215,10 +215,10 @@ def logout():
         session.pop('logged_in')
         session.pop('uid')
         flash('You are logged out!') 
-        return redirect(url_for('welcome'))
+        return redirect(url_for('signin'))
     else:
         flash("You are not logged in!")
-        return redirect(url_for('welcome'))
+        return redirect(url_for('signin'))
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
