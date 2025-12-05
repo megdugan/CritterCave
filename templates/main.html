@@ -27,7 +27,7 @@
             </div>
 
             <div class="critter-info-right">
-                <h1 class="critter-name">{{ critter.name }}</h1>
+                <h1 class="critter-name"><a href=" {{ url_for('critter_page', cid=critter.cid) }}"> {{ critter.name }} </a></h1>
                 <p class="critter-maker">
                     <h4>Made by:
                     <a href="{{ url_for('user_profile', uid=critter.uid) }}">

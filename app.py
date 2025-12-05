@@ -375,7 +375,7 @@ def critter_page(cid):
     critter_info = critter.get_critter_by_id(conn,cid)
     critter_info['created'] = critter_info['created'].strftime("%m/%d/%Y")[:10]
     creator_uid = int(critter_info['uid'])
-    creator_info = profile.get_user_info(conn,creator_uid)
+    creator_info = profile.get_user_info(conn, creator_uid)
     if creator_info is None:
         # error message for user uid of Nonetype
         flash(f'No profile found with uid={creator_uid}')
@@ -385,18 +385,12 @@ def critter_page(cid):
         flash(f'No critter found with cid={cid}')
         return redirect(url_for('index'))
     # get story info
-    stories_by_user = story.get_stories_for_critter_by_user(conn, cid, uid)
-    stories_not_by_user = story.get_stories_for_critter_not_by_user(conn, cid, uid)
-    for s in stories_not_by_user:
-        print(stories_not_by_user)
-        s['creator'] = profile.get_user_info(conn, s['uid'])['username']
-    print("stories_by_user")
-    print(stories_by_user)
-    print("stories_not_by_user")
-    print(stories_not_by_user)
-    print(f"stories_not_by_user {stories_not_by_user}")
-    print("critter made by user")
+    stories = story.get_stories_for_critter(conn, cid, creator_uid)
+    stories_by_user = [story for story in stories if story["original"] == True]
+    stories_not_by_user = [story for story in stories if story["original"] == False]
     # render the critter template it's info and all of it's stories
+    for s in stories:
+        print(s)
     return render_template(
         'critter.html',
         user=creator_info,
@@ -449,9 +443,7 @@ def story_page(cid, sid):
         return render_template('main.html')
     print(story_info)
     print(critter_info)
-    writer_uid = int(story_info['uid'])
-    writer_info = profile.get_user_info(conn, writer_uid)
-    return render_template('story.html', story_info=story_info, critter_info=critter_info, critter_creator=creator_info, writer=writer_info)
+    return render_template('story.html', story_info=story_info, critter_info=critter_info)
     
     
 

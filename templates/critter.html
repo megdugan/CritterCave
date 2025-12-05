@@ -23,7 +23,7 @@
             <p class="critter-maker">
                 <h4>Made by:
                 <a href="{{ url_for('user_profile', uid=user.uid) }}">
-                    {{ user.name }}
+                    {{ user.username }}
                 </a>
                 </h4>
                 <h4>{{ critter_info.created }}</h4>
@@ -70,7 +70,7 @@
                 {% for story in stories_not_by_user %}
                     <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
                         <p>{{ story.critter_story }}</p>
-                        <span class="story-author-tag">By {{ story.creator }}</span>
+                        <span class="story-author-tag">By {{ story.creator_info.username }}</span>
                     </a>
                 {% else %}
                     <a href="{{ url_for('story_upload', cid=critter_info.cid) }}"
