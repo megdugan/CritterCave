@@ -36,12 +36,13 @@
             </div>
         </section>
 
+        <button class="tablink" onclick="openPage('Critters', this, 'red')">Critters</button>
+        <button class="tablink" onclick="openPage('Stories', this, 'green')" id="defaultOpen">Stories</button>
+        <button class="tablink" onclick="openPage('Liked_Critters', this, 'blue')">Liked Critters</button>
+        <button class="tablink" onclick="openPage('Liked_Stories', this, 'orange')">Liked Stories</button>
 
-  <button class="tablink" onclick="openPage('Critters', this, 'var(--accent-rosewood)')" id="defaultOpen">Critters</button>
-  <button class="tablink" onclick="openPage('Stories', this, 'var(--accent-rosewood)')">Stories</button>
-  <button class="tablink" onclick="openPage('Liked_Critters', this, 'var(--accent-rosewood)')">Liked Critters</button>
-  <button class="tablink" onclick="openPage('Liked_Stories', this, 'var(--accent-rosewood)')">Liked Stories</button>
         <div id="Critters" class="tabcontent">
+            <h2>Critters:</h2>
             <div class="critter-grid">
                 {% for critter in critters %}
                     <a href="{{ url_for('critter_page', cid=critter['cid']) }}" class="critter-card">
@@ -59,6 +60,7 @@
         </div>
 
         <div id="Stories" class="tabcontent">
+            <h2>Stories:</h2>
             <section class="stories-section">
             <div class="story-group">
                 <div class="story-card-grid">
@@ -75,9 +77,9 @@
         </div>
 
         <div id="Liked_Critters" class="tabcontent">
+            <h2>Liked Critters:</h2>
         </div>
 
-        <div id="Liked_Stories" class="tabcontent">
+        <div id="Liked_Critters" class="tabcontent">
+            <h2>Liked Critters:</h2>
         </div>
-
-{% endblock %}
