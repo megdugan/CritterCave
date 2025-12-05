@@ -9,8 +9,45 @@
 {% endblock %}
 
 {% block main_content %}
-<h1>Main</h1>
-<p>Welcome to CritterCave!!!!</p>
-<p><a href="{{ url_for('old_main') }}">(Link to the main page used during draft)</a></p>
+<section class="main-header">
+    <h1>CritterCave</h1>
+    <p>A cozy home for cataloging creatures big and small</p>
+    <a href="{{ url_for('old_main') }}" class="old"> View Previous Version</a>
+</section>
+
+{% for critter in critters %}
+    <div class="critter-page">
+        <!-- Critter Header Card -->
+        <section class="critter-header-card">
+            <div class="critter-info-left">
+                {% if critter.imagepath %}
+                <img src="{{ url_for('uploaded_file', filename=critter.imagepath) }}"
+                    alt="Critter Image" class="critter-profile-img">
+                {% endif %}
+            </div>
+
+            <div class="critter-info-right">
+                <h1 class="critter-name">{{ critter.name }}</h1>
+                <p class="critter-maker">
+                    <h4>Made by:
+                    <a href="{{ url_for('user_profile', uid=critter.uid) }}">
+                        {{ critter.username }}
+                    </a>
+                    </h4>
+                    <h4>{{ critter.created.strftime('%m/%d/%Y') }}</h4>
+                </p>
+
+                <p class="critter-description">
+                    {{ critter.description }}
+                </p>
+
+                <a href="{{ url_for('story_upload', cid=critter.cid) }}"
+                class="button-primary write-story-btn">
+                Write a Story About {{ critter.name }}
+                </a>
+            </div>
+        </section>
+    </div>
+{% endfor %}
 
 {% endblock %}

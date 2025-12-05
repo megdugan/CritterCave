@@ -250,7 +250,46 @@ h1 {
     margin: 0;
 }
 
+/* ======================================================
+   MAIN HEADER
+====================================================== */
+.main-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
 
+.main-header h1 {
+    font-size: 3.4rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--accent-plum);
+}
+
+.main-header p {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.main-header .old {
+    font-size: 0.95rem;
+    margin-top: 8px;
+
+    display: inline-block;
+    background: var(--accent-plum);
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.main-header .old:hover {
+    background: var(--rosewood);
+}
 
 /* ======================================================
    FORM INPUTS
@@ -565,7 +604,6 @@ a:hover {
 /* ======================================================
    Critter Page Styling
 ====================================================== */
-
 
 /* Main page wrapper */
 .critter-page {
