@@ -45,7 +45,7 @@
                     <p>{{ critter['name'] }}</p>
                 </a>
             {% else %}
-                <p>{{ user.username }} hasn't uploaded any critters.</p>
+                <p>{{ user.name }} hasn't uploaded any critters.</p>
             {% endfor %}
         </div>
 
@@ -63,7 +63,7 @@
                         <p>{{ story.critter_story }}</p>
                     </a>
                 {% else %}
-                    <p>{{ user.username }} hasn't written any stories.</p>
+                    <p>{{ user.name }} hasn't written any stories.</p>
                 {% endfor %}
             </div>
         </div>

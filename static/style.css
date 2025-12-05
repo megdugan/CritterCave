@@ -870,3 +870,9 @@ a:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.favi {
+    display: inline-block;
+    vertical-align:middle; /* or top */
+    line-height: 0; /* optional but solves some cases */
+}
