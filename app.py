@@ -30,23 +30,41 @@ app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
 @app.route('/')
 def index():
-    return render_template('main.html', page_title='Main Page')
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+
+    conn = dbi.connect()
+    critter_info = critter.get_all_critters(conn)
+    return render_template('main.html', critters=critter_info)
 
 @app.route('/old_main/')
 def old_main():
-    return render_template('old_main.html', page_title='Old Main Page')
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+
+    return render_template('old_main.html')
 
 @app.route('/about/')
 def about():
-    return render_template('about.html', page_title='About Us')
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+
+    return render_template('about.html')
 
 @app.route('/create/')
 def create():
-    return render_template('create.html', page_title='Create')
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+
+    return render_template('create.html')
 
 @app.route('/welcome/')
 def welcome():
-    return render_template('welcome.html', page_title='Welcome')
+    return render_template('welcome.html')
 
 @app.route('/signup/', methods=['GET', 'POST'])
 def signup():
