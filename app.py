@@ -152,19 +152,25 @@ def user_profile(uid):
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
+
+    #critter is defined
+    uid = int(uid)
+    conn = dbi.connect()
+    user = profile.get_user_info(conn,uid)
+    critters = profile.get_critters_by_user(conn,uid)
+
+    for item in critters:
+            item['likes']=profile.get_likes(conn,item['cid'])
+            print(item)
+
     # if this is not the users profile
     if int(session['uid'])!=int(uid):
         # if the user isn't viewing their own profile
         print(f'looking up user with uid {uid}')
-        if not uid.isdigit():
-            flash('uid must be a string of digits')
-            return redirect( url_for('index'))
-        # get user info and critters to display
-        uid = int(uid)
-        conn = dbi.connect()
-        user = profile.get_user_info(conn,uid)
+        
+        
         user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
-        critters = profile.get_critters_by_user(conn,uid)
+
         if user is None:
             flash(f'No profile found with uid={uid}')
             return redirect(url_for('index'))
@@ -175,16 +181,11 @@ def user_profile(uid):
             critters=critters
         )
     print(f'looking up user with uid {uid}')
-    if not uid.isdigit():
-        # if the uid is of wrong type, flash message and redirect to home
-        flash('uid must be a string of digits')
-        return redirect( url_for('index'))
     # get user info and critters to display
-    uid = int(uid)
-    conn = dbi.connect()
-    user = profile.get_user_info(conn,uid)
+    
     user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
-    critters = profile.get_critters_by_user(conn,uid)
+    
+
     if user is None:
         # if the user doesn't exist, flash message and redirect to home
         flash(f'No profile found with uid={uid}')
@@ -193,6 +194,7 @@ def user_profile(uid):
         'profile.html',
         user=user,
         critters=critters
+    
     )
 
 @app.route('/logout/')
@@ -734,6 +736,23 @@ def lookup_form():
             return redirect(url_for('user_profile', uid=users[0]['uid']))
         # render a clickable list of users
         return render_template('user_lookup.html', query = query, users = users)
+
+@app.route("/like/<int:cid>",methods=["POST"])
+def like_feature(cid):
+
+    conn = dbi.connect()
+    update_likes=profile.get_likes(conn,cid)
+    uid=session['uid']
+
+    update_likes+=1
+
+    profile.update_like(conn,cid,uid)
+
+    return jsonify({
+        "worked": True,
+        "likes": update_likes
+    })
+
 
 if __name__ == '__main__':
     import sys, os

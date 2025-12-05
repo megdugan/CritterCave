@@ -183,3 +183,33 @@ def lookup_user(conn, query: str):
     if not users:
         return None
     return users
+
+def get_likes(conn,cid):
+    """
+    Lookup a critter rating by , counting how many times that critter is rated in the table.
+    Args:
+        conn -> pymysql.connections.Connection
+        query -> str
+    Return:
+        num of critters -> dict[]
+    """
+
+    curs = dbi.cursor(conn)
+    curs.execute('''
+                    select count(*) from liked_critter where cid=%s
+                ''',[cid])
+    total_likes=curs.fetchone()[0]
+    return total_likes
+
+
+def update_like(conn,cid,uid):
+    curs = dbi.cursor(conn)
+    curs.execute(
+            '''
+            INSERT INTO liked_critter (cid, uid)
+            VALUES (%s, %s)
+            ''',
+            [cid, uid]
+        )
+    conn.commit()
+    
