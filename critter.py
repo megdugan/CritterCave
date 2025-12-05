@@ -49,6 +49,42 @@ def get_critter_by_id(conn, cid: int):
             [cid])
     return curs.fetchone()
 
+def lookup_critter(conn, query:str):
+    """
+    Lookup a critter by name.
+    If none match, return None.
+    Args:
+        conn -> pymysql.connections.Connection
+        query -> string
+    Return:
+        list of critters -> dict[]
+    """
+    name_query = f"%{query}%"
+    curs=dbi.dict_cursor(conn)
+    curs.execute("""
+            select * from critter where name like %s
+            """,[name_query])
+    critters = curs.fetchall()
+    if not critters:
+        return None
+    return critters
+
+def get_all_critters(conn):
+    """
+    Get all critters' information.
+    Args:
+        conn -> pymysql.connections.Connection
+    Return:
+        critter info -> list(dict)
+    """
+    curs=dbi.dict_cursor(conn)
+    curs.execute("""
+        select user.uid as uid, user.name as uname, cid, imagepath, critter.name as cname, 
+            description, critter.created as created
+        from critter inner join user on critter.uid = user.uid
+        order by created desc""")
+    return curs.fetchall()
+
 def delete_critter(conn, cid: int):
     """
     Delete a critter from the database.
@@ -88,23 +124,3 @@ def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
             where cid=%s""",
             [imagepath, name, description, cid])
     conn.commit()
-    
-def lookup_critter(conn, query:str):
-    """
-    Lookup a critter by name.
-    If none match, return None.
-    Args:
-        conn -> pymysql.connections.Connection
-        query -> string
-    Return:
-        list of critters -> dict[]
-    """
-    name_query = f"%{query}%"
-    curs=dbi.dict_cursor(conn)
-    curs.execute("""
-            select * from critter where name like %s
-            """,[name_query])
-    critters = curs.fetchall()
-    if not critters:
-        return None
-    return critters
