@@ -26,13 +26,32 @@
         <h2>Critters:</h2>
         <div class="critter-grid">
             {% for critter in critters %}
-            <a href="{{ url_for('critter_page', cid=critter.cid) }}" class="critter-card">
-                <img src="{{ url_for('uploaded_file', filename=critter.imagepath) }}"
-                    alt="{{ critter.name }}">
-                <p>{{ critter.name }}</p>
-            </a>
+                <a href="{{ url_for('critter_page', cid=critter['cid']) }}" class="critter-card">
+                    <img src="{{ url_for('uploaded_file', filename=critter['imagepath']) }}"
+                        alt="{{ critter['name'] }}">
+                    <p>{{ critter['name'] }}</p>
+                </a>
+            {% else %}
+                <p>{{ user.name }} hasn't uploaded any critters.</p>
             {% endfor %}
         </div>
 
+    <h2>Stories:</h2>
+        <section class="stories-section">
+        <div class="story-group">
+            <div class="story-card-grid">
+                {% for story in stories %}
+                    <a href="{{ url_for('story_page', sid=story.sid, cid=story.critter_info.cid) }}" class="story-card pastel-box story-card-link">
+                        <span class="story-author-tag">For {{ story.critter_info.name }}</span>
+                        <p>{{ story.critter_story }}</p>
+                    </a>
+                {% else %}
+                    <p>{{ user.name }} hasn't written any stories.</p>
+                {% endfor %}
+            </div>
+        </div>
+        </section>
+
     </div>
+    
 {% endblock %}
