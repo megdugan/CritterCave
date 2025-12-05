@@ -10,12 +10,11 @@
 
 {% block main_content %}
 
-    <div class=".profile-settings-wrapper">
+    <div class="profile-settings-wrapper">
         <a href="{{ url_for('settings_page', uid=user.uid) }}" class="button-primary profile-settings-button">Settings</a>
     </div>
 
     <div  id="main" class="main">
-
         <!-- Profile Header Card -->
         <section class="critter-header-card">
             <div class="critter-info-left">
@@ -37,7 +36,8 @@
         </section>
 
         <h2>Critters:</h2>
-        <div class="critter-grid">
+        {% if critters %}
+            <div class="critter-grid">
             {% for critter in critters %}
             <div>
             <a href="{{ url_for('critter_page', cid=critter.cid) }}" class="critter-card">
@@ -64,13 +64,26 @@
 
             {% endfor %}
         </div>
+        {% else %}
+            <p>No critters uploaded.</p>
+        {% endif %}
 
-    <a href="{{ url_for('critter_upload', uid=user.uid) }}" class="button-primary">
-    Add another critter!</a>
-    <p>Currently this only adds critters for Nina, 
-        but this will be updated in Alpha to add critters for the user
-        saved in the session.</p>
-
-
+        <h2>Stories:</h2>
+        {% if stories %}
+            <section class="stories-section">
+            <div class="story-group">
+            <div class="story-card-grid">
+                {% for story in stories %}
+                    <a href="{{ url_for('story_page', sid=story.sid, cid=story.critter_info.cid) }}" class="story-card pastel-box story-card-link">
+                        <span class="story-author-tag">For {{ story.critter_info.name }}</span>
+                        <p>{{ story.critter_story }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+            </div>
+            </section>
+        {% else %}
+            <p>No stories written.</p>
+        {% endif %}
     </div>
 {% endblock %}

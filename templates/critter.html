@@ -23,7 +23,7 @@
             <p class="critter-maker">
                 <h4>Made by:
                 <a href="{{ url_for('user_profile', uid=user.uid) }}">
-                    {{ user.name }}
+                    {{ user.username }}
                 </a>
                 </h4>
                 <h4>{{ critter_info.created }}</h4>
@@ -42,23 +42,24 @@
 
     <!-- Stories Section -->
     <section class="stories-section">
-
         <h2 class="section-title">Stories</h2>
 
         <div class="story-group">
             <h3 class="story-group-title">
-                Stories by {{ user.name }} (creator)
+                Stories by {{ user.username }} (creator)
             </h3>
 
-            <div class="story-card-grid">
-                {% for story in stories_by_user %}
-                    <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
-                        <p>{{ story.critter_story }}</p>
-                    </a>
-                {% else %}
-                    <p class="empty-text">No stories found by this author.</p>
-                {% endfor %}
-            </div>
+            {% if stories_by_user %}
+                <div class="story-card-grid">
+                    {% for story in stories_by_user %}
+                        <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
+                            <p>{{ story.critter_story }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-text">No stories written by this author.</p>
+            {% endif %}
         </div>
 
         <div class="story-group">
@@ -66,19 +67,21 @@
                 Stories by other users
             </h3>
 
-            <div class="story-card-grid">
-                {% for story in stories_not_by_user %}
-                    <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
-                        <p>{{ story.critter_story }}</p>
-                        <span class="story-author-tag">By {{ story.creator }}</span>
-                    </a>
-                {% else %}
-                    <a href="{{ url_for('story_upload', cid=critter_info.cid) }}"
-                    class="empty-text linkify">
-                    Write {{ critter_info.name }}'s first story!
-                    </a>
-                {% endfor %}
-            </div>
+            {% if stories_not_by_user %}
+                <div class="story-card-grid">
+                    {% for story in stories_not_by_user %}
+                        <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
+                            <p>{{ story.critter_story }}</p>
+                            <span class="story-author-tag">By {{ story.creator_info.username }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <a href="{{ url_for('story_upload', cid=critter_info.cid) }}"
+                    class="button-primary write-story-btn">
+                    Write the First Story About {{ critter_info.name }}
+                </a>
+            {% endif %}
         </div>
 
     </section>

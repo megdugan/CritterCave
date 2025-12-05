@@ -178,7 +178,8 @@ def user_profile(uid):
         return render_template(
             'profile_for_none_user.html',
             user=user,
-            critters=critters
+            critters=critters,
+            stories=stories
         )
     print(f'looking up user with uid {uid}')
     # get user info and critters to display
@@ -193,8 +194,8 @@ def user_profile(uid):
     return render_template(
         'profile.html',
         user=user,
-        critters=critters
-    
+        critters=critters,
+        stories=stories
     )
 
 @app.route('/logout/')
@@ -207,10 +208,10 @@ def logout():
         session.pop('logged_in')
         session.pop('uid')
         flash('You are logged out!') 
-        return redirect(url_for('welcome'))
+        return redirect(url_for('signin'))
     else:
         flash("You are not logged in!")
-        return redirect(url_for('welcome'))
+        return redirect(url_for('signin'))
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -255,6 +256,7 @@ def settings_page(): # fix later to get uid from cookies
         ext = user_filename.split('.')[-1]
         filename = secure_filename(f"{nm}.{ext}")
         pathname = os.path.join(app.config['uploads'], filename)
+        os.unlink(pathname)
         file.save(pathname)
         os.chmod(pathname, 0o444)
         # store ONLY the filename in the DB
@@ -377,7 +379,7 @@ def critter_page(cid):
     critter_info = critter.get_critter_by_id(conn,cid)
     critter_info['created'] = critter_info['created'].strftime("%m/%d/%Y")[:10]
     creator_uid = int(critter_info['uid'])
-    creator_info = profile.get_user_info(conn,creator_uid)
+    creator_info = profile.get_user_info(conn, creator_uid)
     if creator_info is None:
         # error message for user uid of Nonetype
         flash(f'No profile found with uid={creator_uid}')
@@ -387,18 +389,12 @@ def critter_page(cid):
         flash(f'No critter found with cid={cid}')
         return redirect(url_for('index'))
     # get story info
-    stories_by_user = story.get_stories_for_critter_by_user(conn, cid, uid)
-    stories_not_by_user = story.get_stories_for_critter_not_by_user(conn, cid, uid)
-    for s in stories_not_by_user:
-        print(stories_not_by_user)
-        s['creator'] = profile.get_user_info(conn, s['uid'])['username']
-    print("stories_by_user")
-    print(stories_by_user)
-    print("stories_not_by_user")
-    print(stories_not_by_user)
-    print(f"stories_not_by_user {stories_not_by_user}")
-    print("critter made by user")
+    stories = story.get_stories_for_critter(conn, cid, creator_uid)
+    stories_by_user = [story for story in stories if story["original"] == True]
+    stories_not_by_user = [story for story in stories if story["original"] == False]
     # render the critter template it's info and all of it's stories
+    for s in stories:
+        print(s)
     return render_template(
         'critter.html',
         user=creator_info,
@@ -451,9 +447,7 @@ def story_page(cid, sid):
         return render_template('main.html')
     print(story_info)
     print(critter_info)
-    writer_uid = int(story_info['uid'])
-    writer_info = profile.get_user_info(conn, writer_uid)
-    return render_template('story.html', story_info=story_info, critter_info=critter_info, critter_creator=creator_info, writer=writer_info)
+    return render_template('story.html', story_info=story_info, critter_info=critter_info)
     
     
 
@@ -621,6 +615,70 @@ def delete_story(sid):
             
             return redirect(url_for('user_profile',
                 uid=uid))
+            
+@app.route('/story/edit_story/<sid>', methods=['GET', 'POST'])
+def edit_story(sid):
+    '''
+    GET routes the user to a page where they can edit their story
+    
+    :param sid: primary key of story to edit
+    '''
+    conn = dbi.connect()
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+    uid = session['uid']
+    
+    user = profile.get_user_info(conn,uid)
+    if user is None:
+        flash(f'No profile found with uid={uid}')
+        return redirect(url_for('index'))
+    
+    try:
+        sid = int(sid)
+    except:
+        flash('invalid url')
+        
+        return redirect(url_for('user_profile',
+            uid=uid))
+        
+    
+    story_info = story.get_story_by_id(conn,sid)
+    cid = int(story_info['cid'])
+    critter_info = critter.get_critter_by_id(conn, cid)
+    
+    if request.method == 'GET':
+        return render_template('edit_story.html', 
+                               story_info=story_info, 
+                               critter_info=critter_info,
+                               user=user)
+    else:
+        
+        # get the story from form
+        new_story = request.form.get('critter-story')
+        # ensure the user uploads a story
+        if new_story == '':
+            # if the story is blank, flash a message and re-render form
+            flash('Please write a story.')
+            return render_template('story_upload.html', 
+                               user=user, 
+                               critter_info=critter_info)
+        # check length of story to avoid error
+        if len(new_story) > 2000:
+            # if the story length is too long, flash a message and re-render form
+            flash('The story cannot be longer than 2000 characters')
+            return render_template('story_upload.html', 
+                               user=user, 
+                               critter_info=critter_info)
+        try:
+            # try to add the story to the database
+            story.update_story(conn, sid, new_story)
+        except:
+            # if this doesn't work, flash an error message
+            flash('An error occurred when uploading the story. Please try again')
+            return render_template('story_upload.html')
+        return redirect(url_for('story_page', sid=sid, cid=cid))
+        
     
 
 @app.route('/critter/<cid>/story_upload/', methods=["GET", "POST"])
