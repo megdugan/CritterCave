@@ -44,8 +44,6 @@
                         alt="{{ critter['name'] }}">
                     <p>{{ critter['name'] }}</p>
                 </a>
-            {% else %}
-                <p>{{ user.name }} hasn't uploaded any critters.</p>
             {% endfor %}
         </div>
         {% else %}
@@ -62,8 +60,6 @@
                         <span class="story-author-tag">For {{ story.critter_info.name }}</span>
                         <p>{{ story.critter_story }}</p>
                     </a>
-                {% else %}
-                    <p>{{ user.name }} hasn't written any stories.</p>
                 {% endfor %}
             </div>
             </div>
