@@ -152,24 +152,23 @@ def user_profile(uid):
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
+    # get user's info
+    uid = int(uid)
+    conn = dbi.connect()
+    user = profile.get_user_info(conn,uid)
+    user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
+    # get user's critters
+    critters = profile.get_critters_by_user(conn,uid)
+    # get number of likes per critter
+    for item in critters:
+            item['likes']=profile.get_likes(conn,item['cid'])
+            print(item)
+    # get user stories
+    stories = story.get_stories_by_user(conn, uid)
     # if this is not the users profile
     if int(session['uid'])!=int(uid):
         # if the user isn't viewing their own profile
         print(f'looking up user with uid {uid}')
-        if not uid.isdigit():
-            flash('uid must be a string of digits')
-            return redirect( url_for('index'))
-        # get user info
-        uid = int(uid)
-        conn = dbi.connect()
-        user = profile.get_user_info(conn,uid)
-        user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
-        # get user's critters
-        critters = profile.get_critters_by_user(conn,uid)
-        # get user's stories
-        stories = story.get_stories_by_user(conn,uid)
-        for s in stories:
-            print(s)
         if user is None:
             flash(f'No profile found with uid={uid}')
             return redirect(url_for('index'))
@@ -181,19 +180,6 @@ def user_profile(uid):
             stories=stories
         )
     print(f'looking up user with uid {uid}')
-    if not uid.isdigit():
-        # if the uid is of wrong type, flash message and redirect to home
-        flash('uid must be a string of digits')
-        return redirect( url_for('index'))
-    # get user info and critters to display
-    uid = int(uid)
-    conn = dbi.connect()
-    user = profile.get_user_info(conn,uid)
-    user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
-    # get user's critters
-    critters = profile.get_critters_by_user(conn,uid)
-    # get user's stories
-    stories = story.get_stories_by_user(conn,uid)
     if user is None:
         # if the user doesn't exist, flash message and redirect to home
         flash(f'No profile found with uid={uid}')
@@ -215,10 +201,10 @@ def logout():
         session.pop('logged_in')
         session.pop('uid')
         flash('You are logged out!') 
-        return redirect(url_for('welcome'))
+        return redirect(url_for('signin'))
     else:
         flash("You are not logged in!")
-        return redirect(url_for('welcome'))
+        return redirect(url_for('signin'))
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -263,6 +249,7 @@ def settings_page(): # fix later to get uid from cookies
         ext = user_filename.split('.')[-1]
         filename = secure_filename(f"{nm}.{ext}")
         pathname = os.path.join(app.config['uploads'], filename)
+        os.unlink(pathname)
         file.save(pathname)
         os.chmod(pathname, 0o444)
         # store ONLY the filename in the DB
@@ -800,6 +787,23 @@ def lookup_form():
             return redirect(url_for('user_profile', uid=users[0]['uid']))
         # render a clickable list of users
         return render_template('user_lookup.html', query = query, users = users)
+
+@app.route("/like/<int:cid>",methods=["POST"])
+def like_feature(cid):
+
+    conn = dbi.connect()
+    update_likes=profile.get_likes(conn,cid)
+    uid=session['uid']
+
+    update_likes+=1
+
+    profile.update_like(conn,cid,uid)
+
+    return jsonify({
+        "worked": True,
+        "likes": update_likes
+    })
+
 
 if __name__ == '__main__':
     import sys, os
