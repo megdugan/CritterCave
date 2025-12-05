@@ -79,7 +79,7 @@ def get_all_critters(conn):
     """
     curs=dbi.dict_cursor(conn)
     curs.execute("""
-        select user.uid as uid, user.name as uname, cid, imagepath, critter.name as cname, 
+        select user.uid as uid, username, cid, imagepath, critter.name as name, 
             description, critter.created as created
         from critter inner join user on critter.uid = user.uid
         order by created desc""")
