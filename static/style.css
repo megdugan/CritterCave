@@ -589,10 +589,8 @@ a:hover {
 .profile-settings-wrapper {
     display: flex;
     justify-content: flex-end;
-    padding: 20px 20px 0 20px;  /* moves the button down */
-    right: 20px;
+    margin-bottom: 40px;
 }
-
 
 /* Place the button in the top-right corner */
 .profile-settings-button {

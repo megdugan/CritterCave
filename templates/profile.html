@@ -15,7 +15,6 @@
     </div>
 
     <div  id="main" class="main">
-
         <!-- Profile Header Card -->
         <section class="critter-header-card">
             <div class="critter-info-left">
@@ -37,7 +36,8 @@
         </section>
 
         <h2>Critters:</h2>
-        <div class="critter-grid">
+        {% if critters %}
+            <div class="critter-grid">
             {% for critter in critters %}
                 <a href="{{ url_for('critter_page', cid=critter['cid']) }}" class="critter-card">
                     <img src="{{ url_for('uploaded_file', filename=critter['imagepath']) }}"
@@ -48,14 +48,14 @@
                 <p>{{ user.name }} hasn't uploaded any critters.</p>
             {% endfor %}
         </div>
+        {% else %}
+            <p>No critters uploaded.</p>
+        {% endif %}
 
-    <a href="{{ url_for('critter_upload', uid=user.uid) }}" class="button-primary">
-    Add another critter!</a>
-    </div>
-
-    <h2>Stories:</h2>
-        <section class="stories-section">
-        <div class="story-group">
+        <h2>Stories:</h2>
+        {% if stories %}
+            <section class="stories-section">
+            <div class="story-group">
             <div class="story-card-grid">
                 {% for story in stories %}
                     <a href="{{ url_for('story_page', sid=story.sid, cid=story.critter_info.cid) }}" class="story-card pastel-box story-card-link">
@@ -66,6 +66,10 @@
                     <p>{{ user.name }} hasn't written any stories.</p>
                 {% endfor %}
             </div>
-        </div>
-        </section>
+            </div>
+            </section>
+        {% else %}
+            <p>No stories written.</p>
+        {% endif %}
+    </div>
 {% endblock %}
