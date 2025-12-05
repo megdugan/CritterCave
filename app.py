@@ -263,6 +263,7 @@ def settings_page(): # fix later to get uid from cookies
         ext = user_filename.split('.')[-1]
         filename = secure_filename(f"{nm}.{ext}")
         pathname = os.path.join(app.config['uploads'], filename)
+        os.unlink(pathname)
         file.save(pathname)
         os.chmod(pathname, 0o444)
         # store ONLY the filename in the DB

@@ -873,6 +873,6 @@ a:hover {
 
 .favi {
     display: inline-block;
-    vertical-align:middle; /* or top */
-    line-height: 0; /* optional but solves some cases */
+    vertical-align:middle;
+    line-height: 0;
 }
