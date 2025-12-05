@@ -78,28 +78,10 @@ def update_story(conn, sid:int, story:str):
             where sid=%s
             """,[story, sid])
     conn.commit()
-    
-    
-def get_stories_for_critter(conn, cid: int):
-    """
-    Get all of the stories for a critter.
-    Args:
-        conn -> pymysql.connections.Connection
-        cid -> int
-    Return:
-        critter stories -> dict[]
-    """
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''
-                 SELECT story.created AS time_created,story.story AS critter_story, uid, sid 
-                 FROM story
-                 WHERE cid = %s''',
-                 [cid])
-    return curs.fetchall()
 
 def get_stories_for_critter(conn, cid: int, uid: int):
     """
-    Get all of the stories for a critter made by a specific user.
+    Get all of the stories for a critter.
     Stories made by creator have "original": True
     Args:
         conn -> pymysql.connections.Connection
@@ -118,4 +100,26 @@ def get_stories_for_critter(conn, cid: int, uid: int):
     for story in stories:
         story["original"] = story["uid"] == uid
         story["creator_info"] = profile.get_user_info(conn, story["uid"])
+    return stories
+
+def get_stories_by_user(conn, uid: int):
+    """
+    Get all of the stories made by a specific user.
+    Args:
+        conn -> pymysql.connections.Connection
+        cid -> int
+        uid -> int (uid of critter's creator)
+    Return:
+        critter stories -> dict[]
+    """
+    curs = dbi.dict_cursor(conn)
+    curs.execute('''
+                 SELECT sid, cid, story.created AS time_created, story.story AS critter_story
+                 FROM story
+                 WHERE uid = %s''',
+                 [uid])
+    stories = curs.fetchall()
+    for story in stories:
+        story["critter_info"] = critter.get_critter_by_id(conn, story["cid"])
+    print(stories)
     return stories

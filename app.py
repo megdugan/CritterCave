@@ -159,12 +159,17 @@ def user_profile(uid):
         if not uid.isdigit():
             flash('uid must be a string of digits')
             return redirect( url_for('index'))
-        # get user info and critters to display
+        # get user info
         uid = int(uid)
         conn = dbi.connect()
         user = profile.get_user_info(conn,uid)
         user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
+        # get user's critters
         critters = profile.get_critters_by_user(conn,uid)
+        # get user's stories
+        stories = story.get_stories_by_user(conn,uid)
+        for s in stories:
+            print(s)
         if user is None:
             flash(f'No profile found with uid={uid}')
             return redirect(url_for('index'))
@@ -172,7 +177,8 @@ def user_profile(uid):
         return render_template(
             'profile_for_none_user.html',
             user=user,
-            critters=critters
+            critters=critters,
+            stories=stories
         )
     print(f'looking up user with uid {uid}')
     if not uid.isdigit():
@@ -184,7 +190,10 @@ def user_profile(uid):
     conn = dbi.connect()
     user = profile.get_user_info(conn,uid)
     user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
+    # get user's critters
     critters = profile.get_critters_by_user(conn,uid)
+    # get user's stories
+    stories = story.get_stories_by_user(conn,uid)
     if user is None:
         # if the user doesn't exist, flash message and redirect to home
         flash(f'No profile found with uid={uid}')
@@ -192,7 +201,8 @@ def user_profile(uid):
     return render_template(
         'profile.html',
         user=user,
-        critters=critters
+        critters=critters,
+        stories=stories
     )
 
 @app.route('/logout/')
