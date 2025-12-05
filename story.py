@@ -43,7 +43,9 @@ def get_story_by_id(conn, sid:int):
     curs=dbi.dict_cursor(conn)
     curs.execute("""
         select * from story where sid=%s""", [sid])
-    return curs.fetchone()
+    story = curs.fetchone()
+    story["creator_info"] = profile.get_user_info(conn, story["uid"])
+    return story
 
 def delete_story(conn, sid:int):
     """
@@ -95,38 +97,25 @@ def get_stories_for_critter(conn, cid: int):
                  [cid])
     return curs.fetchall()
 
-def get_stories_for_critter_by_user(conn, cid: int, uid: int):
+def get_stories_for_critter(conn, cid: int, uid: int):
     """
     Get all of the stories for a critter made by a specific user.
+    Stories made by creator have "original": True
     Args:
         conn -> pymysql.connections.Connection
         cid -> int
-        uid -> int
+        uid -> int (uid of critter's creator)
     Return:
         critter stories -> dict[]
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT story.created AS time_created, story.story AS critter_story , sid
+                 SELECT sid, uid, story.created AS time_created, story.story AS critter_story
                  FROM story
-                 WHERE cid = %s AND uid = %s''',
-                 [cid,uid])
-    return curs.fetchall()
-
-def get_stories_for_critter_not_by_user(conn, cid: int, uid: int):
-    """
-    Get all of the stories for a critter made by anyone except for a specific user.
-    Args:
-        conn -> pymysql.connections.Connection
-        cid -> int
-        uid -> int
-    Return:
-        critter stories -> dict[]
-    """
-    curs = dbi.dict_cursor(conn)
-    curs.execute('''
-                 SELECT story.created AS time_created,story.story AS critter_story, uid, sid
-                 FROM story
-                 WHERE cid = %s AND uid <> %s''',
-                 [cid,uid])
-    return curs.fetchall()
+                 WHERE cid = %s''',
+                 [cid])
+    stories = curs.fetchall()
+    for story in stories:
+        story["original"] = story["uid"] == uid
+        story["creator_info"] = profile.get_user_info(conn, story["uid"])
+    return stories

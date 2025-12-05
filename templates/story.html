@@ -31,7 +31,7 @@
         <!-- RIGHT: Story Card -->
         <div class="story-card">
             <h1 class="story-title">A Tale of {{ critter_info.name }}</h1>
-            <p class="story-author">By <a href="{{ url_for('user_profile', uid=writer.uid) }}">{{ writer.name }}</a> </p>
+            <p class="story-author">By <a href="{{ url_for('user_profile', uid=story_info.uid) }}"> {{ story_info.creator_info.username }} </a></p>
 
             <div class="story-content">
             <p>{{ story_info.story }}</p>
