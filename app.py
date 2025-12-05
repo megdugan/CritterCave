@@ -627,29 +627,35 @@ def edit_story(sid):
     
     :param sid: primary key of story to edit
     '''
+    conn = dbi.connect()
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
     uid = session['uid']
     
+    user = profile.get_user_info(conn,uid)
+    if user is None:
+        flash(f'No profile found with uid={uid}')
+        return redirect(url_for('index'))
+    
     try:
         sid = int(sid)
     except:
         flash('invalid url')
-        user = profile.get_user_info(conn,uid)
-        if user is None:
-            flash(f'No profile found with uid={uid}')
-            return redirect(url_for('index'))
+        
         return redirect(url_for('user_profile',
             uid=uid))
         
-    conn = dbi.connect()
+    
     story_info = story.get_story_by_id(conn,sid)
     cid = int(story_info['cid'])
     critter_info = critter.get_critter_by_id(conn, cid)
     
     if request.method == 'GET':
-        return render_template('edit_story.html', story_info=story_info)
+        return render_template('edit_story.html', 
+                               story_info=story_info, 
+                               critter_info=critter_info,
+                               user=user)
     else:
         
         # get the story from form
@@ -670,7 +676,7 @@ def edit_story(sid):
                                critter_info=critter_info)
         try:
             # try to add the story to the database
-            story.add_story(conn, cid, uid, new_story)
+            story.update_story(conn, sid, new_story)
         except:
             # if this doesn't work, flash an error message
             flash('An error occurred when uploading the story. Please try again')
