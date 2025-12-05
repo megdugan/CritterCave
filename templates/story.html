@@ -42,9 +42,15 @@
 
     <!-- Show delete button only if the logged-in user is the author of the story -->
     {% if session.get('uid') == story_info.uid %}
-    <form action="{{ url_for('delete_story', sid=story_info.sid) }}" method="get">
+    <a href="{{ url_for('edit_story', sid=story_info.sid) }}" class="button-primary">
+    Edit Story
+    </a>
+    <a href="{{ url_for('delete_story', sid=story_info.sid) }}" class="button-primary">
+    Delete Story
+    </a>
+    <!-- <form action="{{ url_for('delete_story', sid=story_info.sid) }}" method="get">
         <button class="button-primary">Delete Story</button>
-    </form>
+    </form> -->
     {% endif %}
 
 </div>

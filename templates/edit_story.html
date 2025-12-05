@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block head_stuff %}
+<title>"Edit Story: Edit a story you have written."</title>
+{% endblock %}
+
+{% block main_content %}
+
+<div class="settings">
+    <h1>Change {{critter_info.name}}'s Epic Tale</h1>
+
+    <!-- Critter Header Card -->
+    <section class="critter-header-card">
+        <div class="critter-info-left">
+            {% if critter_info.imagepath %}
+            <img src="{{ url_for('uploaded_file', filename=critter_info.imagepath) }}"
+                 alt="Critter Image" class="critter-profile-img">
+            {% endif %}
+        </div>
+
+        <div class="critter-info-right">
+            <h1 class="critter-name">{{ critter_info.name }}</h1>
+            <p class="critter-maker">
+                Made by:
+                <a href="{{ url_for('user_profile', uid=user.uid) }}">
+                    {{ user.name }}
+                </a>
+            </p>
+
+            <p class="critter-description">
+                {{ critter_info.description }}
+            </p>
+        </div>
+    </section>
+
+    <p></p>
+
+    <!-- Story Writing -->
+    <form method="post" action="{{ url_for('story_upload', cid=critter_info.cid) }}">
+        <section class="settings-block">
+            <h2>Story Details</h2>
+            <p class="block-subtitle">Add to {{ critter_info.name }}'s adventures here.</p>
+
+            <p>
+                <label for="critter-story"><strong>Your story begins here:</strong></label><br>
+                <textarea id="critter-story" name="critter-story" rows="5" cols="50"
+                >{{ story_info.story }}</textarea>
+            </p>
+        </section>
+        <p><input type="submit" value="Save Your Updated Story"></p>
+    </form>
+
+</div>
+
+{% endblock %}
