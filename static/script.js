@@ -260,5 +260,7 @@ function openPage(pageName, elmnt, color) {
   elmnt.style.backgroundColor = color;
 }
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+// Wait for the DOM to be fully loaded before clicking the default tab
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById("defaultOpen").click();
+});

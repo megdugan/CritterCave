@@ -776,7 +776,17 @@ body, html {
   width: 25%;
   margin-top: 10px;
   margin-bottom: 0px;
-  border-radius: 8px;
+  border-radius: 0; /* Remove border-radius from all tabs by default */
+}
+
+/* Add rounded corners only to the first tab (left side) */
+.tablink:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+/* Add rounded corners only to the last tab (right side) */
+.tablink:last-child {
+  border-radius: 0 16px 16px 0;
 }
 
 .tablink:hover {

@@ -10,9 +10,11 @@
 
 {% block main_content %}
 
-    <div class="profile-settings-wrapper">
-        <a href="{{ url_for('settings_page', uid=user.uid) }}" class="button-primary profile-settings-button">Settings</a>
-    </div>
+    {% if session.get('uid') == user.uid %}
+        <div class="profile-settings-wrapper">
+            <a href="{{ url_for('settings_page', uid=user.uid) }}" class="button-primary profile-settings-button">Settings</a>
+        </div>
+    {% endif %}
 
     <div  id="main" class="main">
         <!-- Profile Header Card -->
@@ -35,12 +37,13 @@
             </div>
         </section>
 
+        <div class="tab-container">
+            <button class="tablink" onclick="openPage('Critters', this, 'var(--accent-rosewood)')" id="defaultOpen">Critters</button>
+            <button class="tablink" onclick="openPage('Stories', this, 'var(--accent-rosewood)')">Stories</button>
+            <button class="tablink" onclick="openPage('Liked_Critters', this, 'var(--accent-rosewood)')">Liked Critters</button>
+            <button class="tablink" onclick="openPage('Liked_Stories', this, 'var(--accent-rosewood)')">Liked Stories</button>
+        </div>
 
-        <button class="tablink" onclick="openPage('Critters', this, 'var(--accent-rosewood)')" id="defaultOpen">Critters</button>
-        <button class="tablink" onclick="openPage('Stories', this, 'var(--accent-rosewood)')">Stories</button>
-        <button class="tablink" onclick="openPage('Liked_Critters', this, 'var(--accent-rosewood)')">Liked Critters</button>
-        <button class="tablink" onclick="openPage('Liked_Stories', this, 'var(--accent-rosewood)')">Liked Stories</button>
-         
         <div id="Critters" class="tabcontent">
             {% if critters %}
             <div class="critter-grid">
