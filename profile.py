@@ -57,9 +57,9 @@ def get_liked_critters(conn, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT critter.name AS name,critter.imagepath AS image,critter.description AS desc
-                 FROM liked_critter JOIN critter ON cid
-                 WHERE liked_critter.uid = %s'''
+                 SELECT critter.cid AS cid, critter.name AS name, critter.imagepath AS imagepath, critter.description AS description, critter.created AS created
+                 FROM liked_critter JOIN critter USING (cid)
+                 WHERE liked_critter.uid = %s''',
                  [uid])
     return curs.fetchall()
 
@@ -76,8 +76,8 @@ def get_liked_stories(conn, uid: int):
     curs = dbi.dict_cursor(conn)
     curs.execute('''
                  SELECT story.story AS story
-                 FROM liked_story JOIN story ON sid
-                 WHERE liked_story.uid = %s'''
+                 FROM liked_story JOIN story USING (sid)
+                 WHERE liked_story.uid = %s''',
                  [uid])
     return curs.fetchall()
 

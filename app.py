@@ -165,20 +165,11 @@ def user_profile(uid):
             print(item)
     # get user stories
     stories = story.get_stories_by_user(conn, uid)
-    # # if this is not the users profile
-    # if int(session['uid'])!=int(uid):
-    #     # if the user isn't viewing their own profile
-    #     print(f'looking up user with uid {uid}')
-    #     if user is None:
-    #         flash(f'No profile found with uid={uid}')
-    #         return redirect(url_for('index'))
-    #     # display profile without settings and add critter button (not logged in user)
-    #     return render_template(
-    #         'profile_for_none_user.html',
-    #         user=user,
-    #         critters=critters,
-    #         stories=stories
-    #     )
+    # get user's liked critters
+    liked_critters = profile.get_liked_critters(conn, uid)
+    # get user's liked stories
+    liked_stories = profile.get_liked_stories(conn, uid)
+    
     print(f'looking up user with uid {uid}')
     if user is None:
         # if the user doesn't exist, flash message and redirect to home
@@ -188,7 +179,9 @@ def user_profile(uid):
         'profile.html',
         user=user,
         critters=critters,
-        stories=stories
+        stories=stories,
+        liked_critters=liked_critters,
+        liked_stories=liked_stories
     )
 
 @app.route('/logout/')
