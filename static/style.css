@@ -753,6 +753,61 @@ a:hover {
 
 
 /* ======================================================
+   Profile Page Tabs Styling
+====================================================== */
+
+/* Set height of body and the document to 100% to enable "full page tabs" */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial;
+}
+
+/* Style tab links */
+.tablink {
+  background-color: var(--plum);
+  color: var(--color-nav-fg);
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 25%;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  border-radius: 0; /* Remove border-radius from all tabs by default */
+}
+
+/* Add rounded corners only to the first tab (left side) */
+.tablink:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+/* Add rounded corners only to the last tab (right side) */
+.tablink:last-child {
+  border-radius: 0 16px 16px 0;
+}
+
+.tablink:hover {
+  background-color: var(--sand-beige);
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+  color: var(--text-primary);
+  display: none;
+  padding: 100px 20px;
+  height: 100%;
+}
+
+/* #Critters {background-color: var(--sand-beige);}
+#Stories {background-color: var(--sand-beige);}
+#Liked_Critters {background-color: var(--sand-beige);}
+#Liked_Stories {background-color: var(--sand-beige);} */
+
+
+/* ======================================================
    Critter Page Styling
 ====================================================== */
 
@@ -1014,6 +1069,7 @@ a:hover {
     resize: vertical;
     transition: border-color 0.2s, background 0.2s;
 }
+
 
 /* MOBILE */
 @media (max-width: 850px) {

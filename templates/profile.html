@@ -10,9 +10,11 @@
 
 {% block main_content %}
 
-    <div class="profile-settings-wrapper">
-        <a href="{{ url_for('settings_page', uid=user.uid) }}" class="button-primary profile-settings-button">Settings</a>
-    </div>
+    {% if session.get('uid') == user.uid %}
+        <div class="profile-settings-wrapper">
+            <a href="{{ url_for('settings_page', uid=user.uid) }}" class="button-primary profile-settings-button">Settings</a>
+        </div>
+    {% endif %}
 
     <div  id="main" class="main">
         <!-- Profile Header Card -->
@@ -35,55 +37,110 @@
             </div>
         </section>
 
-        <h2>Critters:</h2>
-        {% if critters %}
-            <div class="critter-grid">
-            {% for critter in critters %}
-            <div>
-            <a href="{{ url_for('critter_page', cid=critter.cid) }}" class="critter-card">
-                <img src="{{ url_for('uploaded_file', filename=critter.imagepath) }}"
-                    alt="{{ critter.name }}">
-                <p>{{ critter.name }}</p>
-                
-            </a>
-
-            <div class="like-btn-container">
-                <button type="button" class="like-btn" data-cid="{{ critter.cid }}">
-                    <!-- Heart SVG -->
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                </button>
-                <div class="like-count-display">
-                    <span class="like-count">{{ critter.likes }}</span> 
-                </div>
-            </div>
-
-
-            </div>
-
-            {% endfor %}
+        <div class="tab-container">
+            <button class="tablink" onclick="openPage('Critters', this, 'var(--accent-rosewood)')" id="defaultOpen">Critters</button>
+            <button class="tablink" onclick="openPage('Stories', this, 'var(--accent-rosewood)')">Stories</button>
+            <button class="tablink" onclick="openPage('Liked_Critters', this, 'var(--accent-rosewood)')">Liked Critters</button>
+            <button class="tablink" onclick="openPage('Liked_Stories', this, 'var(--accent-rosewood)')">Liked Stories</button>
         </div>
-        {% else %}
-            <p>No critters uploaded.</p>
-        {% endif %}
 
-        <h2>Stories:</h2>
-        {% if stories %}
-            <section class="stories-section">
-            <div class="story-group">
-            <div class="story-card-grid">
-                {% for story in stories %}
-                    <a href="{{ url_for('story_page', sid=story.sid, cid=story.critter_info.cid) }}" class="story-card pastel-box story-card-link">
-                        <span class="story-author-tag">For {{ story.critter_info.name }}</span>
-                        <p>{{ story.critter_story }}</p>
+        <div id="Critters" class="tabcontent">
+            {% if critters %}
+            <div class="critter-grid">
+                {% for critter in critters %}
+                <div>
+                    <a href="{{ url_for('critter_page', cid=critter.cid) }}" class="critter-card">
+                        <img src="{{ url_for('uploaded_file', filename=critter.imagepath) }}"
+                            alt="{{ critter.name }}">
+                        <p>{{ critter.name }}</p>
                     </a>
+
+                    <div class="like-btn-container">
+                        <button type="button" class="like-btn" data-cid="{{ critter.cid }}">
+                            <!-- Heart SVG -->
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <div class="like-count-display">
+                            <span class="like-count">{{ critter.likes }}</span> 
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
+            {% else %}
+                <p>No critters uploaded.</p>
+            {% endif %}
+        </div>
+
+            
+        <div id="Stories" class="tabcontent">
+            {% if stories %}
+                <section class="stories-section">
+                    <div class="story-group">
+                        <div class="story-card-grid">
+                            {% for story in stories %}
+                                <a href="{{ url_for('story_page', sid=story.sid, cid=story.critter_info.cid) }}" class="story-card pastel-box story-card-link">
+                                    <span class="story-author-tag">For {{ story.critter_info.name }}</span>
+                                    <p>{{ story.critter_story }}</p>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+            {% else %}
+                <p>No stories written.</p>
+            {% endif %}
+        </div>
+
+        <div id="Liked_Critters" class="tabcontent">
+            {% if liked_critters %}
+            <div class="critter-grid">
+                {% for critter in liked_critters %}
+                <div>
+                    <a href="{{ url_for('critter_page', cid=critter.cid) }}" class="critter-card">
+                        <img src="{{ url_for('uploaded_file', filename=critter.imagepath) }}"
+                            alt="{{ critter.name }}">
+                        <p>{{ critter.name }}</p>
+                    </a>
+
+                    <div class="like-btn-container">
+                        <button type="button" class="like-btn" data-cid="{{ critter.cid }}">
+                            <!-- Heart SVG -->
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <div class="like-count-display">
+                            <span class="like-count">{{ critter.likes }}</span> 
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            </section>
-        {% else %}
-            <p>No stories written.</p>
-        {% endif %}
+            {% else %}
+                <p>No critters liked yet.</p>
+            {% endif %}
+        </div>
+
+        <div id="Liked_Stories" class="tabcontent">
+            {% if liked_stories %}
+                <section class="stories-section">
+                    <div class="story-group">
+                        <div class="story-card-grid">
+                            {% for story in liked_stories %}
+                                <a href="{{ url_for('story_page', sid=story.sid, cid=story.critter_info.cid) }}" class="story-card pastel-box story-card-link">
+                                    <span class="story-author-tag">For {{ story.critter_info.name }}</span>
+                                    <p>{{ story.critter_story }}</p>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+            {% else %}
+                <p>No stories liked yet.</p>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

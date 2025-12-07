@@ -152,41 +152,25 @@ def user_profile(uid):
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
-
-    #critter is defined
+    # get user's info
     uid = int(uid)
     conn = dbi.connect()
     user = profile.get_user_info(conn,uid)
+    user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
+    # get user's critters
     critters = profile.get_critters_by_user(conn,uid)
-
+    # get number of likes per critter
     for item in critters:
             item['likes']=profile.get_likes(conn,item['cid'])
             print(item)
-
-    # if this is not the users profile
-    if int(session['uid'])!=int(uid):
-        # if the user isn't viewing their own profile
-        print(f'looking up user with uid {uid}')
-        
-        
-        user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
-
-        if user is None:
-            flash(f'No profile found with uid={uid}')
-            return redirect(url_for('index'))
-        # display profile without settings and add critter button (not logged in user)
-        return render_template(
-            'profile_for_none_user.html',
-            user=user,
-            critters=critters,
-            stories=stories
-        )
+    # get user stories
+    stories = story.get_stories_by_user(conn, uid)
+    # get user's liked critters
+    liked_critters = profile.get_liked_critters(conn, uid)
+    # get user's liked stories
+    liked_stories = profile.get_liked_stories(conn, uid)
+    
     print(f'looking up user with uid {uid}')
-    # get user info and critters to display
-    
-    user['created'] = user['created'].strftime("%m/%d/%Y")[:10]
-    
-
     if user is None:
         # if the user doesn't exist, flash message and redirect to home
         flash(f'No profile found with uid={uid}')
@@ -195,7 +179,9 @@ def user_profile(uid):
         'profile.html',
         user=user,
         critters=critters,
-        stories=stories
+        stories=stories,
+        liked_critters=liked_critters,
+        liked_stories=liked_stories
     )
 
 @app.route('/logout/')
