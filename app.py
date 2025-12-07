@@ -532,7 +532,14 @@ def delete_critter(cid):
     if critter_info is None:
         flash(f'No critter found with cid={cid}')
         return redirect(url_for('index'))
+    
+    
     if request.method == 'GET':
+        # make sure logged in user is the creator of critter
+        if critter_info['uid'] != uid:
+            flash('A critter can only be deleted by their creator')
+            all_critters = critter.get_all_critters(conn)
+            return render_template('main.html', critters=all_critters)
         # Render the delete form
         return render_template('delete_critter.html',
                                critter_info=critter_info)
@@ -624,9 +631,7 @@ def edit_story(sid):
         sid = int(sid)
     except:
         flash('invalid url')
-        
-        return redirect(url_for('user_profile',
-            uid=uid))
+        return redirect(url_for('user_profile', uid=uid))
         
     
     story_info = story.get_story_by_id(conn,sid)
@@ -639,32 +644,35 @@ def edit_story(sid):
                                critter_info=critter_info,
                                user=user)
     else:
-        
         # get the story from form
         new_story = request.form.get('critter-story')
         # ensure the user uploads a story
         if new_story == '':
             # if the story is blank, flash a message and re-render form
             flash('Please write a story.')
-            return render_template('story_upload.html', 
-                               user=user, 
-                               critter_info=critter_info)
+            return render_template('edit_story.html',  # CHANGED from story_upload.html
+                               story_info=story_info,   # ADDED
+                               critter_info=critter_info,
+                               user=user)
         # check length of story to avoid error
         if len(new_story) > 2000:
             # if the story length is too long, flash a message and re-render form
             flash('The story cannot be longer than 2000 characters')
-            return render_template('story_upload.html', 
-                               user=user, 
-                               critter_info=critter_info)
+            return render_template('edit_story.html',  # CHANGED from story_upload.html
+                               story_info=story_info,   # ADDED
+                               critter_info=critter_info,
+                               user=user)
         try:
             # try to add the story to the database
             story.update_story(conn, sid, new_story)
         except:
             # if this doesn't work, flash an error message
             flash('An error occurred when uploading the story. Please try again')
-            return render_template('story_upload.html')
+            return render_template('edit_story.html',  # CHANGED from story_upload.html
+                               story_info=story_info,   # ADDED
+                               critter_info=critter_info,
+                               user=user)
         return redirect(url_for('story_page', sid=sid, cid=cid))
-        
     
 
 @app.route('/critter/<cid>/story_upload/', methods=["GET", "POST"])
