@@ -27,7 +27,7 @@
         <h2>Update Profile Information</h2>
         <p class="block-subtitle">Update your profile details here.</p>
         <form method="post" action="{{ url_for('settings_page') }}">
-            <p><label for="name"><strong>Name:</strong></label><br>
+            <p><label for="display-name"><strong>Name:</strong></label><br>
                 <input id="display-name" type="text" name="display-name"
                     value="{{ curr_user_info.name }}"></p>
 

@@ -44,7 +44,7 @@ h1 {
 
 /* Alerts */
 #messages {
-    color: var(--color-alert);
+    color: #7B346A;
     font-style: italic;
 }
 
@@ -1037,7 +1037,7 @@ body, html {
 .story-author {
   margin-top: 0.2rem;
   margin-bottom: 1.5rem;
-  color: var(--text-secondary);
+  color: #7B346A;
   font-style: italic;
 }
 

@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% block main_content %}
 
+<head>
+    <meta charset="utf-8">
+    <title>Delete Critter From Data Base</title>
+</head>
+
+
 <div class="settings">
+
     <h1>Are you sure you want to delete {{ critter_info.name }}?</h1>
     <p>This will also delete all stories written by you and other users about {{ critter_info.name }}</p>
 
