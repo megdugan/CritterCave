@@ -67,8 +67,11 @@ def delete_story(conn, sid:int):
         curs.execute("""
                 delete from story where sid=%s""",[sid])
         conn.commit()
+        print("successfully deleted story")
         return curs.rowcount
     except Exception as err:
+        print(err)
+        print("failed to delete story")
         conn.rollback()
     return
 

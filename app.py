@@ -705,7 +705,7 @@ def delete_story(sid):
             critter_info = critter.get_critter_by_id(conn, story_info['cid'])
             return render_template('delete_story.html', 
                                    story_info=story_info, 
-                                   ritter_info=critter_info,
+                                   critter_info=critter_info,
                                    page_title='Delete Story')
     
         else:
