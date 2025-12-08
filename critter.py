@@ -22,17 +22,21 @@ def add_critter(conn, uid: int, imagepath: str, name: str, description: str):
     Return:
         critter cid -> int
     """
-    time=datetime.now()
-    curs=dbi.dict_cursor(conn)
-    curs.execute("""
-            insert into critter(uid,imagepath,name,description,created)
-            values (%s,%s, %s,%s,%s) """,
-            [uid, imagepath, name, description, time])
-    conn.commit()
-    # Get the critter id (cid)
-    curs.execute('select last_insert_id()')
-    row = curs.fetchone()
-    return row
+    try:
+        time=datetime.now()
+        curs=dbi.dict_cursor(conn)
+        curs.execute("""
+                insert into critter(uid,imagepath,name,description,created)
+                values (%s,%s, %s,%s,%s) """,
+                [uid, imagepath, name, description, time])
+        conn.commit()
+        # Get the critter id (cid)
+        curs.execute('select last_insert_id()')
+        row = curs.fetchone()
+        return row
+    except Exception as e:
+        conn.rollback()
+        return
 
 def get_critter_by_id(conn, cid: int):
     """
@@ -95,21 +99,16 @@ def delete_critter(conn, cid: int):
         None
     """
     curs=dbi.dict_cursor(conn)
-    try:
-        curs.execute('start transaction;')
-        curs.execute(
-            '''delete from story where cid=%s''',
-            [cid])
-        stories_deleted = curs.rowcount
-        curs.execute("""
-                delete from critter where cid=%s
-                """,[cid])
-        critters_deleted = curs.rowcount
-        conn.commit()
-        return critters_deleted, stories_deleted
-    except Exception as e:
-        conn.rollback()
-        return
+    curs.execute(
+        '''delete from story where cid=%s''',
+        [cid])
+    stories_deleted = curs.rowcount
+    curs.execute("""
+            delete from critter where cid=%s
+            """,[cid])
+    critters_deleted = curs.rowcount
+    conn.commit()
+    return critters_deleted, stories_deleted
 
 def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
     """
@@ -123,9 +122,14 @@ def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
     Return:
         None
     """
-    curs=dbi.dict_cursor(conn)
-    curs.execute("""
-            update critter set imagepath=%s,name=%s,description=%s
-            where cid=%s""",
-            [imagepath, name, description, cid])
-    conn.commit()
+    try:
+        curs=dbi.dict_cursor(conn)
+        curs.execute("""
+                update critter set imagepath=%s,name=%s,description=%s
+                where cid=%s""",
+                [imagepath, name, description, cid])
+        conn.commit()
+        return True
+    except:
+        conn.rollback()
+        return False

@@ -127,7 +127,6 @@ def signup():
         user = profile.get_user_info(conn,uid)
         critters = profile.get_critters_by_user(conn,uid)
         flash(f"Welcome to Critter Cave, {user['name']}.")
-        flash(f"testing if logged in {session['logged_in']}")
         return redirect(url_for('user_profile',uid=uid))
 
 
@@ -167,7 +166,6 @@ def signin():
         user = profile.get_user_info(conn,uid)
         critters = profile.get_critters_by_user(conn,uid)
         flash(f"Welcome back, {user['name']}.")
-        flash(f"testing if logged in {session['logged_in']}")
         return redirect(url_for('user_profile',uid=uid))
 
 
@@ -528,6 +526,10 @@ def critter_upload():
             flash('An error occurred when uploading the critter. Please try again')
             return render_template('critter_upload.html')
         
+        if critterID == None:
+            flash('An error occurred when uploading the critter. Please try again')
+            return render_template('critter_upload.html')
+        
         pet = critter.get_critter_by_id(conn, critterID['last_insert_id()'])
         # Add the photo to the uploads folder, using critter{cid} as the name
         cid = pet['cid']
@@ -539,7 +541,9 @@ def critter_upload():
         f.save(pathname)
         os.chmod(pathname, 0o444)
         # Update the critter element in database to have the correct image path
-        critter.update_critter(conn, cid, filename, name, desc)
+        if not critter.update_critter(conn, cid, filename, name, desc):
+            flash('Critter Image not configured correctly, please reupload the critter')
+            redirect(url_for('critter_upload'))
         # Forward the user to the new critter's page
         return redirect(url_for('critter_page', cid=cid))
     
