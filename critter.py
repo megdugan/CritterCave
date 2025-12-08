@@ -22,17 +22,22 @@ def add_critter(conn, uid: int, imagepath: str, name: str, description: str):
     Return:
         critter cid -> int
     """
-    time=datetime.now()
-    curs=dbi.dict_cursor(conn)
-    curs.execute("""
-            insert into critter(uid,imagepath,name,description,created)
-            values (%s,%s, %s,%s,%s) """,
-            [uid, imagepath, name, description, time])
-    conn.commit()
-    # Get the critter id (cid)
-    curs.execute('select last_insert_id()')
-    row = curs.fetchone()
-    return row
+    try:
+        time=datetime.now()
+        curs=dbi.dict_cursor(conn)
+        curs.execute("""
+                insert into critter(uid,imagepath,name,description,created)
+                values (%s,%s, %s,%s,%s) """,
+                [uid, imagepath, name, description, time])
+        conn.commit()
+        # Get the critter id (cid)
+        curs.execute('select last_insert_id()')
+        row = curs.fetchone()
+        return row
+    except Exception as err:
+        conn.rollback()
+        return
+
 
 def get_critter_by_id(conn, cid: int):
     """
@@ -48,6 +53,7 @@ def get_critter_by_id(conn, cid: int):
             select * from critter where cid=%s""", 
             [cid])
     return curs.fetchone()
+
 
 def lookup_critter(conn, query:str):
     """
@@ -69,6 +75,7 @@ def lookup_critter(conn, query:str):
         return None
     return critters
 
+
 def get_all_critters(conn):
     """
     Get all critters' information.
@@ -84,6 +91,7 @@ def get_all_critters(conn):
         from critter inner join user on critter.uid = user.uid
         order by created desc""")
     return curs.fetchall()
+
 
 def delete_critter(conn, cid: int):
     """
@@ -124,9 +132,14 @@ def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
     Return:
         None
     """
-    curs=dbi.dict_cursor(conn)
-    curs.execute("""
-            update critter set imagepath=%s,name=%s,description=%s
-            where cid=%s""",
-            [imagepath, name, description, cid])
-    conn.commit()
+    try:
+        curs=dbi.dict_cursor(conn)
+        curs.execute("""
+                update critter set imagepath=%s,name=%s,description=%s
+                where cid=%s""",
+                [imagepath, name, description, cid])
+        conn.commit()
+        return True
+    except Exception as err:
+        conn.rollback()
+        return False

@@ -19,7 +19,7 @@
             <h2 class="critter-name">{{ critter_info.name }}</h2>
 
             <div class="critter-extra">
-            <p><strong>Creator:</strong> {{ critter_info.creator_name }}</p>
+            <p><strong>Creator:</strong> <a href="{{ url_for('user_profile', uid=critter_info.creator_info.uid) }}">{{ critter_info.creator_info.username }}</a></p> </p>
             <p><strong>Description:</strong> {{ critter_info.description }}</p>
             </div>
 

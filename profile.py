@@ -28,6 +28,7 @@ def get_user_info(conn, uid: int):
                  [uid])
     return curs.fetchone()
 
+
 def get_critters_by_user(conn, uid: int):
     """
     Returns all critters made by the specified user with uid.
@@ -81,6 +82,7 @@ def get_liked_stories(conn, uid: int):
                  [uid])
     return curs.fetchall()
 
+
 def sign_up(conn, name: str, username: str, password: str) -> int: 
     """
     Inserts a new user into the database, returning their uid if successful.
@@ -95,19 +97,21 @@ def sign_up(conn, name: str, username: str, password: str) -> int:
         user's uid -> int
     """
     try:
-        # hash the user password
+        # Hash the user password
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        # insert new user information with default profilepic and darkmode setting
+
+        # Insert new user information with default profilepic and darkmode setting
         curs = dbi.cursor(conn)
         curs.execute('''insert into user (name, username, password, created, profilepic, darkmode) 
                         values (%s, %s, %s, %s, %s, %s)''', [name, username, hashed.decode('utf-8'), datetime.now(), 'default.jpg', False])
         conn.commit()
-        # return user uid
+
+        # Return user uid
         curs.execute('select last_insert_id()')
         row = curs.fetchone()
         return row[0]
     except pymysql.err.IntegrityError as err:
-        # exception for duplicate username error
+        # Exception for duplicate username error
         details = err.args
         if details[0] == pymysql.constants.ER.DUP_ENTRY:
             print('duplicate key for username {}'.format(username))
@@ -115,6 +119,7 @@ def sign_up(conn, name: str, username: str, password: str) -> int:
         else:
             print('error inserting user')
             return -2
+
 
 def sign_in(conn, username: str, password: str) -> None: 
     """
@@ -129,26 +134,29 @@ def sign_in(conn, username: str, password: str) -> None:
         user's uid -> int
     """
     try:
-        # grab user stored password
+        # Grab user stored password
         curs = dbi.cursor(conn)
         curs.execute('''select uid, password from user where username = %s''', [username])
         uid, stored = curs.fetchone()
-        # check whether entered password matches database using hashing
+
+        # Check whether entered password matches database using hashing
         hashed = bcrypt.hashpw(password.encode('utf-8'), stored.encode('utf-8'))
         print(f"encrypted: {hashed}")
         hashed_str = hashed.decode('utf-8')
         print(f"descrypted: {hashed_str}")
+
         if hashed_str == stored:
-            # if the login is correct, return uid
+            # If the login is correct, return uid
             print('Login successful.')
             return uid
-        # else, if the password is incorrect, return -1
+        # Else, if the password is incorrect, return -1
         print('Password is incorrect.')
         return -1
     except TypeError:
-        # if the username does not exist is incorrect, return -2
+        # If the username does not exist is incorrect, return -2
         print('Username does not exist.')
         return -2
+
 
 def delete_user(conn, uid: int) -> None: 
     """
@@ -159,10 +167,14 @@ def delete_user(conn, uid: int) -> None:
     Return:
         None
     """
-    curs = dbi.cursor(conn)
-    curs.execute('''delete from user where uid = %s''', uid)
-    conn.commit()
+    try:
+        curs = dbi.cursor(conn)
+        curs.execute('''delete from user where uid = %s''', uid)
+        conn.commit()
+    except Exception as err:
+        conn.rollback()
     return
+    
 
 def lookup_user(conn, query: str):
     """
@@ -184,6 +196,7 @@ def lookup_user(conn, query: str):
         return None
     return users
 
+
 def get_likes(conn,cid):
     """
     Lookup a critter rating by , counting how many times that critter is rated in the table.
@@ -203,13 +216,16 @@ def get_likes(conn,cid):
 
 
 def update_like(conn,cid,uid):
-    curs = dbi.cursor(conn)
-    curs.execute(
-            '''
-            INSERT INTO liked_critter (cid, uid)
-            VALUES (%s, %s)
-            ''',
-            [cid, uid]
-        )
-    conn.commit()
-    
+    try:
+        curs = dbi.cursor(conn)
+        curs.execute(
+                '''
+                INSERT INTO liked_critter (cid, uid)
+                VALUES (%s, %s)
+                ''',
+                [cid, uid]
+            )
+        conn.commit()
+    except Exception as err:
+        conn.rollback()
+    return
