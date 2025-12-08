@@ -34,9 +34,10 @@ def add_critter(conn, uid: int, imagepath: str, name: str, description: str):
         curs.execute('select last_insert_id()')
         row = curs.fetchone()
         return row
-    except Exception as e:
+    except Exception as err:
         conn.rollback()
         return
+
 
 def get_critter_by_id(conn, cid: int):
     """
@@ -52,6 +53,7 @@ def get_critter_by_id(conn, cid: int):
             select * from critter where cid=%s""", 
             [cid])
     return curs.fetchone()
+
 
 def lookup_critter(conn, query:str):
     """
@@ -73,6 +75,7 @@ def lookup_critter(conn, query:str):
         return None
     return critters
 
+
 def get_all_critters(conn):
     """
     Get all critters' information.
@@ -89,6 +92,7 @@ def get_all_critters(conn):
         order by created desc""")
     return curs.fetchall()
 
+
 def delete_critter(conn, cid: int):
     """
     Delete a critter from the database.
@@ -99,16 +103,22 @@ def delete_critter(conn, cid: int):
         None
     """
     curs=dbi.dict_cursor(conn)
-    curs.execute(
-        '''delete from story where cid=%s''',
-        [cid])
-    stories_deleted = curs.rowcount
-    curs.execute("""
-            delete from critter where cid=%s
-            """,[cid])
-    critters_deleted = curs.rowcount
-    conn.commit()
-    return critters_deleted, stories_deleted
+    try:
+        curs.execute('start transaction;')
+        curs.execute(
+            '''delete from story where cid=%s''',
+            [cid])
+        stories_deleted = curs.rowcount
+        curs.execute("""
+                delete from critter where cid=%s
+                """,[cid])
+        critters_deleted = curs.rowcount
+        conn.commit()
+        return critters_deleted, stories_deleted
+    except Exception as e:
+        conn.rollback()
+        return
+    
 
 def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
     """
@@ -130,6 +140,6 @@ def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
                 [imagepath, name, description, cid])
         conn.commit()
         return True
-    except:
+    except Exception as err:
         conn.rollback()
         return False
