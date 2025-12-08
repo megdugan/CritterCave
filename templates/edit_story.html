@@ -36,7 +36,7 @@
     <p></p>
 
     <!-- Story Writing -->
-    <form method="post" action="{{ url_for('story_upload', cid=critter_info.cid) }}">
+    <form method="post" action="{{ url_for('edit_story', sid=story_info.sid) }}">
         <section class="settings-block">
             <h2>Story Details</h2>
             <p class="block-subtitle">Add to {{ critter_info.name }}'s adventures here.</p>
