@@ -106,6 +106,9 @@ def delete_critter(conn, cid: int):
     try:
         curs.execute('start transaction;')
         curs.execute(
+            '''delete from liked_critter where cid=%s''',
+            [cid])
+        curs.execute(
             '''delete from story where cid=%s''',
             [cid])
         stories_deleted = curs.rowcount
@@ -114,10 +117,13 @@ def delete_critter(conn, cid: int):
                 """,[cid])
         critters_deleted = curs.rowcount
         conn.commit()
+        print("in try; commit completed")
         return critters_deleted, stories_deleted
     except Exception as e:
+        print("in except")
+        print(e)
         conn.rollback()
-        return
+        return 0,0
     
 
 def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
