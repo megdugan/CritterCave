@@ -463,6 +463,7 @@ def story_page(cid, sid):
         # Error message for critter cid of Nonetype
         flash(f'No critter found with cid={cid}')
         return render_template('main.html')
+    # save creator info
     critter_info['creator_info'] = creator_info
     # Get story info
     if not sid.isdigit():
