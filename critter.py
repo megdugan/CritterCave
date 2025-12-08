@@ -110,6 +110,7 @@ def delete_critter(conn, cid: int):
     except Exception as e:
         conn.rollback()
         return
+    
 
 def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
     """
