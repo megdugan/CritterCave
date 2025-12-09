@@ -325,7 +325,10 @@ def settings_page():
                     ext = user_filename.split('.')[-1]
                     filename = secure_filename(f"{nm}.{ext}")
                     pathname = os.path.join(app.config['uploads'], filename)
-                    os.unlink(pathname)
+                    try:
+                        os.unlink(pathname)
+                    except Exception as e:
+                        pass
                     file.save(pathname)
                     os.chmod(pathname, 0o444)
                     # Store ONLY the filename in the DB
