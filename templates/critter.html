@@ -77,10 +77,15 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <a href="{{ url_for('story_upload', cid=critter_info.cid) }}"
-                    class="button-primary write-story-btn">
-                    Write the First Story About {{ critter_info.name }}
-                </a>
+                <!-- Show be the first button only if the user is not the creator. -->
+                {% if session.get('uid') == critter_info.uid %}
+                    <p class="empty-text">No stories written yet.</p>
+                {% else %}
+                    <a href="{{ url_for('story_upload', cid=critter_info.cid) }}"
+                        class="button-primary write-story-btn">
+                        Write the First Story About {{ critter_info.name }}
+                    </a>
+                {% endif %}
             {% endif %}
         </div>
 
