@@ -361,8 +361,9 @@ def settings_page():
                     try:
                         # Attempt to update the user's settings
                         settings.update_personal_info(conn,uid,new_name,new_username)
-                    except:
+                    except Exception as e:
                         # If unsuccessful, flash an error message
+                        print(e)
                         flash("An error occurred when updating the profile information. Please try again.")
                         return redirect(url_for('settings_page'))
                     
