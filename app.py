@@ -47,24 +47,6 @@ def index():
         return redirect(url_for('user_profile', uid=uid))
 
 
-@app.route('/old_main/')
-def old_main():
-    """
-    Displays links from the draft submission.
-    """
-
-    if 'uid' not in session:
-        flash("Please Login in first!")
-        return redirect(url_for('signin'))
-    try:
-        return render_template('old_main.html', page_title='Old Main Page')
-    except Exception as e:
-        print(e)
-        uid=session['uid']
-        flash('An error occurred. Please try again.')
-        return redirect(url_for('user_profile', uid=uid))
-
-
 @app.route('/about/')
 def about():
     """
@@ -100,20 +82,6 @@ def create():
         uid=session['uid']
         flash('An error occurred. Please try again.')
         return redirect(url_for('critter_upload'))
-
-
-@app.route('/welcome/')
-def welcome():
-    if 'uid' not in session:
-        flash("Please Login in first!")
-        return redirect(url_for('signin'))
-    try:
-        return render_template('welcome.html', page_title='Welcome to CritterCave')
-    except Exception as e:
-        print(e)
-        uid=session['uid']
-        flash('An error occurred. Please try again.')
-        return redirect(url_for('user_profile', uid=uid))
 
 
 @app.route('/signup/', methods=['GET', 'POST'])
