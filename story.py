@@ -111,14 +111,13 @@ def get_stories_for_critter(conn, cid: int, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT sid, uid, story.created AS time_created, story.story AS critter_story
+                 SELECT sid, user.uid,name, story.created AS time_created, story.story AS critter_story
                  FROM story
+                 join user on story.uid=user.uid 
                  WHERE cid = %s''',
                  [cid])
     stories = curs.fetchall()
-    for story in stories:
-        story["original"] = story["uid"] == uid
-        story["creator_info"] = profile.get_user_info(conn, story["uid"])
+
     return stories
 
 
@@ -134,12 +133,11 @@ def get_stories_by_user(conn, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT sid, cid, story.created AS time_created, story.story AS critter_story
+                 SELECT sid, story.cid, story.created AS time_created, story.story,
+                 critter.cid,critter.uid,critter.imagepath,critter.name,critter.description,critter.created AS critter_story
                  FROM story
-                 WHERE uid = %s''',
+                 join critter on critter.uid=story.uid
+                 WHERE story.uid = %s''',
                  [uid])
     stories = curs.fetchall()
-    for story in stories:
-        story["critter_info"] = critter.get_critter_by_id(conn, story["cid"])
-    print(stories)
     return stories
