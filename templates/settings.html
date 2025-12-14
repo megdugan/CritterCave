@@ -15,7 +15,7 @@
     <section class="settings-block">
         <h2>Change Profile Picture</h2>
         <p class="block-subtitle">This image will be displayed on your profile</p>
-        <form method="post" action="" enctype="multipart/form-data">
+        <form method="post" action="{{ url_for('settings_page') }}" enctype="multipart/form-data">
             <p><label for="profile-pic"><strong>New Profile Picture:</strong></label><br>
                 <input id="profile-pic" type="file" name="profile-pic"></p>
             <p><input type="submit" name="action" value="Update Profile Picture"></p>
@@ -43,7 +43,7 @@
      <section class="settings-block">
         <h2>Update Password</h2>
         <p class="block-subtitle">Change your password here.</p>
-        <form method="post" action="">
+        <form method="post" action="{{ url_for('settings_page') }}">
             <p><label for="old_pw"><strong>Old Password:</strong></label></p>
                 <input id="old_pw" type="password" name="old_pw"></p> 
             <p><label for="new_pw1"><strong>New Password:</strong></label></p>
@@ -58,7 +58,7 @@
      <section class="settings-block">
         <h2>Update Appearance</h2>
         <p class="block-subtitle">Update the site's appearance to darkmode or lightmode here.</p>
-        <form method="post" action="">
+        <form method="post" action="{{ url_for('settings_page') }}">
             <p>
                 <label for="appearance"><strong>Choose Appearance:</strong></label><br>
                 <select id="appearance" name="appearance">
