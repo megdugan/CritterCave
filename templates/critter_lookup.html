@@ -11,24 +11,36 @@
 
 <h1>Critter results for '{{query}}'</h1>
 
+<div class="critter-page">
 {% for c in critters %}
+    
+<!-- Critter Header Card -->
+<section class="critter-header-card">
 
-<div class="search_result">
-    <div class="critter_result">
-        <div>
-            <img src="{{  url_for('uploaded_file', filename=c['imagepath']) }}"
-            alt="Profile Picture" class="critter-profile-img">
-        </div>
-        <div style="padding-left:20px">
-            <h1><a href="{{url_for('critter_page', cid=c['cid'])}}">{{c['name']}}</a></h1>
-            <a href="{{url_for('user_profile', uid=c['uid'])}}">{{c['creator']}}</a>
-            <p>{{c['created']}}</p>
-
-        </div>
+    <div class="critter-info-left">
+        {% if c['imagepath'] %}
+        <img src="{{ url_for('uploaded_file', filename=c['imagepath']) }}"
+            alt="Critter Image" class="critter-profile-img">
+        {% endif %}
     </div>
-    <p>Description: {{c['description']}}</p>
-</div>
+
+    <div class="critter-info-right">
+        <h1 class="critter-name"><a href="{{url_for('critter_page', cid=c['cid'])}}">{{c['name']}}</a></h1>
+        <p class="critter-maker">
+            <h4>Made by:
+            <a href="{{url_for('user_profile', uid=c['uid'])}}">
+                {{c['creator']}}</a>
+            </h4>
+        </p>
+
+        <p class="critter-description">
+            {{ c['description'] }}
+        </p>
+    </div>
+</section>
+<br>
 
 {% endfor %}
+</div>
 
 {% endblock %}
