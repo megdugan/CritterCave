@@ -113,10 +113,11 @@ def get_stories_for_critter(conn, cid: int, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT sid, user.uid,name, story.created AS time_created, story.story AS critter_story
+                 SELECT sid, user.uid,user.username, story.created AS time_created, story.story AS critter_story
                  FROM story
+                 join critter on story.cid=critter.cid
                  join user on story.uid=user.uid 
-                 WHERE cid = %s''',
+                 WHERE critter.cid = %s''',
                  [cid])
     stories = curs.fetchall()
     return stories
