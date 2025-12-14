@@ -1,8 +1,10 @@
+<!-- (CritterCave) -->
+<!-- Displays the critter's information and stories -->
+
 {% extends "base.html" %}
 
 {% block head_stuff %}
-<title>"Critter Page: Displays a critter's information, 
-    including it's photo, name, description, and stories."</title>
+<title>"Critter Page"</title>
 {% endblock %}
 
 {% block main_content %}
@@ -37,6 +39,12 @@
                class="button-primary write-story-btn">
                Write a Story About {{ critter_info.name }}
             </a>
+
+            <!-- Show delete button only if the logged-in user is the creator of the critter -->
+            {% if session.get('uid') == critter_info.uid %}
+                <a href="{{ url_for('delete_critter', cid=critter_info.cid) }}"
+                    class="button-primary write-story-btn">Delete Critter</a>
+            {% endif %}
         </div>
     </section>
 
@@ -90,16 +98,6 @@
         </div>
 
     </section>
-
-    <!-- Show delete button only if the logged-in user is the creator of the critter -->
-    {% if session.get('uid') == critter_info.uid %}
-     <form action="{{ url_for('delete_critter', cid=critter_info.cid) }}" method="get">
-        <button class="button-primary">Delete Critter</button>
-    </form>
-    {% endif %}
-
-   
-
 </div>
 
 {% endblock %}
