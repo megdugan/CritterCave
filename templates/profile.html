@@ -5,7 +5,7 @@
 {% extends "base.html" %}
 
 {% block head_stuff %}
-<title>"Profile"</title>
+<title>Profile</title>
 {% endblock %}
 
 {% block main_content %}
@@ -86,9 +86,9 @@
                     <div class="story-group">
                         <div class="story-card-grid">
                             {% for story in stories %}
-                                <a href="{{ url_for('story_page', sid=story.sid, cid=story.critter_info.cid) }}" class="story-card pastel-box story-card-link">
-                                    <span class="story-author-tag">For {{ story.critter_info.name }}</span>
-                                    <p>{{ story.critter_story }}</p>
+                                <a href="{{ url_for('story_page', sid=story.sid, cid=story.cid) }}" class="story-card pastel-box story-card-link">
+                                    <span class="story-author-tag">For {{ story.name }}</span>
+                                    <p>{{ story.story }}</p>
                                 </a>
                             {% endfor %}
                         </div>
@@ -139,9 +139,9 @@
                     <div class="story-group">
                         <div class="story-card-grid">
                             {% for story in liked_stories %}
-                                <a href="{{ url_for('story_page', sid=story.sid, cid=story.critter_info.cid) }}" class="story-card pastel-box story-card-link">
-                                    <span class="story-author-tag">For {{ story.critter_info.name }}</span>
-                                    <p>{{ story.critter_story }}</p>
+                                <a href="{{ url_for('story_page', sid=story.sid, cid=story.cid) }}" class="story-card pastel-box story-card-link">
+                                    <span class="story-author-tag">For {{ story.name }}</span>
+                                    <p>{{ story.story }}</p>
                                 </a>
                             {% endfor %}
                         </div>

@@ -4,30 +4,41 @@
 {% extends "base.html" %}   
 
 {% block head_stuff %}
-<title>"User Search"</title>
+<title>Search Results</title>
 {% endblock %}
 
 {% block main_content %}      
 
 <h1>User results for '{{query}}'</h1>
 
+<div class="critter-page">
 {% for u in users %}
 
-<div class="search_result">
-    <div class="critter_result">
-        <div>
-            <img src="{{  url_for('uploaded_file', filename=u['profilepic']) }}"
-            alt="Profile Picture" class="critter-profile-img">
-        </div>
-        <div style="padding-left:20px">
-            <h1><a  href="{{url_for('user_profile', uid=u['uid'])}}">{{u['name']}}</a></h1>
-            <p>@{{u['username']}}</p>
-            <p>Join date: {{u['created']}}</p>
-            <p>Number of critters: {{u['num_critters']}}</p>
-        </div>
+<!-- User Header Card -->
+<section class="critter-header-card">
+
+    <div class="critter-info-left">
+        {% if u['profilepic'] %}
+        <img src="{{ url_for('uploaded_file', filename=u['profilepic']) }}"
+            alt="Critter Image" class="critter-profile-img">
+        {% endif %}
     </div>
-</div>
+
+    <div class="critter-info-right">
+        <h4 class="critter-name">
+            <a href="{{url_for('user_profile', uid=u['uid'])}}">{{u['name']}}</a>
+        </h4>
+
+        <p class="critter-maker">
+            <h4>@{{u['username']}}</h4>
+            <h4>Joined: {{u['created']}}</h4>
+            <h4>Number of critters: {{u['num_critters']}}</h4>
+        </p>
+    </div>
+</section>
+<br>
 
 {% endfor %}
+</div>
 
 {% endblock %}

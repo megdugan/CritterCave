@@ -4,14 +4,13 @@
 {% extends "base.html" %}
 
 {% block head_stuff %}
-<title>"CritterCave"</title>
+<title>CritterCave</title>
 {% endblock %}
 
 {% block main_content %}
 <section class="main-header">
     <h1>CritterCave</h1>
     <p>A cozy home for cataloging creatures big and small</p>
-    <a href="{{ url_for('old_main') }}" class="old"> View Draft Main Page</a>
 </section>
 
 {% for critter in critters %}
