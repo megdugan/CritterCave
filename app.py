@@ -97,7 +97,6 @@ def signup():
     else:
         try:
             # If method is post, get contents of filled in form
-            conn = dbi.connect()
             name = request.form.get('name')
             username = request.form.get('username')
             password = request.form.get('password')
@@ -117,6 +116,7 @@ def signup():
                 return redirect(url_for('signup'))
             
             # If successful, redirect to user's page
+            conn = dbi.connect()
             user = profile.get_user_info(conn,uid)
             critters = profile.get_critters_by_user(conn,uid)
             flash(f"Welcome to Critter Cave, {user['name']}.")
@@ -141,7 +141,6 @@ def signin():
     else:
         try:
             # If method is post, get contents of filled in form
-            conn = dbi.connect()
             username = request.form.get('username')
             password = request.form.get('password')
             print(username)
@@ -162,6 +161,7 @@ def signin():
                 return  redirect(url_for('signin'))
             
             # If successful, redirect to user's page
+            conn = dbi.connect()
             user = profile.get_user_info(conn,uid)
             critters = profile.get_critters_by_user(conn,uid)
             flash(f"Welcome back, {user['name']}.")
@@ -516,7 +516,6 @@ def critter_upload():
             # Method is post, form has been filled out
             # Get critter info from form
             try:
-                conn = dbi.connect()
                 f = request.files['critter-pic']
                 user_filename = f.filename
                 name = request.form.get('critter-name')
@@ -542,6 +541,7 @@ def critter_upload():
                 
                 try:
                     # Try to add the critter to the database
+                    conn = dbi.connect()
                     critterID = critter.add_critter(conn, uid, app.config['uploads'], name, desc)
                 except:
                     # If this doesn't work, flash an error message
@@ -712,13 +712,14 @@ def edit_story(sid):
     
     :param sid: primary key of story to edit
     '''
-    conn = dbi.connect()
+
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
     uid = session['uid']
     
     try:
+        conn = dbi.connect()
         user = profile.get_user_info(conn,uid)
         if user is None:
             flash(f'No profile found with uid={uid}')
@@ -826,8 +827,7 @@ def story_upload(cid):
     else:
         try: 
             # Method is post, form has been filled out
-            # Add the story to the database
-            conn = dbi.connect()
+            
             # Get the user's uid from session
             uid = session['uid']
             # Get the story from form
@@ -844,6 +844,7 @@ def story_upload(cid):
                 return redirect(url_for('story_upload', cid=cid))
             try:
                 # Try to add the story to the database
+                conn = dbi.connect()
                 story.add_story(conn, cid, uid, new_story)
             except:
                 # If this doesn't work, flash an error message
@@ -868,9 +869,9 @@ def lookup_form():
         # Get the query type (either critter's name or user's username)
         query_type = request.args.get('kind')
         query = request.args.get('query')
-        conn = dbi.connect()
         if query_type == 'critter':
             # If the query type is critter, get critters matching the query
+            conn = dbi.connect()
             critters = critter.lookup_critter(conn, query)
             if not critters:
                 # If no critters match the query, flash a message
@@ -890,6 +891,7 @@ def lookup_form():
                                    page_title='Critter Lookup Results')
         if query_type == 'user':
             # If the query type is user, get users matching the query
+            conn = dbi.connect()
             users = profile.lookup_user(conn, query)
             if not users:
                 # If no users match the query, flash a message
