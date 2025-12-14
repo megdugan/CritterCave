@@ -945,6 +945,9 @@ def like_feature(cid):
 
     conn = dbi.connect()
     update_likes=profile.get_likes(conn,cid)
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
     uid=session['uid']
     try:
         update_likes+=1
