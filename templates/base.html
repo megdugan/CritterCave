@@ -65,9 +65,12 @@
 <!-- Flash Messages -->
 {% with messages = get_flashed_messages() %}
   {% if messages %}
-    <div id="messages">
-      {% for msg in messages %}
-        <p>*** {{ msg }} ***</p>
+    <div class="flash-container">
+      {% for message in messages %}
+        <div class="flash">
+          <span class="flash-message">{{ message }}</span>
+          <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+        </div>
       {% endfor %}
     </div>
   {% endif %}
