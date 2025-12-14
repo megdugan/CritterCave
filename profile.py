@@ -22,7 +22,7 @@ def get_user_info(conn, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT *
+                 SELECT uid, name, username, created, profilepic
                  FROM user
                  WHERE uid = %s''',
                  [uid])
@@ -189,7 +189,8 @@ def lookup_user(conn, query: str):
     name_query = f"%{query}%"
     curs=dbi.dict_cursor(conn)
     curs.execute("""
-            select * from user where username like %s
+            select uid, name, username, created, profilepic
+            from user where username like %s
             """,[name_query])
     users = curs.fetchall()
     if not users:
@@ -199,7 +200,7 @@ def lookup_user(conn, query: str):
 
 def get_likes(conn,cid):
     """
-    Lookup a critter rating by , counting how many times that critter is rated in the table.
+    Lookup a critter rating by, counting how many times that critter is liked in the table.
     Args:
         conn -> pymysql.connections.Connection
         query -> str
