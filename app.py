@@ -100,6 +100,7 @@ def signup():
             name = request.form.get('name')
             username = request.form.get('username')
             password = request.form.get('password')
+            conn = dbi.connect()
             uid = profile.sign_up(conn, name, username, password)
 
             # Set the session for uid 
@@ -116,7 +117,6 @@ def signup():
                 return redirect(url_for('signup'))
             
             # If successful, redirect to user's page
-            conn = dbi.connect()
             user = profile.get_user_info(conn,uid)
             critters = profile.get_critters_by_user(conn,uid)
             flash(f"Welcome to Critter Cave, {user['name']}.")
@@ -145,6 +145,7 @@ def signin():
             password = request.form.get('password')
             print(username)
             print(password)
+            conn = dbi.connect()
             uid = profile.sign_in(conn, username, password)
 
             # Set the session for uid 
@@ -161,7 +162,6 @@ def signin():
                 return  redirect(url_for('signin'))
             
             # If successful, redirect to user's page
-            conn = dbi.connect()
             user = profile.get_user_info(conn,uid)
             critters = profile.get_critters_by_user(conn,uid)
             flash(f"Welcome back, {user['name']}.")
@@ -588,6 +588,7 @@ def delete_critter(cid):
         cid = int(cid)
     except:
         flash('Invalid URL')
+        conn = dbi.connect()
         user = profile.get_user_info(conn,uid)
         if user is None:
             flash(f'No profile found with uid={uid}')
@@ -652,6 +653,7 @@ def delete_story(sid):
         sid = int(sid)
     except:
         flash('invalid url')
+        conn = dbi.connect()
         user = profile.get_user_info(conn,uid)
         if user is None:
             flash(f'No profile found with uid={uid}')
