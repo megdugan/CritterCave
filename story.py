@@ -38,7 +38,7 @@ def add_story(conn, cid:int, uid:int, story:str):
 
 def get_story_by_id(conn, sid:int):
     """
-    Get a story by it's sid.
+    Get a story by its sid.
     Args:
         conn -> pymysql.connections.Connection
         sid -> int
@@ -47,7 +47,9 @@ def get_story_by_id(conn, sid:int):
     """
     curs=dbi.dict_cursor(conn)
     curs.execute("""
-        select * from story where sid=%s""", [sid])
+        select sid, cid, uid, created, story
+        from story where sid=%s""", 
+        [sid])
     story = curs.fetchone()
     story["creator_info"] = profile.get_user_info(conn, story["uid"])
     return story
