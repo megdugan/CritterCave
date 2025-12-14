@@ -152,7 +152,6 @@ def signup():
             user = profile.get_user_info(conn,uid)
             critters = profile.get_critters_by_user(conn,uid)
             flash(f"Welcome to Critter Cave, {user['name']}.")
-            flash(f"testing if logged in {session['logged_in']}")
             return redirect(url_for('user_profile',uid=uid))
         except Exception as e:
             print(e)
@@ -197,7 +196,6 @@ def signin():
             user = profile.get_user_info(conn,uid)
             critters = profile.get_critters_by_user(conn,uid)
             flash(f"Welcome back, {user['name']}.")
-            flash(f"testing if logged in {session['logged_in']}")
             return redirect(url_for('user_profile',uid=uid))
         except Exception as e:
             print(e)
@@ -237,8 +235,8 @@ def user_profile(uid):
         print(f'looking up user with uid {uid}')
         if user is None:
             # If the user doesn't exist, flash message and redirect to home
-            flash(f'No profile found with uid={uid}')
-            return redirect(url_for('index'))
+            flash(f'An error occurred. Please sign in again')
+            return redirect(url_for('signin'))
         return render_template(
             'profile.html',
             user=user,
@@ -431,11 +429,12 @@ def critter_page(cid):
         flash("Please Login in first!")
         return redirect(url_for('signin'))
     uid = session['uid']
+    
     try:
         print(f'looking up critter with cid {cid}')
         if not cid.isdigit():
             # If the critter cid is wrong type, flash error message
-            flash('cid must be a string of digits')
+            flash('This critter page does not exist. Please try again.')
             return redirect( url_for('index'))
         
         # Get critter info
@@ -447,11 +446,11 @@ def critter_page(cid):
         creator_info = profile.get_user_info(conn, creator_uid)
         if creator_info is None:
             # Error message for user uid of Nonetype
-            flash(f'No profile found with uid={creator_uid}')
+            flash(f'The creator of the specified critter does not exist. Please try again.')
             return redirect(url_for('index'))
         if critter_info is None:
             # Error message for critter cid of Nonetype
-            flash(f'No critter found with cid={cid}')
+            flash(f'This critter does not exist. Please try again.')
             return redirect(url_for('index'))
         # Get story info
         stories = story.get_stories_for_critter(conn, cid, creator_uid)
@@ -490,7 +489,7 @@ def story_page(cid, sid):
         print(f'looking up critter with cid {cid}')
         if not cid.isdigit():
             # If the critter cid is wrong type, flash error message
-            flash('cid must be a string of digits')
+            flash('This critter does not exist. Please try again.')
             return redirect( url_for('index'))
         # Get critter info
         cid = int(cid)
@@ -500,18 +499,18 @@ def story_page(cid, sid):
         creator_info = profile.get_user_info(conn,creator_uid)
         if creator_info is None:
             # Error message for user uid of Nonetype
-            flash(f'No profile found with uid={creator_uid}')
+            flash(f'This profile does not exist. Please try again.')
             return redirect( url_for('index'))
         if critter_info is None:
             # Error message for critter cid of Nonetype
-            flash(f'No critter found with cid={cid}')
+            flash(f'This critter does not exist. Please try again.')
             return redirect( url_for('index'))
         # save creator info
         critter_info['creator_info'] = creator_info
         # Get story info
         if not sid.isdigit():
             # If the critter cid is wrong type, flash error message
-            flash('cid must be a string of digits')
+            flash('This story does not exist. Please try again.')
             return redirect( url_for('critter_page', cid=cid))
         sid = int(sid)
         story_info = story.get_story_by_id(conn, sid)
@@ -611,19 +610,17 @@ def delete_critter(cid):
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
+    # validate that 
     uid = session['uid']
+    user = profile.get_user_info(conn,uid)
+    if user is None:
+        flash(f'There was an error retrieving your user information. Please sign in again')
+        return redirect(url_for('signin'))
     
     try:
         cid = int(cid)
     except:
         flash('Invalid URL')
-        user = profile.get_user_info(conn,uid)
-        if user is None:
-            flash(f'No profile found with uid={uid}')
-            return redirect(url_for('index'))
-        if user is None:
-            flash(f'No profile found with uid={uid}')
-            return redirect(url_for('index'))
         return redirect(url_for('user_profile',
             uid=uid))
     try:
@@ -631,7 +628,7 @@ def delete_critter(cid):
         critter_info = critter.get_critter_by_id(conn,cid)
         
         if critter_info is None:
-            flash(f'No critter found with cid={cid}')
+            flash(f'This critter does not exist. Please try again.')
             return redirect(url_for('index'))
         
         if request.method == 'GET':
@@ -680,11 +677,11 @@ def delete_story(sid):
     try:
         sid = int(sid)
     except:
-        flash('invalid url')
+        flash('Invalid url')
         user = profile.get_user_info(conn,uid)
         if user is None:
-            flash(f'No profile found with uid={uid}')
-            return redirect(url_for('index'))
+            flash(f'There was an error accessing your user profile. Please sign in again.')
+            return redirect(url_for('signin'))
         return redirect(url_for('user_profile',
             uid=uid))
     try:
@@ -693,8 +690,7 @@ def delete_story(sid):
         print("in delete story")
         
         if story_info is None:
-            print("no story")
-            flash(f'No story found with sid={sid}')
+            flash(f'This story does not exist. Please try again.')
             return redirect(url_for('index'))
         if story_info['uid'] != uid:
             flash('Only a story creator can delete their story')
@@ -750,8 +746,8 @@ def edit_story(sid):
     try:
         user = profile.get_user_info(conn,uid)
         if user is None:
-            flash(f'No profile found with uid={uid}')
-            return redirect(url_for('index'))
+            flash(f'There was an error accessing your user profile. Please sign in again.')
+            return redirect(url_for('signin'))
         
         try:
             sid = int(sid)
@@ -765,7 +761,7 @@ def edit_story(sid):
         critter_info = critter.get_critter_by_id(conn, cid)
         
         if story_info is None:
-            flash(f'No story found with sid={sid}')
+            flash(f'Invalid url')
             return redirect(url_for('user_profile', uid=uid))
         
         if story_info['uid'] != uid:
@@ -821,7 +817,7 @@ def story_upload(cid):
         print(f'looking up critter with cid {cid}')
         if not cid.isdigit():
             # If the critter cid is wrong type, flash error message
-            flash('cid must be a string of digits')
+            flash('Invalid url')
             return redirect( url_for('index'))
         # Get critter info for form
         cid = int(cid)
@@ -835,11 +831,11 @@ def story_upload(cid):
             # Send the upload form
             if user is None:
                 # If the user doesn't exist, flash message and redirect
-                flash(f'No profile found with uid={uid}')
+                flash(f'An error occurred. Please try again.')
                 return redirect(url_for('index'))
             if critter_info is None:
                 # If the critter doesn't exist, flash message and redirect
-                flash(f'No critter found with cid={cid}')
+                flash(f'An error occurred. Please try again.')
                 return redirect(url_for('index'))
             # Render the blank form
             return render_template('story_upload.html', 

@@ -4,11 +4,7 @@ Contains all database methods relating to accessing and displaying critters.
 """
 
 from datetime import datetime
-import bcrypt
 import cs304dbi as dbi
-import profile
-import story
-import settings
 
 def add_critter(conn, uid: int, imagepath: str, name: str, description: str):
     """
