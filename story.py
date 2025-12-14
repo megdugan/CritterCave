@@ -119,7 +119,6 @@ def get_stories_for_critter(conn, cid: int, uid: int):
                  WHERE cid = %s''',
                  [cid])
     stories = curs.fetchall()
-
     return stories
 
 
@@ -138,7 +137,7 @@ def get_stories_by_user(conn, uid: int):
                  SELECT sid, story.cid, story.created AS time_created, story.story,
                  critter.cid,critter.uid,critter.imagepath,critter.name,critter.description,critter.created AS critter_story
                  FROM story
-                 join critter on critter.uid=story.uid
+                 join critter on critter.cid=story.cid
                  WHERE story.uid = %s''',
                  [uid])
     stories = curs.fetchall()
