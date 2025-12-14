@@ -94,7 +94,7 @@ def signup():
     if request.method == 'GET':
         # If method is get, send a blank form
         return render_template('signup.html', page_title='Sign Up')
-    else:
+    else: # Then method is POST and we try to sign up
         try:
             # If method is post, get contents of filled in form
             conn = dbi.connect()
@@ -138,7 +138,7 @@ def signin():
     if request.method == 'GET':
         # If method is get, send a blank form
         return render_template('signin.html', page_title='Sign In')
-    else:
+    else: #Then method is POST and we try to sign in
         try:
             # If method is post, get contents of filled in form
             conn = dbi.connect()
@@ -240,7 +240,7 @@ def logout():
         
         flash('You are logged out!') 
         return redirect(url_for('signin'))
-    else:
+    else: # Then user is not logged in 
         flash("You are not logged in!")
         return redirect(url_for('signin'))
 
@@ -276,7 +276,7 @@ def settings_page():
                 curr_user_info=curr_user_info,
                 page_title='Settings'
                 )
-        else:
+        else: # Then method is POST and we have to update settings
             try:
                 action = request.form.get('action')
                 if action == 'Update Profile Picture':
@@ -380,7 +380,7 @@ def settings_page():
                     # Update appearance pref
                     # ADD THIS CODE
                     flash("Appearance updated!")
-                else:
+                else: # Will be the dark mode feature
                     flash("This is not yet implemented")
                 return redirect(url_for('settings_page'))
             except Exception as e:
@@ -512,7 +512,7 @@ def critter_upload():
             # Method is get, user entered the page
             # Send the upload form
             return render_template('critter_upload.html', page_title='Upload a New Critter')
-        else:
+        else: 
             # Method is post, form has been filled out
             # Get critter info from form
             try:
@@ -614,7 +614,7 @@ def delete_critter(cid):
             return render_template('delete_critter.html',
                                 critter_info=critter_info,
                                 page_title='Delete Critter')
-        else:
+        else: # Then method is POST and we try to delete critter
             try:
                 action = request.form.get('action')
                 if action == 'Delete':
@@ -622,7 +622,7 @@ def delete_critter(cid):
                     critters_deleted, stories_deleted = critter.delete_critter(conn, cid)
                     if critters_deleted == 0:
                         flash('Critter not found or already deleted.')
-                    else:
+                    else: # Flash number of critters and stories deleted
                         flash(f'Deleted {critters_deleted} critter and {stories_deleted} related stories.')
                     
                     return redirect(url_for('user_profile',
@@ -680,7 +680,7 @@ def delete_story(sid):
                                    critter_info=critter_info,
                                    page_title='Delete Story')
     
-        else:
+        else: # Then method is POST and we try to delete story
             try:
                 print("post")
                 action = request.form.get('action')
@@ -691,7 +691,7 @@ def delete_story(sid):
                     print("deleted?")
                     if stories_deleted == 0:
                         flash('Story not found or already deleted.')
-                    else:
+                    else: # Flash number of stories deleted
                         flash(f'Number of stories deleted: {stories_deleted}.')
                     
                     return redirect(url_for('user_profile',
@@ -749,7 +749,7 @@ def edit_story(sid):
                                 critter_info=critter_info,
                                 user=user,
                                 page_title='Edit Story')
-        else:
+        else: # Then method is POST and we try to edit story
             try:
                 # Get the story from form
                 new_story = request.form.get('critter-story')
