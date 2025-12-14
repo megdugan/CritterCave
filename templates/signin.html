@@ -1,5 +1,6 @@
 <!-- (CritterCave) -->
-<!-- HTML template for the sign in page / form -->
+<!-- Sign-in page for CritterCave -->
+
 <!doctype html>
 <html lang='en'>
 <head>
@@ -8,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name=author content="">
     <title>"Sign-In Page for CritterCave"</title>
-    <link rel="icon" type="image/x-icon" href="/static/favi.png">
+    <title>"Sign-In"</title>
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename = 'favi.png')}}">
     <link rel='stylesheet' href="{{url_for('static', filename = 'style.css')}}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 

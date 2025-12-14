@@ -46,7 +46,8 @@ def get_critter_by_id(conn, cid: int):
     """
     curs=dbi.dict_cursor(conn)
     curs.execute("""
-            select * from critter where cid=%s""", 
+            select cid, uid, imagepath, name, description, created
+            from critter where cid=%s""", 
             [cid])
     return curs.fetchone()
 
@@ -64,7 +65,8 @@ def lookup_critter(conn, query:str):
     name_query = f"%{query}%"
     curs=dbi.dict_cursor(conn)
     curs.execute("""
-            select * from critter where name like %s
+            select cid, uid, imagepath, name, description, created
+            from critter where name like %s
             """,[name_query])
     critters = curs.fetchall()
     if not critters:

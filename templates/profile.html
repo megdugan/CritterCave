@@ -1,11 +1,11 @@
 <!-- (CritterCave) -->
-<!-- HTML template for a user's profile page -->
+<!-- Displays a user's profile page, including their critter,
+    stories, liked critters, and liked stories -->
 
 {% extends "base.html" %}
 
 {% block head_stuff %}
-<title>"Profile Page: Displays a user's information and all 
-    the critters they created."</title>
+<title>"Profile"</title>
 {% endblock %}
 
 {% block main_content %}
@@ -75,7 +75,7 @@
                 {% endfor %}
             </div>
             {% else %}
-                <p>No critters uploaded.</p>
+                <p class="empty-text">No critters uploaded.</p>
             {% endif %}
         </div>
 
@@ -95,7 +95,7 @@
                     </div>
                 </section>
             {% else %}
-                <p>No stories written.</p>
+                <p class="empty-text">No stories written.</p>
             {% endif %}
         </div>
 
@@ -129,7 +129,7 @@
                 {% endfor %}
             </div>
             {% else %}
-                <p>No critters liked yet.</p>
+                <p class="empty-text">No critters liked yet.</p>
             {% endif %}
         </div>
 
@@ -148,7 +148,7 @@
                     </div>
                 </section>
             {% else %}
-                <p>No stories liked yet.</p>
+                <p class="empty-text">No stories liked yet.</p>
             {% endif %}
         </div>
     </div>
