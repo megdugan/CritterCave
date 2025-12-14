@@ -707,7 +707,6 @@ def delete_story(sid):
                                    story_info=story_info, 
                                    critter_info=critter_info,
                                    page_title='Delete Story')
-    
         else:
             try:
                 print("post")
