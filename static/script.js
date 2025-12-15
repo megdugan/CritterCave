@@ -28,6 +28,10 @@ function closeNavall() {
 
 
 
+/* ======================================================
+   Like Button with Animations
+====================================================== */
+
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -41,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
 
             const cid = this.dataset.cid;
+            const url = this.dataset.url;
 
             // Create ripple effect
             const ripple = document.createElement('div');
@@ -61,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
             this.classList.add('liked');
 
             // Your existing fetch logic
-            fetch(`/like/${cid}`, {
+            fetch(url, {
                 method: "POST"
             })
             .then(res => res.json())
@@ -90,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     });
-
+    // in my template create a golabl java
     // Helper function to create particle explosion
     function createParticles(button) {
         const colors = ['#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#ffd89b', '#19d4ff'];
