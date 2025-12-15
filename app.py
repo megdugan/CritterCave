@@ -400,14 +400,12 @@ def critter_page(cid):
         flash("Please Login in first!")
         return redirect(url_for('signin'))
     uid = session['uid']
-    
     try:
         print(f'looking up critter with cid {cid}')
         if not cid.isdigit():
             # If the critter cid is wrong type, flash error message
             flash('This critter page does not exist. Please try again.')
             return redirect( url_for('index'))
-        
         # Get critter info
         cid = int(cid)
         conn = dbi.connect()
@@ -425,9 +423,6 @@ def critter_page(cid):
             return redirect(url_for('index'))
         # Get story info
         stories = story.get_stories_for_critter(conn, cid, creator_uid)
-        stories_by_user = [story for story in stories if story["original"] == True]
-        stories_not_by_user = [story for story in stories if story["original"] == False]
-
         # Render the critter template it's info and all of it's stories
         for s in stories:
             print(s)
@@ -435,13 +430,13 @@ def critter_page(cid):
             'critter.html',
             user=creator_info,
             critter_info=critter_info,
-            stories_by_user=stories_by_user,
-            stories_not_by_user=stories_not_by_user,
+            stories=stories,
             page_title=f"{critter_info['name']}'s Critter Page"
         )
     except Exception as e:
         print(e)
-        flash('An error occurred. Please try again.')
+        flash(str(e))
+        # flash('An error occurred. Please try again.')
         return redirect(url_for('user_profile', uid=uid))
     
 @app.route('/story/<cid>/<sid>')
