@@ -57,12 +57,14 @@
                 Stories by {{ user.username }} (creator)
             </h3>
 
-            {% if stories_by_user %}
+            {% if stories %}
                 <div class="story-card-grid">
-                    {% for story in stories_by_user %}
+                    {% for story in stories %}
+                        {% if story.uid == user.uid %}
                         <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
                             <p>{{ story.critter_story }}</p>
                         </a>
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% else %}
@@ -75,13 +77,15 @@
                 Stories by other users
             </h3>
 
-            {% if stories_not_by_user %}
+            {% if stories %}
                 <div class="story-card-grid">
-                    {% for story in stories_not_by_user %}
+                    {% for story in stories %}
+                        {% if story.uid != user.uid %}
                         <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
                             <p>{{ story.critter_story }}</p>
-                            <span class="story-author-tag">By {{ story.creator_info.username }}</span>
+                            <span class="story-author-tag">By {{ story.username }}</span>
                         </a>
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% else %}
