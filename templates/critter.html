@@ -60,7 +60,7 @@
             {% if stories %}
                 <div class="story-card-grid">
                     {% for story in stories %}
-                    <div>
+                    <div >
                         {% if story.uid == user.uid %}
                         <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" class="story-card pastel-box story-card-link">
                             <p>{{ story.critter_story }}</p>

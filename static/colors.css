@@ -16,6 +16,7 @@
   --accent-sage: #678A7B;
   --accent-mustard: #D8A72F;
 
+  --story-author: #7B346A;
   --accent-nav-bg: #EEE2C8;
   --bg: #F8F1E4;
   --panel: #EEE2C8;
@@ -41,6 +42,8 @@
   --accent-sage: #6C9689;
   --accent-mustard: #BE922A;
 
+  --button-text: #eb7fc7;
+  --story-author:#dd65c1;
   --accent-nav-bg: white;
   --bg: #141211;
   --panel: #302A29;
@@ -49,7 +52,7 @@
 
   --text-primary: #F4EEE5;
   --text-secondary: #CAC3B8;
-  --text-link: #B7649C;
+  --text-link: #eb7fc7;
 
   --color-header: #f7c7cf;
   --color-focus: var(--accent-sage);

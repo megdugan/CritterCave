@@ -307,7 +307,7 @@ h1 {
     font-size: 3.4rem;
     font-weight: 700;
     margin-bottom: 12px;
-    color: var(--accent-plum);
+    
 }
 
 .main-header p {
@@ -904,6 +904,10 @@ body, html {
     box-shadow: 0 3px 7px rgba(0,0,0,0.06);
 }
 
+#critter-story{
+    color:black;
+}
+
 /* Name & description layout */
 .critter-info-right {
     flex: 1;
@@ -918,7 +922,7 @@ body, html {
 
 .critter-maker a {
     font-weight: 600;
-    color: var(--accent-plum);
+    color: var(--story-author);
 }
 
 .critter-description {
@@ -1050,7 +1054,7 @@ body, html {
   margin: auto;
 }
 
-.critter-info-card, .story-card {
+.critter-info-card {
   background: var(--sand-beige);
   border-radius: 22px;
   padding: 2rem;
@@ -1085,7 +1089,7 @@ body, html {
 /* Make the critter card button more subtle */
 .critter-info-card .button-primary {
     background: transparent;
-    color: var(--accent-plum);
+    color: var(--button-text);
     border: 1px solid var(--border-subtle);
     font-weight: 500;
     font-size: 0.95rem;
@@ -1101,6 +1105,8 @@ body, html {
     transform: none;
 }
 
+
+
 /* RIGHT STORY CARD */
 .story-title {
   margin-top: 0;
@@ -1110,7 +1116,7 @@ body, html {
 .story-author {
   margin-top: 0.2rem;
   margin-bottom: 1.5rem;
-  color: #7B346A;
+  color: var(--story-author);
   font-style: italic;
 }
 

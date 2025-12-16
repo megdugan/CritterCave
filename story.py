@@ -66,8 +66,13 @@ def delete_story(conn, sid:int):
     """
     try:
         curs=dbi.dict_cursor(conn)
+
+        curs.execute("""
+                delete from liked_story where sid=%s""",[sid])
+
         curs.execute("""
                 delete from story where sid=%s""",[sid])
+        
         conn.commit()
         print("successfully deleted story")
         return curs.rowcount

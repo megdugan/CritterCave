@@ -587,6 +587,7 @@ def delete_critter(cid):
         return redirect(url_for('signin'))
     # validate that 
     uid = session['uid']
+    conn = dbi.connect()
     user = profile.get_user_info(conn,uid)
     if user is None:
         flash(f'There was an error retrieving your user information. Please sign in again')
@@ -596,7 +597,7 @@ def delete_critter(cid):
         cid = int(cid)
     except:
         flash('Invalid URL')
-        conn = dbi.connect()
+        #conn = dbi.connect()
         user = profile.get_user_info(conn,uid)
         if user is None:
             flash(f'No profile found with uid={uid}')
@@ -607,7 +608,7 @@ def delete_critter(cid):
         return redirect(url_for('user_profile',
             uid=uid))
     try:
-        conn = dbi.connect()
+        #conn = dbi.connect()
         critter_info = critter.get_critter_by_id(conn,cid)
         
         if critter_info is None:
