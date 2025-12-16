@@ -10,11 +10,13 @@
   --sand-beige: #E7D6B4;
   --sage-green: #678A7B;
 
+  --submit-button: white;
   --accent-plum: #5F274F;
   --accent-rosewood: #A45C68;
   --accent-sage: #678A7B;
   --accent-mustard: #D8A72F;
 
+  --accent-nav-bg: #EEE2C8;
   --bg: #F8F1E4;
   --panel: #EEE2C8;
   --panel-alt: #E3D6BC;
@@ -34,11 +36,12 @@
 
 /* Dark Mode */
 [data-theme="dark"] {
-  --accent-plum: #B7649C;
+  --accent-plum: #5F274F;
   --accent-rosewood: #CF919A;
   --accent-sage: #6C9689;
   --accent-mustard: #BE922A;
 
+  --accent-nav-bg: white;
   --bg: #141211;
   --panel: #302A29;
   --panel-alt: #3B3433;
@@ -48,7 +51,7 @@
   --text-secondary: #CAC3B8;
   --text-link: #B7649C;
 
-  --color-header: var(--accent-plum);
+  --color-header: #f7c7cf;
   --color-focus: var(--accent-sage);
   --color-alert: var(--accent-rosewood);
   --font-family: Verdana;

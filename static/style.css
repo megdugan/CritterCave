@@ -104,7 +104,7 @@ h1 {
 .topbar .search input[type="text"],
 .topbar .search select {
     font-size: 1rem;
-    color: inherit;
+    color: black;
     background: white;
     border: 2px solid var(--border-subtle);
     border-radius: 5px;
@@ -186,7 +186,7 @@ h1 {
     border-radius: 10px;
     border: none;
     font-size: 20px;
-    color: white;
+    color: var(--accent-nav-bg);
     background: var(--accent-plum);
     padding: 10px 15px;
     cursor: pointer;
@@ -360,7 +360,7 @@ h1 {
 
 .sign_up_form input[type="submit"],
 form > p > input[type="submit"] {
-    background: #5F274F;;
+    background: #5F274F;
     color: white;
     padding: 12px 22px;
     border-radius: 10px;
@@ -678,6 +678,34 @@ form > p > input[type="submit"]:hover {
         opacity: 0.8; 
         transform: scale(1.05); 
     }
+}
+
+.like-btn-story {
+    position: relative;
+    display: inline-block;  /* Push it down */
+    z-index: 10;
+    bottom: 35px;
+    
+    
+}
+
+.like-count-display-story{
+    position: absolute;
+    bottom: -20px;
+    left: 14px;
+    transform: translateX(-50%);
+    color: #5F274F;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: block ;
+    visibility: visible ;
+}
+
+.like-count-story {
+    font-weight: 700;
+    color: inherit; /* Inherits color from parent .like-count-display */
 }
 
 /* ======================================================

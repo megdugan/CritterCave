@@ -191,7 +191,7 @@ def user_profile(uid):
         critters = profile.get_critters_by_user(conn,uid)
         # Get number of likes per critter
         for item in critters:
-                item['likes']=profile.get_likes(conn,item['cid'])
+                item['likes']=profile.get_likes_data_critter(conn,item['cid'])
                 print(item)
         # Get user stories
         stories = story.get_stories_by_user(conn, uid)
@@ -372,14 +372,15 @@ def settings_page():
                     flash('Password successfully updated.')
                     # Rerender settings page
                     return redirect(url_for('settings_page'))
-                elif action == 'update_appearance':
+
+                elif action == 'update_appearance': # Dark mode settings
                     # If action is update appearance, upate darkmode settings
                     appearance = request.form.get('appearance')
                     # Update appearance pref
                     # ADD THIS CODE
-                    flash("Appearance updated!")
-                else: # Will be the dark mode feature
-                    flash("This is not yet implemented")
+                    session['theme'] = 'dark' if appearance == 'darkmode' else 'light'
+                    flash('Appearance updated!', 'success')
+                
                 return redirect(url_for('settings_page'))
             except Exception as e:
                 print(e)
@@ -421,11 +422,19 @@ def critter_page(cid):
             # Error message for critter cid of Nonetype
             flash(f'This critter does not exist. Please try again.')
             return redirect(url_for('index'))
+
         # Get story info
         stories = story.get_stories_for_critter(conn, cid, creator_uid)
-        # Render the critter template it's info and all of it's stories
+        
+        
+        # Render the critter template it's info and all of it's stories\
+        print(stories)
         for s in stories:
             print(s)
+            s['story_likes']=critter.get_likes_data_stories(conn,s['sid'])
+        
+        print(stories)
+
         return render_template(
             'critter.html',
             user=creator_info,
@@ -824,7 +833,7 @@ def story_upload(cid):
         flash('An error occurred. Please try again.')
         return redirect(url_for('critter_page', cid=cid))
     
-    else:
+    else: # Then method is POST and we try to upload story
         try: 
             # Method is post, form has been filled out
             
@@ -916,10 +925,10 @@ def lookup_form():
         return redirect(url_for('user_profile', uid=uid))
 
 @app.route("/like/<int:cid>",methods=["POST"])
-def like_feature(cid):
+def like_feature_critter(cid):
 
     conn = dbi.connect()
-    update_likes=profile.get_likes(conn,cid)
+    update_likes=profile.get_likes_data_critter(conn,cid)
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
@@ -937,6 +946,28 @@ def like_feature(cid):
         print(e)
         flash('An error occurred. Please try again.')
         return redirect(url_for('critter_page', cid=cid))
+
+@app.route("/like_story/<int:sid>",methods=["POST"])
+def like_story_feature(sid):
+    conn = dbi.connect()
+    update_likes=critter.get_likes_data_stories(conn,sid)
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+    uid=session['uid']
+    try:
+        update_likes+=1
+
+        critter.update_story_likes(conn,sid,uid)
+
+        return jsonify({
+            "worked": True,
+            "story_likes": update_likes
+        })
+    except Exception as e:
+        print(e)
+        flash('An error occurred. Please try again.')
+        
 
 
 if __name__ == '__main__':

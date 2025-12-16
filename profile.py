@@ -198,7 +198,7 @@ def lookup_user(conn, query: str):
     return users
 
 
-def get_likes(conn,cid):
+def get_likes_data_critter(conn,cid):
     """
     Lookup a critter rating by, counting how many times that critter is liked in the table.
     Args:
