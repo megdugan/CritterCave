@@ -53,25 +53,24 @@
                         <img src="{{ url_for('uploaded_file', filename=critter.imagepath) }}"
                             alt="{{ critter.name }}">
                         <p>{{ critter.name }}</p>
-                    </a>
 
-                    <div class="like-btn-container">
-                        <button value="like"
-                                type="button"
-                                class="like-btn"
-                                data-cid="{{ critter.cid }}"
-                                data-url="{{ url_for('like_feature_critter', cid=critter.cid) }}"
-                                aria-label="Like this critter">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                            </svg>
-                        </button>
+                        <div class="like-btn-container">
+                            <button value="like"
+                                    type="button"
+                                    class="like-btn"
+                                    data-cid="{{ critter.cid }}"
+                                    data-url="{{ url_for('like_feature_critter', cid=critter.cid) }}"
+                                    aria-label="Like this critter">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
 
-                        <div class="like-count-display">
-                            <span class="like-count">{{ critter.likes }}</span> 
+                                <div class="like-count-display-story">
+                                    <span class="like-count">{{ critter.likes }}</span> 
+                                </div>
+                            </button>
                         </div>
-                    </div>
-
+                    </a>
                 </div>
                 {% endfor %}
             </div>

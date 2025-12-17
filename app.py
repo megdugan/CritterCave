@@ -34,7 +34,7 @@ def index():
     Displays all critters from most recently created to least.
     """
     if 'uid' not in session:
-        flash("Please Login in first!")
+        flash("Please Login in!")
         return redirect(url_for('signin'))
     try:
         conn = dbi.connect()
@@ -426,8 +426,9 @@ def critter_page(cid):
             return redirect(url_for('index'))
 
         # Get story info
-        stories = story.get_stories_for_critter(conn, cid, creator_uid)
-        
+        stories = story.get_stories_for_critter(conn, cid, creator_uid) 
+        creator_stories = [s for s in stories if s["uid"] == creator_uid]
+        other_stories = [s for s in stories if s["uid"] != creator_uid]
         
         # Render the critter template it's info and all of it's stories\
         print(stories)
@@ -441,7 +442,8 @@ def critter_page(cid):
             'critter.html',
             user=creator_info,
             critter_info=critter_info,
-            stories=stories,
+            creator_stories=creator_stories,
+            other_stories=other_stories,
             page_title=f"{critter_info['name']}'s Critter Page"
         )
     except Exception as e:
