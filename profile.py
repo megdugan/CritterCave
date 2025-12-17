@@ -76,7 +76,7 @@ def get_liked_stories(conn, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT story.story AS story
+                 SELECT DISTINCT story.story,story.sid,story.cid 
                  FROM liked_story JOIN story USING (sid)
                  WHERE liked_story.uid = %s''',
                  [uid])
@@ -198,7 +198,7 @@ def lookup_user(conn, query: str):
     return users
 
 
-def get_likes(conn,cid):
+def get_likes_data_critter(conn,cid):
     """
     Lookup a critter rating by, counting how many times that critter is liked in the table.
     Args:

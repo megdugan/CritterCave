@@ -147,3 +147,42 @@ def update_critter(conn, cid: int, imagepath: str, name: str, description:str):
     except Exception as err:
         conn.rollback()
         return False
+
+def get_likes_data_stories(conn,sid):
+    """
+    Lookup a critter rating by, counting how many times that critter's stories are liked in the table.
+    Args:
+        conn -> pymysql.connections.Connection
+        query -> str
+    Return:
+        num of critters -> dict[]
+    """
+
+    curs = dbi.cursor(conn)
+    curs.execute('''
+                    select count(*) from liked_story where sid=%s
+                ''',[sid])
+    total_likes=curs.fetchone()[0]
+    return total_likes
+
+
+def update_story_likes(conn,sid,uid):
+    """
+    Update story likes by inserting a new like into the liked_story table.
+    Args:
+        conn -> pymysql.connections.Connection
+        sid -> int
+        uid -> int
+    Return:
+        None"""
+    try:
+        curs = dbi.cursor(conn)
+        curs.execute(
+                '''
+                insert into liked_story (sid,uid)
+                values (%s,%s)
+                ''',[sid,uid])
+        conn.commit()
+    except Exception as err:
+        curs.rollback()
+    return

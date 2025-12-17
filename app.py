@@ -94,7 +94,7 @@ def signup():
     if request.method == 'GET':
         # If method is get, send a blank form
         return render_template('signup.html', page_title='Sign Up')
-    else:
+    else: # Then method is POST and we try to sign up
         try:
             # If method is post, get contents of filled in form
             name = request.form.get('name')
@@ -137,7 +137,7 @@ def signin():
     if request.method == 'GET':
         # If method is get, send a blank form
         return render_template('signin.html', page_title='Sign In')
-    else:
+    else: #Then method is POST and we try to sign in
         try:
             # If method is post, get contents of filled in form
             username = request.form.get('username')
@@ -191,7 +191,7 @@ def user_profile(uid):
         critters = profile.get_critters_by_user(conn,uid)
         # Get number of likes per critter
         for item in critters:
-                item['likes']=profile.get_likes(conn,item['cid'])
+                item['likes']=profile.get_likes_data_critter(conn,item['cid'])
                 print(item)
         # Get user stories
         stories = story.get_stories_by_user(conn, uid)
@@ -238,7 +238,7 @@ def logout():
         
         flash('You are logged out!') 
         return redirect(url_for('signin'))
-    else:
+    else: # Then user is not logged in 
         flash("You are not logged in!")
         return redirect(url_for('signin'))
 
@@ -274,7 +274,7 @@ def settings_page():
                 curr_user_info=curr_user_info,
                 page_title='Settings'
                 )
-        else:
+        else: # Then method is POST and we have to update settings
             try:
                 action = request.form.get('action')
                 if action == 'Update Profile Picture':
@@ -372,14 +372,15 @@ def settings_page():
                     flash('Password successfully updated.')
                     # Rerender settings page
                     return redirect(url_for('settings_page'))
-                elif action == 'update_appearance':
+
+                elif action == 'update_appearance': # Dark mode settings
                     # If action is update appearance, upate darkmode settings
                     appearance = request.form.get('appearance')
                     # Update appearance pref
                     # ADD THIS CODE
-                    flash("Appearance updated!")
-                else:
-                    flash("This is not yet implemented")
+                    session['theme'] = 'dark' if appearance == 'darkmode' else 'light'
+                    flash('Appearance updated!', 'success')
+                
                 return redirect(url_for('settings_page'))
             except Exception as e:
                 print(e)
@@ -400,14 +401,12 @@ def critter_page(cid):
         flash("Please Login in first!")
         return redirect(url_for('signin'))
     uid = session['uid']
-    
     try:
         print(f'looking up critter with cid {cid}')
         if not cid.isdigit():
             # If the critter cid is wrong type, flash error message
             flash('This critter page does not exist. Please try again.')
             return redirect( url_for('index'))
-        
         # Get critter info
         cid = int(cid)
         conn = dbi.connect()
@@ -423,25 +422,30 @@ def critter_page(cid):
             # Error message for critter cid of Nonetype
             flash(f'This critter does not exist. Please try again.')
             return redirect(url_for('index'))
+
         # Get story info
         stories = story.get_stories_for_critter(conn, cid, creator_uid)
-        stories_by_user = [story for story in stories if story["original"] == True]
-        stories_not_by_user = [story for story in stories if story["original"] == False]
-
-        # Render the critter template it's info and all of it's stories
+        
+        
+        # Render the critter template it's info and all of it's stories\
+        print(stories)
         for s in stories:
             print(s)
+            s['story_likes']=critter.get_likes_data_stories(conn,s['sid'])
+        
+        print(stories)
+
         return render_template(
             'critter.html',
             user=creator_info,
             critter_info=critter_info,
-            stories_by_user=stories_by_user,
-            stories_not_by_user=stories_not_by_user,
+            stories=stories,
             page_title=f"{critter_info['name']}'s Critter Page"
         )
     except Exception as e:
         print(e)
-        flash('An error occurred. Please try again.')
+        flash(str(e))
+        # flash('An error occurred. Please try again.')
         return redirect(url_for('user_profile', uid=uid))
     
 @app.route('/story/<cid>/<sid>')
@@ -511,7 +515,7 @@ def critter_upload():
             # Method is get, user entered the page
             # Send the upload form
             return render_template('critter_upload.html', page_title='Upload a New Critter')
-        else:
+        else: 
             # Method is post, form has been filled out
             # Get critter info from form
             try:
@@ -583,6 +587,7 @@ def delete_critter(cid):
         return redirect(url_for('signin'))
     # validate that 
     uid = session['uid']
+    conn = dbi.connect()
     user = profile.get_user_info(conn,uid)
     if user is None:
         flash(f'There was an error retrieving your user information. Please sign in again')
@@ -592,7 +597,7 @@ def delete_critter(cid):
         cid = int(cid)
     except:
         flash('Invalid URL')
-        conn = dbi.connect()
+        #conn = dbi.connect()
         user = profile.get_user_info(conn,uid)
         if user is None:
             flash(f'No profile found with uid={uid}')
@@ -603,7 +608,7 @@ def delete_critter(cid):
         return redirect(url_for('user_profile',
             uid=uid))
     try:
-        conn = dbi.connect()
+        #conn = dbi.connect()
         critter_info = critter.get_critter_by_id(conn,cid)
         
         if critter_info is None:
@@ -619,7 +624,7 @@ def delete_critter(cid):
             return render_template('delete_critter.html',
                                 critter_info=critter_info,
                                 page_title='Delete Critter')
-        else:
+        else: # Then method is POST and we try to delete critter
             try:
                 action = request.form.get('action')
                 if action == 'Delete':
@@ -627,7 +632,7 @@ def delete_critter(cid):
                     critters_deleted, stories_deleted = critter.delete_critter(conn, cid)
                     if critters_deleted == 0:
                         flash('Critter not found or already deleted.')
-                    else:
+                    else: # Flash number of critters and stories deleted
                         flash(f'Deleted {critters_deleted} critter and {stories_deleted} related stories.')
                     
                     return redirect(url_for('user_profile',
@@ -684,7 +689,8 @@ def delete_story(sid):
                                    story_info=story_info, 
                                    critter_info=critter_info,
                                    page_title='Delete Story')
-        else:
+    
+        else: # Then method is POST and we try to delete story
             try:
                 print("post")
                 action = request.form.get('action')
@@ -695,7 +701,7 @@ def delete_story(sid):
                     print("deleted?")
                     if stories_deleted == 0:
                         flash('Story not found or already deleted.')
-                    else:
+                    else: # Flash number of stories deleted
                         flash(f'Number of stories deleted: {stories_deleted}.')
                     
                     return redirect(url_for('user_profile',
@@ -754,7 +760,7 @@ def edit_story(sid):
                                 critter_info=critter_info,
                                 user=user,
                                 page_title='Edit Story')
-        else:
+        else: # Then method is POST and we try to edit story
             try:
                 # Get the story from form
                 new_story = request.form.get('critter-story')
@@ -828,7 +834,7 @@ def story_upload(cid):
         flash('An error occurred. Please try again.')
         return redirect(url_for('critter_page', cid=cid))
     
-    else:
+    else: # Then method is POST and we try to upload story
         try: 
             # Method is post, form has been filled out
             
@@ -920,10 +926,10 @@ def lookup_form():
         return redirect(url_for('user_profile', uid=uid))
 
 @app.route("/like/<int:cid>",methods=["POST"])
-def like_feature(cid):
+def like_feature_critter(cid):
 
     conn = dbi.connect()
-    update_likes=profile.get_likes(conn,cid)
+    update_likes=profile.get_likes_data_critter(conn,cid)
     if 'uid' not in session:
         flash("Please Login in first!")
         return redirect(url_for('signin'))
@@ -941,6 +947,28 @@ def like_feature(cid):
         print(e)
         flash('An error occurred. Please try again.')
         return redirect(url_for('critter_page', cid=cid))
+
+@app.route("/like_story/<int:sid>",methods=["POST"])
+def like_story_feature(sid):
+    conn = dbi.connect()
+    update_likes=critter.get_likes_data_stories(conn,sid)
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+    uid=session['uid']
+    try:
+        update_likes+=1
+
+        critter.update_story_likes(conn,sid,uid)
+
+        return jsonify({
+            "worked": True,
+            "story_likes": update_likes
+        })
+    except Exception as e:
+        print(e)
+        flash('An error occurred. Please try again.')
+        
 
 
 if __name__ == '__main__':
