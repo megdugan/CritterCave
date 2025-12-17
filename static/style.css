@@ -441,6 +441,7 @@ form > p > input[type="submit"]:hover {
     padding: 14px 18px;
     margin: 14px auto 24px;
     transition: border-color 0.2s, background 0.2s;
+    color: #333;
 }
 
 .settings-block input:focus,
@@ -454,7 +455,7 @@ form > p > input[type="submit"]:hover {
 /* Textareas */
 .settings-block textarea {
     font-size: 15px;
-    color: var(--text-primary);
+    color: black ;
     background: #f9fafb;
     border: 1px solid var(--border-subtle);
     border-radius: 12px;
@@ -585,7 +586,7 @@ form > p > input[type="submit"]:hover {
     width: 28px;
     height: 28px;
     fill: none;
-    stroke: #7B346A;
+    stroke: #4b2341;
     stroke-width: 2;
     transition: all 0.3s ease;
     position: relative;
@@ -627,7 +628,7 @@ form > p > input[type="submit"]:hover {
 }
 
 .like-count-display-story {
-    color: #5F274F;
+    color: White;
     font-weight: 600;
     font-size: 14px;
     white-space: nowrap;
@@ -971,7 +972,7 @@ body, html {
     margin-bottom: 14px;
     font-size: 20px;
     font-weight: 600;
-    color: var(--accent-plum);
+    color: var(--title-color);
 }
 
 /* Grid of story cards */
