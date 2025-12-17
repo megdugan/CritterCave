@@ -743,6 +743,11 @@ form > p > input[type="submit"]:hover {
     margin-left: 4px;
 }
 
+.like-btn-story .like-btn:hover .like-count-display-story,
+.like-btn-story .like-btn:hover .like-count-story {
+    color: #d1d5db;
+    transition: color 0.3s ease;
+}
 
 /* ======================================================
    Profile Page and Critter Styling
@@ -1024,10 +1029,8 @@ body, html {
 }
 
 .story-card-link {
-    display: block;
     text-decoration: none;
     color: inherit;        /* Keeps your pastel-box text color */
-    border-radius: 18px;   /* Same as your pastel-box cards */
 }
 
 .story-card-link:hover {

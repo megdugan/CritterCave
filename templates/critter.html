@@ -65,7 +65,6 @@
                             <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}"
                             class="story-card-link">
                             <p>{{ story.critter_story }}</p>
-                            </a>
 
                             <div class="like-btn-story">
                                 <button value="like"
@@ -83,6 +82,9 @@
                                     </div>
                                 </button>
                             </div>
+                            </a>
+
+                            
                         </div>
                         {% endif %}
                     {% endfor %}
@@ -106,10 +108,11 @@
                             <a href="{{ url_for('story_page', sid=story.sid, cid=critter_info.cid) }}" 
                             class="story-card-link">
                                 <p>{{ story.critter_story }}</p>
-                                <span class="story-author-tag">By {{ story.username }}</span>
-                            </a>
+                                <a href="{{ url_for('user_profile', uid=story.uid) }}">
+                                    By {{story.username}}
+                                </a>
 
-                            <div class="like-btn-story">
+                                <div class="like-btn-story">
                                 <button value="like"
                                         type="button"
                                         class="like-btn"
@@ -124,8 +127,8 @@
                                     <span class="like-count-story">{{ story.story_likes }}</span> 
                                     </div>
                                 </button>
-                            </div>
-                            
+                                </div>
+                            </a>
                         </div>
                         {% endif %}
                     {% endfor %}
