@@ -67,7 +67,6 @@ def update_personal_info(conn, uid: int, new_name:str, new_username:str):
             [new_name,new_username,uid]
         )
         conn.commit()
-        flash(f'name for uid {uid} updated to {new_name}, username updated to {new_username}')
     except Exception as err:
         conn.rollback()
     return
@@ -122,7 +121,6 @@ def update_name(conn, uid: int, new_name: str):
                     WHERE uid = %s''',
                     [new_name,uid])
         conn.commit()
-        flash(f'name for uid {uid} updated to {new_name}')
     except Exception as err:
         conn.rollback()
     return
@@ -146,7 +144,6 @@ def update_username(conn, uid: int, new_username: str):
                     WHERE uid = %s''',
                     [new_username,uid])
         conn.commit()
-        flash(f'username for uid {uid} updated to {new_username}')
     except Exception as err:
         conn.rollback()
     return
@@ -170,7 +167,6 @@ def update_darkmode(conn, uid: int, new_mode):
                     WHERE uid = %s''',
                     [new_mode, uid])
         conn.commit()
-        flash(f'darkmode for uid {uid} updated to {new_mode}')
     except Exception as err:
         conn.rollback()
     return
@@ -193,7 +189,6 @@ def update_pfp(conn, uid: int, new_pfp: str):
             WHERE uid = %s
             ''', [new_pfp, uid])
         conn.commit()
-        flash(f'pfp for uid {uid} updated to {new_pfp}')
     except Exception as err:
         conn.rollback()
     return
