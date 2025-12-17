@@ -76,8 +76,13 @@ def get_liked_stories(conn, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT DISTINCT story.story,story.sid,story.cid 
-                 FROM liked_story JOIN story USING (sid)
+                 SELECT DISTINCT story.sid, story.uid, story.cid, story.story, 
+                 user.username,
+                 critter.name
+                 FROM liked_story 
+                 JOIN story on liked_story.sid = story.sid
+                 JOIN user on story.uid=user.uid
+                 JOIN critter on story.cid=critter.cid
                  WHERE liked_story.uid = %s''',
                  [uid])
     return curs.fetchall()

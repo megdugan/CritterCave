@@ -142,6 +142,7 @@
                         <div class="story-card-grid">
                             {% for story in liked_stories %}
                                 <a href="{{ url_for('story_page', sid=story.sid, cid=story.cid) }}" class="story-card pastel-box story-card-link">
+                                    <span class="story-author-tag">By {{ story.username }}</span><br>
                                     <span class="story-author-tag">For {{ story.name }}</span>
                                     <p>{{ story.story }}</p>
                                 </a>

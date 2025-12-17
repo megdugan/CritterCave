@@ -199,6 +199,8 @@ def user_profile(uid):
         liked_critters = profile.get_liked_critters(conn, uid)
         # Get user's liked stories
         liked_stories = profile.get_liked_stories(conn, uid)
+        for s in liked_stories:
+            print(s)
         
         print(f'looking up user with uid {uid}')
         if user is None:
