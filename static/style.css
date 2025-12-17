@@ -680,33 +680,69 @@ form > p > input[type="submit"]:hover {
     }
 }
 
+/* ======================================================
+   Like button for STORIES (on critter page)
+====================================================== */
+
 .like-btn-story {
-    position: relative;
-    display: inline-block;  /* Push it down */
-    z-index: 10;
-    bottom: 35px;
-    
-    
+    gap: 8px;
+    margin-top: 12px;
+    padding: 8px 0;
 }
 
-.like-count-display-story{
-    position: absolute;
-    bottom: -20px;
-    left: 14px;
-    transform: translateX(-50%);
+.like-btn-story .like-btn {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    transition: all 0.3s ease;
+    background: #A45C68;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    margin: 0;
+}
+
+.like-btn-story .like-btn:hover {
+    background: #5F274F;
+}
+
+.like-btn-story .like-btn.liked {
+    background: linear-gradient(135deg, #5F274F 0%, #A45C68 100%);
+    box-shadow: 0 6px 20px rgba(164, 92, 104, 0.5);
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-out;
+}
+
+.like-btn-story .like-btn svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: #7B346A;
+    stroke-width: 2;
+    transition: all 0.3s ease;
+}
+
+.like-btn-story .like-btn:hover svg {
+    stroke: #d1d5db;
+}
+
+.like-btn-story .like-btn.liked svg {
+    fill: white;
+    stroke: white;
+    transform: scale(1.1);
+}
+
+.like-count-display-story {
     color: #5F274F;
     font-weight: 600;
     font-size: 14px;
     white-space: nowrap;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    display: block ;
-    visibility: visible ;
+    display: inline-block;
+    margin-left: 4px;
 }
 
-.like-count-story {
-    font-weight: 700;
-    color: inherit; /* Inherits color from parent .like-count-display */
-}
 
 /* ======================================================
    Profile Page and Critter Styling
@@ -973,6 +1009,7 @@ body, html {
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    align-items: start;
 }
 
 /* Card styling reused + enhanced */
@@ -983,6 +1020,7 @@ body, html {
     border: 1px solid var(--border-subtle);
     box-shadow: 0 2px 5px rgba(0,0,0,0.04);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+    align-items: start;
 }
 
 .story-card-link {
