@@ -58,8 +58,10 @@ def get_liked_critters(conn, uid: int):
     """
     curs = dbi.dict_cursor(conn)
     curs.execute('''
-                 SELECT DISTINCT critter.cid AS cid, critter.name AS name, critter.imagepath AS imagepath, critter.description AS description, critter.created AS created
-                 FROM liked_critter JOIN critter USING (cid)
+                 SELECT DISTINCT critter.cid AS cid, critter.name AS name, critter.imagepath AS imagepath, critter.description AS description, critter.created AS created,
+                 (select count(*) from liked_critter WHERE cid = critter.cid) AS like_count
+                 FROM liked_critter 
+                 JOIN critter USING (cid)
                  WHERE liked_critter.uid = %s''',
                  [uid])
     return curs.fetchall()

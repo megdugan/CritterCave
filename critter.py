@@ -91,7 +91,8 @@ def get_all_critters(conn):
     curs=dbi.dict_cursor(conn)
     curs.execute("""
         select user.uid as uid, username, cid, imagepath, critter.name as name, 
-            description, critter.created as created
+            description, critter.created as created,
+            (select count(*) from liked_critter where cid = critter.cid) as like_count
         from critter inner join user on critter.uid = user.uid
         order by created desc""")
     return curs.fetchall()

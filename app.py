@@ -39,6 +39,10 @@ def index():
     try:
         conn = dbi.connect()
         critter_info = critter.get_all_critters(conn)
+
+        for item in critter_info:
+            print(item)
+        
         return render_template('main.html', critters=critter_info, page_title='Home')
     except Exception as e:
         print(e)
@@ -46,6 +50,38 @@ def index():
         flash('An error occurred. Please try again.')
         return redirect(url_for('user_profile', uid=uid))
 
+@app.route('/home-sorted/', methods=['GET'])
+def index_sorted():
+    """
+    Displays all critters based on user sort form.
+    """
+    if 'uid' not in session:
+        flash("Please Login in!")
+        return redirect(url_for('signin'))
+    try:
+        conn = dbi.connect()
+        critter_info = critter.get_all_critters(conn)
+
+        sort_value = request.args.get('value')
+        sort_way = request.args.get('sort')
+        print(f"{sort_value=}")
+        print(f"{sort_way=}")
+        # save reverse boolean value
+        reverse=False
+        if sort_way == "descending":
+            reverse=True
+        # if sort value is an integer, cast it
+        if sort_value == 'like_count':
+            sorted_critter_info = sorted(critter_info, key=lambda item: int(item[sort_value]), reverse=reverse)
+        else:
+            sorted_critter_info = sorted(critter_info, key=lambda item: item[sort_value], reverse=reverse)
+        print(sorted_critter_info)
+        return render_template('main.html', critters=sorted_critter_info, page_title='Home')
+    except Exception as e:
+        print(e)
+        uid=session['uid']
+        flash('An error occurred. Please try again.')
+        return redirect(url_for('user_profile', uid=uid))
 
 @app.route('/about/')
 def about():
@@ -197,6 +233,7 @@ def user_profile(uid):
         stories = story.get_stories_by_user(conn, uid)
         # Get user's liked critters
         liked_critters = profile.get_liked_critters(conn, uid)
+        print("Test:"+str(liked_critters))
         # Get user's liked stories
         liked_stories = profile.get_liked_stories(conn, uid)
         for s in liked_stories:
@@ -884,25 +921,7 @@ def lookup_form():
         # Get the query type (either critter's name or user's username)
         query_type = request.args.get('kind')
         query = request.args.get('query')
-        if query_type == 'critter':
-            # If the query type is critter, get critters matching the query
-            conn = dbi.connect()
-            critters = critter.lookup_critter(conn, query)
-            if not critters:
-                # If no critters match the query, flash a message
-                flash('No critters matched the query. Please try again.')
-                return redirect(url_for('index'))
-            if len(critters) == 1:
-                # If only one critter matches the query, redirect directly to that critter's page
-                return redirect(url_for('critter_page', cid=critters[0]['cid']))
-            for c in critters:
-                # Fix critter's created time
-                c['created'] = c['created'].strftime("%m/%d/%Y")
-            # Render a clickable list of critters
-            return render_template('critter_lookup.html',
-                                   query = query, 
-                                   critters = critters,
-                                   page_title='Critter Lookup Results')
+        print(f"{query_type=}")
         if query_type == 'user':
             # If the query type is user, get users matching the query
             conn = dbi.connect()
@@ -923,8 +942,47 @@ def lookup_form():
                                    query = query, 
                                    users = users,
                                    page_title='User Lookup Results')
+        if query_type == 'critter':
+            # If the query type is critter, get critters matching the query
+            conn = dbi.connect()
+            critters = critter.lookup_critter(conn, query)
+            if not critters:
+                # If no critters match the query, flash a message
+                flash('No critters matched the query. Please try again.')
+                return redirect(url_for('index'))
+            if len(critters) == 1:
+                # If only one critter matches the query, redirect directly to that critter's page
+                return redirect(url_for('critter_page', cid=critters[0]['cid']))
+            for c in critters:
+                # Fix critter's created time
+                c['created'] = c['created'].strftime("%m/%d/%Y")
+            # Render a clickable list of critters
+            return render_template('critter_lookup.html',
+                                   query = query, 
+                                   critters = critters,
+                                   page_title='Critter Lookup Results')
+        if query_type == 'story':
+            print('story')
+            conn = dbi.connect()
+            stories = story.lookup_story(conn, query)
+            if not stories:
+                # If no stories match the query, flash a message
+                flash('No stories matched the query. Please try again.')
+                return redirect(url_for('index'))
+            if len(stories) == 1:
+                # If only one story matches the query, redirect directly to that story's page
+                return redirect(url_for('story_page', cid=stories[0]['cid'], sid=stories[0]['sid']))
+            for s in stories:
+                # Fix story's created time
+                s['created'] = s['created'].strftime("%m/%d/%Y")
+            # Render a clickable list of stories
+            return render_template('story_lookup.html',
+                                   query = query, 
+                                   stories = stories,
+                                   page_title='Story Lookup Results')
     except Exception as e:
         uid = session['uid']
+        print("erroroororororr")
         print(e)
         flash('An error occurred. Please try again.')
         return redirect(url_for('user_profile', uid=uid))
@@ -957,10 +1015,15 @@ def sort_critter_results(query: str):
         print(f"{sort_value=}")
         print(f"{sort_way=}")
         print(f"{query=}")
+        # save reverse boolean value
         reverse=False
         if sort_way == "descending":
             reverse=True
-        sorted_critters = sorted(critters, key=lambda item: item[sort_value], reverse=reverse)
+        # if sort value is an integer, cast it
+        if sort_value == 'like_count':
+            sorted_critters = sorted(critters, key=lambda item: int(item[sort_value]), reverse=reverse)
+        else:
+            sorted_critters = sorted(critters, key=lambda item: item[sort_value], reverse=reverse)
         # Render a clickable list of critters
         return render_template('critter_lookup.html',
                                 query = query, 
@@ -984,7 +1047,6 @@ def sort_user_results(query: str):
     try:
         conn = dbi.connect()
         users = profile.lookup_user(conn, query)
-        print(users)
         if not users:
             # If no users match the query, flash a message
             flash('No users matched the query. Please try again.')
@@ -1001,15 +1063,68 @@ def sort_user_results(query: str):
         print(f"{sort_value=}")
         print(f"{sort_way=}")
         print(f"{query=}")
+        # save reverse boolean value
         reverse=False
         if sort_way == "descending":
             reverse=True
-        sorted_users = sorted(users, key=lambda item: item[sort_value], reverse=reverse)
+        # if sort value is an integer, cast it
+        if sort_value == 'critter_count':
+            sorted_users = sorted(users, key=lambda item: int(item[sort_value]), reverse=reverse)
+        else:
+            sorted_users = sorted(users, key=lambda item: item[sort_value], reverse=reverse)
         # Render a clickable list of users
         return render_template('user_lookup.html',
                                 query = query, 
                                 users = sorted_users,
                                 page_title='User Lookup Results')     
+    except Exception as e:
+        uid = session['uid']
+        print(e)
+        flash('An error occurred. Please try again.')
+        return redirect(url_for('index'))
+
+@app.route('/story-query/sorted/<query>', methods=['GET', 'POST'])
+def sort_story_results(query: str):
+    """
+    Display sorted results for story lookup.
+    """
+    # Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+    try:
+        conn = dbi.connect()
+        stories = story.lookup_story(conn, query)
+        if not stories:
+            # If no stories match the query, flash a message
+            flash('No stories matched the query. Please try again.')
+            return redirect(url_for('index'))
+        if len(stories) == 1:
+            # If only one story matches the query, redirect directly to that story's page
+            return redirect(url_for('story_page', cid=stories[0]['cid'], sid=stories[0]['sid']))
+        for s in stories:
+            # Fix story's created time
+            s['created'] = s['created'].strftime("%m/%d/%Y")
+        # get result sort info
+        sort_value = request.args.get('value')
+        sort_way = request.args.get('sort')
+        print(f"{sort_value=}")
+        print(f"{sort_way=}")
+        print(f"{query=}")
+        # save reverse boolean value
+        reverse=False
+        if sort_way == "descending":
+            reverse=True
+        # if sort value is an integer, cast it
+        if sort_value == 'like_count':
+            sorted_stories = sorted(stories, key=lambda item: int(item[sort_value]), reverse=reverse)
+        else:
+            sorted_stories = sorted(stories, key=lambda item: item[sort_value], reverse=reverse)
+        # Render a clickable list of users
+        return render_template('story_lookup.html',
+                                query = query, 
+                                stories = sorted_stories,
+                                page_title='Story Lookup Results')     
     except Exception as e:
         uid = session['uid']
         print(e)
