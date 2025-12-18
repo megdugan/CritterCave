@@ -39,6 +39,10 @@ def index():
     try:
         conn = dbi.connect()
         critter_info = critter.get_all_critters(conn)
+
+        for item in critter_info:
+            print(item)
+        
         return render_template('main.html', critters=critter_info, page_title='Home')
     except Exception as e:
         print(e)
@@ -197,6 +201,7 @@ def user_profile(uid):
         stories = story.get_stories_by_user(conn, uid)
         # Get user's liked critters
         liked_critters = profile.get_liked_critters(conn, uid)
+        print("Test:"+str(liked_critters))
         # Get user's liked stories
         liked_stories = profile.get_liked_stories(conn, uid)
         for s in liked_stories:
