@@ -630,6 +630,7 @@ def delete_critter(cid):
                                 page_title='Delete Critter')
         else: # Then method is POST and we try to delete critter
             try:
+                print("Entered delete function")
                 action = request.form.get('action')
                 if action == 'Delete':
                     # If button clicked == confirm deletion:

@@ -110,6 +110,12 @@ def delete_critter(conn, cid: int):
     try:
         curs.execute('start transaction;')
         curs.execute(
+            '''delete from liked_story
+            where sid in (
+            select sid from story
+            where cid = %s)''',
+            [cid])
+        curs.execute(
             '''delete from liked_critter where cid=%s''',
             [cid])
         curs.execute(
