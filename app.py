@@ -50,6 +50,38 @@ def index():
         flash('An error occurred. Please try again.')
         return redirect(url_for('user_profile', uid=uid))
 
+@app.route('/home-sorted/', methods=['GET'])
+def index_sorted():
+    """
+    Displays all critters based on user sort form.
+    """
+    if 'uid' not in session:
+        flash("Please Login in!")
+        return redirect(url_for('signin'))
+    try:
+        conn = dbi.connect()
+        critter_info = critter.get_all_critters(conn)
+
+        sort_value = request.args.get('value')
+        sort_way = request.args.get('sort')
+        print(f"{sort_value=}")
+        print(f"{sort_way=}")
+        # save reverse boolean value
+        reverse=False
+        if sort_way == "descending":
+            reverse=True
+        # if sort value is an integer, cast it
+        if sort_value == 'like_count':
+            sorted_critter_info = sorted(critter_info, key=lambda item: int(item[sort_value]), reverse=reverse)
+        else:
+            sorted_critter_info = sorted(critter_info, key=lambda item: item[sort_value], reverse=reverse)
+        print(sorted_critter_info)
+        return render_template('main.html', critters=sorted_critter_info, page_title='Home')
+    except Exception as e:
+        print(e)
+        uid=session['uid']
+        flash('An error occurred. Please try again.')
+        return redirect(url_for('user_profile', uid=uid))
 
 @app.route('/about/')
 def about():
@@ -983,10 +1015,15 @@ def sort_critter_results(query: str):
         print(f"{sort_value=}")
         print(f"{sort_way=}")
         print(f"{query=}")
+        # save reverse boolean value
         reverse=False
         if sort_way == "descending":
             reverse=True
-        sorted_critters = sorted(critters, key=lambda item: item[sort_value], reverse=reverse)
+        # if sort value is an integer, cast it
+        if sort_value == 'like_count':
+            sorted_critters = sorted(critters, key=lambda item: int(item[sort_value]), reverse=reverse)
+        else:
+            sorted_critters = sorted(critters, key=lambda item: item[sort_value], reverse=reverse)
         # Render a clickable list of critters
         return render_template('critter_lookup.html',
                                 query = query, 
@@ -1026,10 +1063,15 @@ def sort_user_results(query: str):
         print(f"{sort_value=}")
         print(f"{sort_way=}")
         print(f"{query=}")
+        # save reverse boolean value
         reverse=False
         if sort_way == "descending":
             reverse=True
-        sorted_users = sorted(users, key=lambda item: item[sort_value], reverse=reverse)
+        # if sort value is an integer, cast it
+        if sort_value == 'critter_count':
+            sorted_users = sorted(users, key=lambda item: int(item[sort_value]), reverse=reverse)
+        else:
+            sorted_users = sorted(users, key=lambda item: item[sort_value], reverse=reverse)
         # Render a clickable list of users
         return render_template('user_lookup.html',
                                 query = query, 
@@ -1069,10 +1111,15 @@ def sort_story_results(query: str):
         print(f"{sort_value=}")
         print(f"{sort_way=}")
         print(f"{query=}")
+        # save reverse boolean value
         reverse=False
         if sort_way == "descending":
             reverse=True
-        sorted_stories = sorted(stories, key=lambda item: item[sort_value], reverse=reverse)
+        # if sort value is an integer, cast it
+        if sort_value == 'like_count':
+            sorted_stories = sorted(stories, key=lambda item: int(item[sort_value]), reverse=reverse)
+        else:
+            sorted_stories = sorted(stories, key=lambda item: item[sort_value], reverse=reverse)
         # Render a clickable list of users
         return render_template('story_lookup.html',
                                 query = query, 
