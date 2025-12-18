@@ -43,6 +43,25 @@
                 class="button-primary write-story-btn">
                 Write a Story About {{ critter.name }}
                 </a>
+                
+                
+                <div class="like-btn-container-home">
+                    <button value="like"
+                            type="button"
+                            class="home-like" 
+                            data-cid="{{ critter.cid }}"
+                            data-url="{{ url_for('like_feature_critter', cid=critter.cid) }}"
+                            aria-label="Like this critter">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+
+                        <div class="like-count-display-story">
+                            <span class="like-count">{{ critter.like_count }}</span> 
+                        </div>
+                    </button>
+                </div>
+                
             </div>
         </section>
     </div>
