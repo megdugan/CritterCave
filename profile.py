@@ -194,8 +194,12 @@ def lookup_user(conn, query: str):
     name_query = f"%{query}%"
     curs=dbi.dict_cursor(conn)
     curs.execute("""
-            select uid, name, username, created, profilepic
-            from user where username like %s
+            SELECT user.uid, user.name, user.username, user.created, user.profilepic,
+            COUNT(critter.uid) AS critter_count
+            FROM user
+            LEFT JOIN critter ON critter.uid = user.uid
+            WHERE user.username LIKE %s
+            GROUP BY user.uid, user.name, user.username, user.created, user.profilepic
             """,[name_query])
     users = curs.fetchall()
     if not users:

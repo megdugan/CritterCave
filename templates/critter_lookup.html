@@ -9,9 +9,28 @@
 
 {% block main_content %}      
 
-<h1>Critter results for '{{query}}'</h1>
+<div class="topsection" id="first_main">
+    <div class="sort-search">
+        <form class="search" method="GET" action="{{ url_for('sort_critter_results', query=query) }}">
+            <label>sort by:
+                <select required name="value">
+                    <option value="name">critter name</option>
+                    <option value="username">creator username</option>
+                    <option value="created">date created</option>
+                    <option value="like_count">like count</option>
+                </select>
+            </label>
+            <select required name="sort">
+                <option value="ascending">ascending</option>
+                <option value="descending">descending</option>
+            </select>
+            <input type="submit" value="apply">
+        </form>
+    </div>
+</div>
 
 <div class="critter-page">
+
 {% for c in critters %}
     
 <!-- Critter Header Card -->
@@ -27,15 +46,16 @@
     <div class="critter-info-right">
         <h1 class="critter-name"><a href="{{url_for('critter_page', cid=c['cid'])}}">{{c['name']}}</a></h1>
         <p class="critter-maker">
-            <h4>Made by:
-            <a href="{{url_for('user_profile', uid=c['uid'])}}">
-                {{c['creator']}}</a>
+            <h4>{{ c['created'] }} | <a href="{{url_for('user_profile', uid=c['uid'])}}">
+                {{c['username']}}</a>
             </h4>
+            <h4>Likes: {{c['like_count']}}</h4>
         </p>
 
         <p class="critter-description">
             {{ c['description'] }}
         </p>
+        
     </div>
 </section>
 <br>

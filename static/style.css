@@ -1169,3 +1169,64 @@ body, html {
     vertical-align:middle;
     line-height: 0;
 }
+
+.sort-search {
+    justify-items:right;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 10px 15px;
+    margin: 0;
+}
+
+/* Search Form */
+.sort-search .search {
+    overflow: hidden;
+    min-width: 0;
+    margin-right: 12px;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+}
+
+.sort-search .search label {
+    font-weight: bold;
+    color: var(--text-secondary);
+}
+
+.sort-search .search input[type="text"],
+.sort-search .search select {
+    font-size: 1rem;
+    color: black;
+    background: white;
+    border: 2px solid var(--border-subtle);
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin: 0;
+    flex-shrink: 1;
+    min-width: 70px;
+}
+
+/* .form-select option {
+    background-color: var(--accent-plum);
+} */
+
+.sort-search .search input[type="submit"] {
+    font-weight: bold;
+    color: white;
+    background: var(--accent-plum);
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.sort-search .search input[type="submit"]:hover {
+    background: var(--rosewood);
+    transition: background 0.2s ease, transform 0.15s ease;
+    
+}

@@ -891,13 +891,12 @@ def lookup_form():
                 # If no critters match the query, flash a message
                 flash('No critters matched the query. Please try again.')
                 return redirect(url_for('index'))
-            for c in critters:
-                # Save critter's creator and created time for display as well
-                c['creator'] = profile.get_user_info(conn, c['uid'])['username']
-                c['created'] = c['created'].strftime("%m/%d/%Y")
             if len(critters) == 1:
                 # If only one critter matches the query, redirect directly to that critter's page
                 return redirect(url_for('critter_page', cid=critters[0]['cid']))
+            for c in critters:
+                # Fix critter's created time
+                c['created'] = c['created'].strftime("%m/%d/%Y")
             # Render a clickable list of critters
             return render_template('critter_lookup.html',
                                    query = query, 
@@ -907,17 +906,17 @@ def lookup_form():
             # If the query type is user, get users matching the query
             conn = dbi.connect()
             users = profile.lookup_user(conn, query)
+            print(users)
             if not users:
                 # If no users match the query, flash a message
                 flash('No users matched the query. Please try again.')
                 return redirect(url_for('index'))
-            for u in users:
-                # Save user's account creation time and number of critters for display as well
-                u['created'] = u['created'].strftime("%m/%d/%Y")
-                u['num_critters'] = len(profile.get_critters_by_user(conn, u['uid']))
             if len(users) == 1:
                 # If only one user matches the query, redirect directly to that user's page
                 return redirect(url_for('user_profile', uid=users[0]['uid']))
+            for u in users:
+                # Fix user's created time
+                u['created'] = u['created'].strftime("%m/%d/%Y")
             # Render a clickable list of users
             return render_template('user_lookup.html', 
                                    query = query, 
@@ -928,6 +927,93 @@ def lookup_form():
         print(e)
         flash('An error occurred. Please try again.')
         return redirect(url_for('user_profile', uid=uid))
+
+@app.route('/critter-query/sorted/<query>', methods=['GET', 'POST'])
+def sort_critter_results(query: str):
+    """
+    Display sorted results for critter lookup.
+    """
+    # Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+    try:
+        conn = dbi.connect()
+        critters = critter.lookup_critter(conn, query)
+        if not critters:
+            # If no critters match the query, flash a message
+            flash('No critters matched the query. Please try again.')
+            return redirect(url_for('index'))
+        if len(critters) == 1:
+            # If only one critter matches the query, redirect directly to that critter's page
+            return redirect(url_for('critter_page', cid=critters[0]['cid']))
+        for c in critters:
+            # Fix critter's created time
+            c['created'] = c['created'].strftime("%m/%d/%Y")
+        # get result sort info
+        sort_value = request.args.get('value')
+        sort_way = request.args.get('sort')
+        print(f"{sort_value=}")
+        print(f"{sort_way=}")
+        print(f"{query=}")
+        reverse=False
+        if sort_way == "descending":
+            reverse=True
+        sorted_critters = sorted(critters, key=lambda item: item[sort_value], reverse=reverse)
+        # Render a clickable list of critters
+        return render_template('critter_lookup.html',
+                                query = query, 
+                                critters = sorted_critters,
+                                page_title='Critter Lookup Results')     
+    except Exception as e:
+        uid = session['uid']
+        print(e)
+        flash('An error occurred. Please try again.')
+        return redirect(url_for('index'))
+
+@app.route('/user-query/sorted/<query>', methods=['GET', 'POST'])
+def sort_user_results(query: str):
+    """
+    Display sorted results for user lookup.
+    """
+    # Session code 
+    if 'uid' not in session:
+        flash("Please Login in first!")
+        return redirect(url_for('signin'))
+    try:
+        conn = dbi.connect()
+        users = profile.lookup_user(conn, query)
+        print(users)
+        if not users:
+            # If no users match the query, flash a message
+            flash('No users matched the query. Please try again.')
+            return redirect(url_for('index'))
+        if len(users) == 1:
+            # If only one user matches the query, redirect directly to that user's page
+            return redirect(url_for('user_profile', uid=users[0]['uid']))
+        for u in users:
+            # Fix user's created time
+            u['created'] = u['created'].strftime("%m/%d/%Y")
+        # get result sort info
+        sort_value = request.args.get('value')
+        sort_way = request.args.get('sort')
+        print(f"{sort_value=}")
+        print(f"{sort_way=}")
+        print(f"{query=}")
+        reverse=False
+        if sort_way == "descending":
+            reverse=True
+        sorted_users = sorted(users, key=lambda item: item[sort_value], reverse=reverse)
+        # Render a clickable list of users
+        return render_template('user_lookup.html',
+                                query = query, 
+                                users = sorted_users,
+                                page_title='User Lookup Results')     
+    except Exception as e:
+        uid = session['uid']
+        print(e)
+        flash('An error occurred. Please try again.')
+        return redirect(url_for('index'))
 
 @app.route("/like/<int:cid>",methods=["POST"])
 def like_feature_critter(cid):

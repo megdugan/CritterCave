@@ -65,9 +65,15 @@ def lookup_critter(conn, query:str):
     name_query = f"%{query}%"
     curs=dbi.dict_cursor(conn)
     curs.execute("""
-            select cid, uid, imagepath, name, description, created
-            from critter where name like %s
-            """,[name_query])
+            SELECT critter.cid, critter.uid, critter.imagepath, critter.name, critter.description, critter.created,
+            user.username,
+            COUNT(liked_critter.cid) AS like_count
+            FROM critter
+            LEFT JOIN user ON critter.uid = user.uid
+            LEFT JOIN liked_critter ON critter.cid = liked_critter.cid
+            WHERE critter.name LIKE %s
+            GROUP BY critter.cid, critter.uid, critter.imagepath, critter.name, critter.description, critter.created, user.username;
+                """,[name_query])
     critters = curs.fetchall()
     if not critters:
         return None

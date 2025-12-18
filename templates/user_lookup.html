@@ -9,7 +9,25 @@
 
 {% block main_content %}      
 
-<h1>User results for '{{query}}'</h1>
+<div class="topsection" id="first_main">
+    <div class="sort-search">
+        <form class="search" method="GET" action="{{ url_for('sort_user_results', query=query) }}">
+            <label>sort by:
+                <select required name="value">
+                    <option value="name">creator name</option>
+                    <option value="username">creator username</option>
+                    <option value="created">date created</option>
+                    <option value="critter_count">critter count</option>
+                </select>
+            </label>
+            <select required name="sort">
+                <option value="ascending">ascending</option>
+                <option value="descending">descending</option>
+            </select>
+            <input type="submit" value="apply">
+        </form>
+    </div>
+</div>
 
 <div class="critter-page">
 {% for u in users %}
@@ -30,9 +48,8 @@
         </h4>
 
         <p class="critter-maker">
-            <h4>@{{u['username']}}</h4>
-            <h4>Joined: {{u['created']}}</h4>
-            <h4>Number of critters: {{u['num_critters']}}</h4>
+            <h4>{{u['created']}} | @{{u['username']}}</h4>
+            <h4>Critters: {{u['critter_count']}}</h4>
         </p>
     </div>
 </section>
