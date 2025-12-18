@@ -148,3 +148,32 @@ def get_stories_by_user(conn, uid: int):
                  [uid])
     stories = curs.fetchall()
     return stories
+
+def lookup_story(conn, query:str):
+    """
+    Lookup a story by a word contained in it.
+    If none match, return None.
+    Args:
+        conn -> pymysql.connections.Connection
+        query -> string
+    Return:
+        list of stories -> dict[]
+    """
+    name_query = f"%{query}%"
+    curs=dbi.dict_cursor(conn)
+    curs.execute("""
+            SELECT story.sid, story.cid, story.uid, story.created, story.story,
+            user.username, user.profilepic,
+            critter.name, critter.imagepath,
+            COUNT(liked_story.sid) AS like_count
+            FROM story
+            LEFT JOIN user ON story.uid = user.uid
+            LEFT JOIN critter on story.cid = critter.cid
+            LEFT JOIN liked_story ON story.sid = liked_story.sid
+            WHERE story.story LIKE %s
+            GROUP BY story.sid;
+                """,[name_query])
+    critters = curs.fetchall()
+    if not critters:
+        return None
+    return critters

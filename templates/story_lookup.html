@@ -1,10 +1,10 @@
 <!-- (CritterCave) -->
-<!-- Displays the results of a user's seach for another user -->
+<!-- Displays the results of a user's seach for a critter -->
 
-{% extends "base.html" %}   
+{% extends "base.html" %}  
 
 {% block head_stuff %}
-<title>User Search Results</title>
+<title>Story Search Results</title>
 {% endblock %}
 
 {% block main_content %}      
@@ -12,13 +12,13 @@
 <!-- sort search results form -->
 <div class="topsection" id="first_main">
     <div class="sort-search">
-        <form class="search" method="GET" action="{{ url_for('sort_user_results', query=query) }}">
+        <form class="search" method="GET" action="{{ url_for('sort_story_results', query=query) }}">
             <label>sort by:
                 <select required name="value">
-                    <option value="name">creator name</option>
+                    <option value="name">critter name</option>
                     <option value="username">creator username</option>
                     <option value="created">date created</option>
-                    <option value="critter_count">critter count</option>
+                    <option value="like_count">like count</option>
                 </select>
             </label>
             <select required name="sort">
@@ -31,27 +31,29 @@
 </div>
 
 <div class="critter-page">
-{% for u in users %}
 
-<!-- User Header Card -->
+{% for s in stories %}
+    
+<!-- Critter Header Card -->
 <section class="critter-header-card">
 
     <div class="critter-info-left">
-        {% if u['profilepic'] %}
-        <img src="{{ url_for('uploaded_file', filename=u['profilepic']) }}"
+        {% if s['imagepath'] %}
+        <img src="{{ url_for('uploaded_file', filename=s['imagepath']) }}"
             alt="Critter Image" class="critter-profile-img">
         {% endif %}
     </div>
 
     <div class="critter-info-right">
-        <h4 class="critter-name">
-            <a href="{{url_for('user_profile', uid=u['uid'])}}">{{u['name']}}</a>
-        </h4>
-
+        <h3 class="critter-maker">For <a href="{{url_for('critter_page', cid=s['cid'])}}">{{s['name']}}</a>, By <a href="{{url_for('user_profile', uid=s['uid'])}}">{{s['username']}}</a></h4>
         <p class="critter-maker">
-            <h4>{{u['created']}} | @{{u['username']}}</h4>
-            <h4>Critters: {{u['critter_count']}}</h4>
+            <h4>{{ s['created'] }} | Likes: {{s['like_count']}}</h4>
         </p>
+
+        <p class="critter-description">
+            {{ s['story'] }}
+        </p>
+        
     </div>
 </section>
 <br>
