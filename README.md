@@ -2,6 +2,12 @@
 
 CritterCave is a website where creative users can host and share their drawings and stories. It was made for the CS 304 (Databases with Web Interfaces) Fall '25 final project.
 
+## Authors
+* Nina Howley '27
+* Kayla Mullen '26
+* Ruth Perjuste '27
+* Meg Dugan '26
+
 <h3><a href="https://docs.google.com/presentation/d/16YTipf9f0nsKDPncJ8UkXRD3P80b9dzwVpxjoZLHsRk/present?slide=id.g15a0ec99c20_0_0" target="_blank">Presentation</a></h3>
 <h3><a href="https://www.youtube.com/watch?v=qxWkv95kA5c" target="_blank">Demo Video</a></h3>
 
@@ -22,12 +28,6 @@ CritterCave is a website where creative users can host and share their drawings 
 ### Search
 
 <img alt="image" src="static/screenshots/search.png" />
-
-## Authors
-* Nina Howley '27
-* Kayla Mullen '26
-* Ruth Perjuste '27
-* Meg Dugan '26
 
 ## Contents
 
