@@ -1,6 +1,8 @@
 # CritterCave
 
-CritterCave is a website where creative users can host and share their drawings and stories. It was made for the CS 304 (Databases with Web Interfaces) Fall '25 final project.
+CritterCave is a website where creative users can host and share their drawings and stories.
+
+Created for the CS 304 (Databases with Web Interfaces) Fall '25 final project.
 
 ## Authors
 * Nina Howley '27
