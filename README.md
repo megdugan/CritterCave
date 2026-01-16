@@ -6,17 +6,19 @@ CritterCave is a website where creative users can host and share their drawings 
 
 ### Log In
 
-<img alt="image" src="static/screenshots/home.png" />
+<img alt="image" src="static/screenshots/sign_in.png" />
 
 ### Home Page
 
-<img alt="image" src="static/screenshots/major_plan_popup.png" />
+<img alt="image" src="static/screenshots/home.png" />
 
 ### Profile Page
 
-<img alt="image" src="static/screenshots/explore_popup.png" />
+<img alt="image" src="static/screenshots/profile.png" />
 
 ### Search
+
+<img alt="image" src="static/screenshots/search.png" />
 
 ## Authors
 * Nina Howley '27
